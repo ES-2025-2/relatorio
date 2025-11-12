@@ -174,6 +174,49 @@ medias_por_estado %>%
                 full_width = FALSE, 
                 position = "center") %>%
   row_spec(0, bold = TRUE, background = "#D3D3D3") # Estilo do cabeçalho
+
+# Calcular o desvio padrão e o coeficiente de variancia
+analise_dispersao_estado <- amostra_10p %>%
+  filter(TP_PRESENCA_CH == 1 & !is.na(NU_NOTA_CH)) %>%
+  group_by(SG_UF_PROVA) %>%
+  summarise(
+    Media = mean(NU_NOTA_CH),
+    Desvio_Padrao = sd(NU_NOTA_CH),
+    Coef_Variacao_Percent = (Desvio_Padrao / Media) * 100, # Fórmula do CV
+    Numero_de_Alunos = n()
+  ) %>%
+  # Vamos ordenar pelo Coef. de Variação (do mais consistente para o menos)
+  arrange(Coef_Variacao_Percent) 
+
+# Exibir a tabela
+analise_dispersao_estado %>%
+  kable(
+    caption = "Tabela 5: Análise de Dispersão das Notas de CH por Estado",
+    col.names = c("Estado", "Média", "Desvio Padrão", "CV (%)", "Nº de Alunos"),
+    digits = 2,
+    format = "html"
+  ) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), 
+                full_width = FALSE, 
+                position = "center") %>%
+  row_spec(0, bold = TRUE, background = "#D3D3D3")
+
+# Primeiro, criamos o conjunto de dados filtrado (apenas presentes com nota)
+dados_ch_presentes <- amostra_10p %>%
+  filter(TP_PRESENCA_CH == 1 & !is.na(NU_NOTA_CH))
+
+# Agora, o Boxplot
+ggplot(dados_ch_presentes, aes(x = reorder(SG_UF_PROVA, NU_NOTA_CH, FUN = median), y = NU_NOTA_CH)) +
+  geom_boxplot(fill = "lightblue", outlier.shape = 21, outlier.size = 2) +
+  coord_flip() + # Essencial para ler os 27 estados
+  labs(
+    title = "Gráfico 6: Boxplot das Notas de CH por Estado",
+    subtitle = "Ordenado pela Mediana (Quartil 2)",
+    x = "Estado (UF)",
+    y = "Nota em Ciências Humanas"
+  ) +
+  theme_minimal()
+
 ```
 
 
