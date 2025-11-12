@@ -6,25 +6,42 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## R Markdown
+```{r setup-e-carga, message=FALSE, warning=FALSE}
+# Carregar o banco de dados
+amostra_10p <- read.csv("amostra_10p.csv", fileEncoding = "latin1")
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+# Substituir os códigos por rótulos descritivos
+amostra_10p$TP_PRESENCA_MT <- factor(
+  amostra_10p$TP_PRESENCA_MT,
+  levels = c(0, 1, 2),
+  labels = c("Ausente", "Presente", "Eliminado")
+)
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+# Criar tabelas de frequência
+freq_abs <- table(amostra_10p$TP_PRESENCA_MT)
+freq_rel <- prop.table(freq_abs)
 
-```{r cars}
-summary(cars)
+# Montar tabela final com símbolo de %
+tabela <- data.frame(
+  Presença_na_prova = names(freq_abs),
+  Frequência = as.vector(freq_abs),
+  Proporção = round(as.vector(freq_rel), 12),
+  Percentual = paste0(round(100 * as.vector(freq_rel), 2), "%")
+)
+
+# Exibir tabela formatada
+library(kableExtra)
+knitr::kable(tabela, caption = "Tabela de Frequência - Presença na Prova de Matemática") %>%
+  kable_styling(full_width = FALSE, bootstrap_options = c("striped", "hover"))
+
+
+barplot(table(amostra_10p$TP_PRESENCA_MT),
+        main = "Presença na prova",
+        col = c("tomato", "lightgreen", "skyblue"),
+        xlab = "Situação", ylab = "Frequência")
+
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
