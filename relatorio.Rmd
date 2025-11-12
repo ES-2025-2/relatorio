@@ -9,6 +9,150 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r}
+#Carregar as bibliotecas necessárias
+
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+
+```
+
+
+```{r setup-e-carga, message=FALSE, warning=FALSE}
+#Carregar o banco de dados
+
+amostra_10p <- read.csv("amostra_10p.csv")
+
+head(amostra_10p)
+```
+
+
+```{r}
+# Item 1: Tabela de Frequências (Absoluta e Relativa)
+# Vamos renomear os valores 0 e 1 para ficarem mais claros
+tabela_presenca <- amostra_10p %>%
+  mutate(Presenca = case_when(
+    TP_PRESENCA_CH == 0 ~ "Ausente",
+    TP_PRESENCA_CH == 1 ~ "Presente",
+    TRUE ~ "Outro"
+  )) %>%
+  count(Presenca, sort = TRUE) %>% # Conta as ocorrências
+  mutate(Percentual = prop.table(n) * 100) # Calcula o percentual
+
+# Mostra a tabela formatada (ótimo para o relatório)
+kable(tabela_presenca,
+      caption = "Tabela 1: Frequência de Presença na Prova de CH",
+      col.names = c("Status", "Frequência (N)", "Percentual (%)"),
+      digits = 2) # Formata com 2 casas decimais
+
+# Item 2: Gráfico (Gráfico de Barras)
+ggplot(tabela_presenca, aes(x = reorder(Presenca, -n), y = n)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  geom_text(aes(label = n), vjust = -0.5) + # Adiciona o número no topo
+  labs(title = "Gráfico 1: Presença na Prova de CH",
+       x = "Status de Presença",
+       y = "Número de Alunos") +
+  theme_minimal()
+
+```
+Com base na Tabela 1 e no Gráfico consi
+
+
+```{r}
+# Item 1: Tabela de Frequências (Códigos da Prova)
+tabela_prova <- amostra_10p %>%
+  filter(TP_PRESENCA_CH == 1) %>% # Filtra APENAS os presentes
+  count(CO_PROVA_CH, sort = TRUE) %>%
+  mutate(Percentual = prop.table(n) * 100)
+
+# Item 3: Medida Descritiva (Moda)
+# A moda é o primeiro valor da tabela (o mais frequente)
+moda_prova <- tabela_prova$CO_PROVA_CH[1]
+# (Você pode citar a moda no seu texto)
+
+# Mostra a tabela
+kable(tabela_prova,
+      caption = "Tabela 2: Frequência dos Códigos de Prova de CH (entre presentes)",
+      col.names = c("Código da Prova", "Frequência (N)", "Percentual (%)"),
+      digits = 2)
+
+# Item 2: Gráfico (Gráfico de Barras)
+ggplot(tabela_prova, aes(x = reorder(factor(CO_PROVA_CH), -n), y = n)) +
+  geom_bar(stat = "identity", fill = "darkgreen") +
+  labs(title = "Gráfico 2: Distribuição dos Códigos de Prova de CH",
+       x = "Código da Prova",
+       y = "Número de Alunos") +
+  theme_minimal()
+
+```
+
+
+```{r}
+# Cria um dataframe filtrado SÓ para as notas de CH dos PRESENTES
+dados_notas_ch <- amostra_10p %>%
+  filter(TP_PRESENCA_CH == 1) %>%
+  filter(!is.na(NU_NOTA_CH)) # Remove valores Nulos (NA), se houver
+
+# Item 3: Calcular e interpretar as medidas descritivas
+# summary() já nos dá as separatrizes (Min, Q1, Mediana, Q3, Max) e a Média
+medidas_resumo <- summary(dados_notas_ch$NU_NOTA_CH)
+
+# Calculamos as medidas de dispersão que faltam
+desvio_padrao <- sd(dados_notas_ch$NU_NOTA_CH)
+variancia <- var(dados_notas_ch$NU_NOTA_CH)
+
+# (Você pode imprimir esses valores no seu texto)
+# Ex: A média da nota de CH foi [valor] com desvio padrão de [valor].
+
+# Item 1: Tabela de Frequências (com Classes)
+# 1. Definimos os limites (breaks) das classes
+limites_classes <- seq(floor(min(dados_notas_ch$NU_NOTA_CH)),
+                       ceiling(max(dados_notas_ch$NU_NOTA_CH)),
+                       by = 100) # (Classes de tamanho 100, ajuste se necessário)
+
+# 2. Cortamos os dados nas classes
+dados_notas_ch <- dados_notas_ch %>%
+  mutate(Classe_Nota = cut(NU_NOTA_CH, breaks = limites_classes, right = FALSE))
+
+# 3. Contamos as classes
+tabela_classes_notas <- dados_notas_ch %>%
+  count(Classe_Nota) %>%
+  mutate(Percentual = prop.table(n) * 100)
+
+# Mostra a tabela
+kable(tabela_classes_notas,
+      caption = "Tabela 3: Distribuição de Frequência das Notas de CH (por classe)",
+      col.names = c("Faixa de Nota", "Frequência (N)", "Percentual (%)"),
+      digits = 2)
+
+# Item 2: Gráficos para dados contínuos (Histograma)
+ggplot(dados_notas_ch, aes(x = NU_NOTA_CH)) +
+  geom_histogram(aes(y = after_stat(density)), # 'density' é melhor para ver a forma
+                 binwidth = 50, # Ajuste a largura da barra (bin)
+                 color = "black", fill = "lightblue") +
+  geom_density(color = "red", linewidth = 1) + # Adiciona uma linha de densidade
+  labs(title = "Gráfico 3: Histograma das Notas de CH",
+       x = "Nota de Ciências Humanas",
+       y = "Densidade") +
+  theme_minimal()
+
+# Item 4: Construir o Boxplot
+ggplot(dados_notas_ch, aes(y = NU_NOTA_CH)) +
+  geom_boxplot() +
+  labs(title = "Gráfico 4: Boxplot das Notas de CH",
+       x = "",
+       y = "Nota de Ciências Humanas") +
+  theme_minimal()
+
+```
+
+```{r}
+
+```
+
+
 ## R Markdown
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
