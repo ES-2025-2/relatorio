@@ -9,6 +9,8 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+Analise da area de conhecimento de Humanas: Heitor
+
 ```{r}
 #Carregar as bibliotecas necessárias
 
@@ -149,7 +151,29 @@ ggplot(dados_notas_ch, aes(y = NU_NOTA_CH)) +
 ```
 
 ```{r}
+# Calcular a média de nota de CH por estado
+medias_por_estado <- amostra_10p %>%
+  filter(TP_PRESENCA_CH == 1 & !is.na(NU_NOTA_CH)) %>% # Filtra presentes e com nota válida
+  group_by(SG_UF_PROVA) %>%
+  summarise(
+    Media_Nota_CH = mean(NU_NOTA_CH),
+    Numero_de_Alunos = n() # É importante saber o N de cada estado
+  ) %>%
+  arrange(desc(Media_Nota_CH)) # Ordena da maior média para a menor
 
+# Exibir os 10 estados com maiores médias
+medias_por_estado %>%
+  head(10) %>% # Pega apenas os 10 primeiros
+  kable(
+    caption = "Tabela 4: Top 10 Estados por Média em Ciências Humanas",
+    col.names = c("Estado", "Média da Nota", "Nº de Alunos"),
+    digits = 2,
+    format = "html"
+  ) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), 
+                full_width = FALSE, 
+                position = "center") %>%
+  row_spec(0, bold = TRUE, background = "#D3D3D3") # Estilo do cabeçalho
 ```
 
 
