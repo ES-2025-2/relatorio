@@ -2,18 +2,29 @@
 title: "Relatorio"
 author: "Fabio Firanzi, Heitor Dias, Julia Fideles, Matheus Soares, Tiago Braga"
 date: "2025-11-11"
-output: html_document
+output:
+  html_document:
+    df_print: paged
+  pdf_document:
+    latex_engine: pdlatex
+    keep_tex: true
+header-includes: 
+ \usepackage[T1]{fontenc} 
+ \usepackage[utf8]{inputenc} 
+ \usepackage[portuguese]{babel}
+ \usepackage{booktabs} 
+ \usepackage{float} 
+ \usepackage{graphicx}
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
-Analise da area de conhecimento de Humanas: Heitor
+###Analise da area de conhecimento de Humanas: Heitor
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 #Carregar as bibliotecas necessárias
-
 library(readxl)
 library(dplyr)
 library(ggplot2)
@@ -27,18 +38,21 @@ library(kableExtra)
 
 amostra_10p <- read.csv("amostra_10p.csv")
 
-head(amostra_10p)
 ```
 
+# 1.1 Analise da variavel de presença na prova de humanas
+## 1.2 Tabela e Gráfico de Frequências
+Busca indentificar se o aluno estava presente, ausente ou se foi eliminado da prova de ciências humanas, e, com isso, expressar a porcentagem e os valores absolutos da variável TP_PRESENCA_CH.
 
-```{r}
+```{r analise_variavel_presenca, message=FALSE, warning=FALSE}
 # Item 1: Tabela de Frequências (Absoluta e Relativa)
+
 # Vamos renomear os valores 0 e 1 para ficarem mais claros
 tabela_presenca <- amostra_10p %>%
   mutate(Presenca = case_when(
     TP_PRESENCA_CH == 0 ~ "Ausente",
     TP_PRESENCA_CH == 1 ~ "Presente",
-    TRUE ~ "Outro"
+    TRUE ~ "Eliminado da prova"
   )) %>%
   count(Presenca, sort = TRUE) %>% # Conta as ocorrências
   mutate(Percentual = prop.table(n) * 100) # Calcula o percentual
@@ -47,23 +61,47 @@ tabela_presenca <- amostra_10p %>%
 kable(tabela_presenca,
       caption = "Tabela 1: Frequência de Presença na Prova de CH",
       col.names = c("Status", "Frequência (N)", "Percentual (%)"),
-      digits = 2) # Formata com 2 casas decimais
+      digits = 2) %>%
+      kable_styling(bootstrap_options = c("striped", "hover", "condensed"), 
+      full_width = FALSE, 
+      position = "center") %>%
+      row_spec(0, bold = TRUE, background = "#D3D3D3")
 
 # Item 2: Gráfico (Gráfico de Barras)
 ggplot(tabela_presenca, aes(x = reorder(Presenca, -n), y = n)) +
   geom_bar(stat = "identity", fill = "steelblue") +
   geom_text(aes(label = n), vjust = -0.5) + # Adiciona o número no topo
+  
+  scale_y_continuous(
+    # 3. ALTERAÇÃO AQUI: Formatamos o EIXO Y (lateral)
+    labels = scales::label_number(big.mark = ".", decimal.mark = ","),
+    
+    # 4. ALTERAÇÃO AQUI: Aumentamos o teto do gráfico em 10% para o número não cortar
+    expand = expansion(mult = c(0, 0.1)) 
+  ) +
+  
   labs(title = "Gráfico 1: Presença na Prova de CH",
        x = "Status de Presença",
        y = "Número de Alunos") +
   theme_minimal()
 
 ```
-Com base na Tabela 1 e no Gráfico consi
 
+Com base na analise do gráfico "Presença na Prova Ciências Humanas" e da tabela "Frequência da Presença na Prova de Ciências Humanas" foi possível determinar que no Exame Nacional do Ensino Médio (ENEM), edição de 2024, o número de alunos presentes foi de aproximadamente 2,73 vezes maior que o número de alunos ausentes. Isso se revela, atraves da variavel 
 
 ```{r}
 # Item 1: Tabela de Frequências (Códigos da Prova)
+
+library(dplyr)
+
+# 1. Criar tabela para as provas de acessibilidade
+dados_acessibilidade <- amostra_10p %>%
+  filter(CO_PROVA_CH %in% c(1387, 1390, 1391, 1388)) 
+
+# 2. Criar tabela para as provas de normais
+dados_normais <- amostra_10p %>%
+  filter(CO_PROVA_CH %in% c(1386, 1384, 1383, 1385))
+
 tabela_prova <- amostra_10p %>%
   filter(TP_PRESENCA_CH == 1) %>% # Filtra APENAS os presentes
   count(CO_PROVA_CH, sort = TRUE) %>%
@@ -78,24 +116,93 @@ moda_prova <- tabela_prova$CO_PROVA_CH[1]
 kable(tabela_prova,
       caption = "Tabela 2: Frequência dos Códigos de Prova de CH (entre presentes)",
       col.names = c("Código da Prova", "Frequência (N)", "Percentual (%)"),
-      digits = 2)
+      digits = 2) %>%
+      kable_styling(bootstrap_options = c("striped", "hover", "condensed"), 
+      full_width = FALSE, 
+      position = "center") %>%
+      row_spec(0, bold = TRUE, background = "#D3D3D3")
 
-# Item 2: Gráfico (Gráfico de Barras)
-ggplot(tabela_prova, aes(x = reorder(factor(CO_PROVA_CH), -n), y = n)) +
-  geom_bar(stat = "identity", fill = "darkgreen") +
-  labs(title = "Gráfico 2: Distribuição dos Códigos de Prova de CH",
-       x = "Código da Prova",
-       y = "Número de Alunos") +
-  theme_minimal()
+library(dplyr)
+library(ggplot2)
+
+# Preparar os dados - criar a 
+tabela_acessibilidade <- dados_acessibilidade %>%
+  count(CO_PROVA_CH) %>% # <--- Isso cria a coluna 'n'
+  mutate(Percentual = prop.table(n) * 100)
+
+tabela_normais <- dados_normais %>%
+  count(CO_PROVA_CH) %>%                 # Conta quantos alunos fizeram cada prova
+  mutate(Percentual = prop.table(n) * 100) # Calcula a %
+
+# Gerar o Gráfico de Pizza - dados normais
+ggplot(tabela_normais, aes(x = 2, y = Percentual, fill = factor(CO_PROVA_CH))) +
+  geom_col(width = 1) + 
+  coord_polar(theta = "y") +
+  geom_text(
+    aes(label = paste0(round(Percentual, 1), "%")),
+    position = position_stack(vjust = 0.5),
+    color = "black", # Dica: Se o fundo for escuro, mude para "white"
+    size = 4
+  ) +
+  
+  # Títulos e Legendas
+  labs(
+    title = "Distribuição: Provas Normais (Rosca)",
+    fill = "Código da Prova",
+    x = NULL,
+    y = NULL
+  ) +
+  theme_void()
+
+# Gerar o Gráfico de Pizza - dados acessibilidade
+ggplot(tabela_acessibilidade, aes(x = 2, y = Percentual, fill = factor(CO_PROVA_CH))) +
+  geom_col(width = 1) + 
+  coord_polar(theta = "y") +
+  geom_text(
+    aes(label = paste0(round(Percentual, 1), "%")),
+    position = position_stack(vjust = 0.5),
+    color = "black", # Dica: Se o fundo for escuro, mude para "white"
+    size = 4
+  ) +
+  
+  # Títulos e Legendas
+  labs(
+    title = "Distribuição: Provas de Acessibilidade",
+    fill = "Código da Prova",
+    x = NULL,
+    y = NULL
+  ) +
+  theme_void()
+
+# Gerar o Gráfico de Pizza - dados acessibilidade + dados normais
+ggplot(tabela_prova, aes(x = 2, y = Percentual, fill = factor(CO_PROVA_CH))) +
+  geom_col(width = 1) + 
+  coord_polar(theta = "y") +
+  geom_text(
+    aes(label = paste0(round(Percentual, 1), "%")),
+    position = position_stack(vjust = 0.5),
+    color = "black", # Dica: Se o fundo for escuro, mude para "white"
+    size = 4
+  ) +
+  
+  # Títulos e Legendas
+  labs(
+    title = "Distribuição: Provas de Acessibilidade",
+    fill = "Código da Prova",
+    x = NULL,
+    y = NULL
+  ) +
+  theme_void()
 
 ```
 
 
-```{r}
+```{r analise-continua-nota-1, echo=FALSE}
+
 # Cria um dataframe filtrado SÓ para as notas de CH dos PRESENTES
 dados_notas_ch <- amostra_10p %>%
   filter(TP_PRESENCA_CH == 1) %>%
-  filter(!is.na(NU_NOTA_CH)) # Remove valores Nulos (NA), se houver
+  filter(!is.na(NU_NOTA_CH))
 
 # Item 3: Calcular e interpretar as medidas descritivas
 # summary() já nos dá as separatrizes (Min, Q1, Mediana, Q3, Max) e a Média
@@ -104,9 +211,6 @@ medidas_resumo <- summary(dados_notas_ch$NU_NOTA_CH)
 # Calculamos as medidas de dispersão que faltam
 desvio_padrao <- sd(dados_notas_ch$NU_NOTA_CH)
 variancia <- var(dados_notas_ch$NU_NOTA_CH)
-
-# (Você pode imprimir esses valores no seu texto)
-# Ex: A média da nota de CH foi [valor] com desvio padrão de [valor].
 
 # Item 1: Tabela de Frequências (com Classes)
 # 1. Definimos os limites (breaks) das classes
@@ -127,11 +231,24 @@ tabela_classes_notas <- dados_notas_ch %>%
 kable(tabela_classes_notas,
       caption = "Tabela 3: Distribuição de Frequência das Notas de CH (por classe)",
       col.names = c("Faixa de Nota", "Frequência (N)", "Percentual (%)"),
-      digits = 2)
+      digits = 2,
+      format = "html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), 
+                full_width = FALSE, 
+                position = "center") %>%
+  row_spec(0, bold = TRUE, background = "#D3D3D3")
+
+# 2. Gráfico: Histograma
+hist(dados_notas_ch$NU_NOTA_CH,
+     main="Gráfico 3: Distribuição das Notas de Humanas (GO)",
+     xlab="Nota de Humanas",
+     ylab="Frequência",
+     col="darkred",
+     breaks = 20)
 
 # Item 2: Gráficos para dados contínuos (Histograma)
 ggplot(dados_notas_ch, aes(x = NU_NOTA_CH)) +
-  geom_histogram(aes(y = after_stat(density)), # 'density' é melhor para ver a forma
+  geom_histogram(aes(y = after_stat(density)), 
                  binwidth = 50, # Ajuste a largura da barra (bin)
                  color = "black", fill = "lightblue") +
   geom_density(color = "red", linewidth = 1) + # Adiciona uma linha de densidade
@@ -182,10 +299,10 @@ analise_dispersao_estado <- amostra_10p %>%
   summarise(
     Media = mean(NU_NOTA_CH),
     Desvio_Padrao = sd(NU_NOTA_CH),
-    Coef_Variacao_Percent = (Desvio_Padrao / Media) * 100, # Fórmula do CV
+    Coef_Variacao_Percent = (Desvio_Padrao / Media) * 100,
     Numero_de_Alunos = n()
   ) %>%
-  # Vamos ordenar pelo Coef. de Variação (do mais consistente para o menos)
+  
   arrange(Coef_Variacao_Percent) 
 
 # Exibir a tabela
@@ -220,22 +337,116 @@ ggplot(dados_ch_presentes, aes(x = reorder(SG_UF_PROVA, NU_NOTA_CH, FUN = median
 ```
 
 
-## R Markdown
+```{r}
+VARIAVEL_EM_ANALISE <- "NU_NOTA_CH"
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+dados_analise <- amostra_10p %>%
+  # Filtra alunos PRESENTES na prova de CH
+  filter(TP_PRESENCA_CH == 1) %>%
+  # Seleciona apenas a nota de CH e renomeia para "Valor"
+  select(Valor = all_of(VARIAVEL_EM_ANALISE)) %>%
+  # Remove NAs (notas nulas)
+  filter(!is.na(Valor))
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+# 2. Tabela de Frequências (por Classes)
+
+Para dados quantitativos contínuos, criamos classes (faixas de valores) para a tabela de frequências.
+
+```{r}
+# 1. Definir os limites das classes (ex: de 50 em 50 pontos)
+limites_classes <- seq(
+  from = floor(min(dados_analise$Valor) / 50) * 50, # Arredonda para baixo
+  to = ceiling(max(dados_analise$Valor) / 50) * 50, # Arredonda para cima
+  by = 50 # Intervalo da classe
+)
+
+# 2. Criar a tabela de frequências
+tabela_freq <- dados_analise %>%
+  mutate(Classe = cut(
+    Valor,
+    breaks = limites_classes,
+    right = FALSE # Intervalo [fechado, aberto)
+  )) %>%
+  count(Classe, name = "Frequencia") %>%
+  filter(!is.na(Classe)) %>% # Remove NAs que podem surgir do 'cut'
+  mutate(
+    Percentual = (Frequencia / sum(Frequencia)) * 100,
+    Acumulada = cumsum(Frequencia),
+    Percentual_Acumulado = cumsum(Percentual)
+  )
+
+# 3. Exibir a tabela formatada
+tabela_freq %>%
+  kable(
+    caption = "Tabela 1: Tabela de Frequências por Classe (Nota de CH)",
+    col.names = c("Classe", "Freq. (N)", "%", "Freq. Acum.", "% Acum."),
+    digits = 2,
+    format = "html"
+  ) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), 
+                full_width = FALSE) %>%
+  # Destaca a Classe Modal (maior frequência)
+  row_spec(which.max(tabela_freq$Frequencia), 
+           bold = TRUE, 
+           background = "#DFF0D8")
+
+
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Interpretação da Tabela 1: A faixa de nota com maior frequência (a Classe Modal) é [500, 550), contendo 21.05% dos alunos.
+
+# 3. Medidas Descritivas
+
+Calculamos as principais medidas de tendência central, dispersão e posição.
+
+```{r}
+
+
+# 1. Calcular Medidas usando summary()
+sumario <- summary(dados_analise$Valor)
+
+# 2. Calcular Medidas Adicionais
+medidas_adicionais <- tibble(
+  Medida = c(
+    "Variância",
+    "Desvio Padrão",
+    "Amplitude Total (Range)",
+    "Coef. de Variação (CV)"
+  ),
+  Valor = c(
+    var(dados_analise$Valor),
+    sd(dados_analise$Valor),
+    max(dados_analise$Valor) - min(dados_analise$Valor),
+    (sd(dados_analise$Valor) / mean(dados_analise$Valor)) * 100
+  )
+)
+
+# 3. Juntar tudo numa tabela
+# O summary() já nos dá: Mínimo, Q1, Mediana, Média, Q3, Máximo
+tabela_medidas <- tibble(
+  Medida = names(sumario),
+  Valor = as.numeric(sumario)
+) %>%
+  # Adiciona as medidas extras
+  bind_rows(medidas_adicionais)
+
+# 4. Exibir a tabela de medidas
+tabela_medidas %>%
+  kable(
+    caption = "Tabela 2: Medidas Descritivas para Nota de CH",
+    col.names = c("Medida", "Valor"),
+    digits = 2,
+    format = "html"
+  ) %>%
+  kable_styling(bootstrap_options = c("striped", "condensed"), 
+                full_width = FALSE)
+
+
+```
+
+Sobre a Moda: Para dados contínuos, não se calcula uma "Moda" (valor único), pois é raro um valor se repetir. Analisamos a Classe Modal, como visto na Tabela 1 (a faixa de valores mais frequente).
+
