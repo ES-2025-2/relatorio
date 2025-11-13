@@ -67,10 +67,8 @@ freq_rel_comp4 <- prop.table(freq_abs_comp4)
 freq_abs_comp5 <- table(amostra_10p$NU_NOTA_COMP5)
 freq_rel_comp5 <- prop.table(freq_abs_comp5)
 
-
-# Resolver o problema das linhas aaaaaaaaaaaaa
 tabela_freq_comp1 <- data.frame(
-  Nota = names(notas),
+  Nota = names(freq_abs_comp1),
   'Frequência na Competência 1' = as.vector(freq_abs_comp1),
   'Porcentagem de Frequência' = paste0(round(100 * as.vector(freq_rel_comp1), 2), "%"),
   'Frequência na Competência 2' = as.vector(freq_abs_comp2),
@@ -84,17 +82,5 @@ tabela_freq_comp1 <- data.frame(
   check.names = FALSE
 )
 
-print(tabela_freq_comp1)
-```
-
-```{r notaCompetencias}
-freq_abs_comp2 <- table(comp2)
-freq_rel_comp2 <- prop.table(freq_abs_comp2)
-
-tabela_freq_comp1 <- data.frame(
-  Nota = names(freq_abs_comp2),
-  'Frequência na Competência 2' = round(as.vector(freq_abs_comp2), 4),
-  'Porcentagem de Frequência' = paste0(round(100 * as.vector(freq_rel_comp2), 2), "%")
-)
 print(tabela_freq_comp1)
 ```
