@@ -1,47 +1,155 @@
 ---
-title: "Relatorio"
+title: "Relatório"
 author: "Fabio Firanzi, Heitor Dias, Julia Fideles, Matheus Soares, Tiago Braga"
 date: "2025-11-11"
-output: html_document
+output:
+  pdf_document:
+    latex_engine: pdflatex
+    keep_tex: true
+header-includes: |
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage[portuguese]{babel}
+  \usepackage{booktabs}
+  \usepackage{float}
+  \usepackage{graphicx}
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  fig.pos = "H",
+  fig.path = "relatorio-figs/"
+)
 ```
 
 ```{r setup-e-carga, message=FALSE, warning=FALSE}
-# Carregar o banco de dados
+library(ggplot2)
+library(kableExtra)
+library(dplyr)
+
 amostra_10p <- read.csv("amostra_10p.csv", fileEncoding = "latin1")
 
-# Substituir os códigos por rótulos descritivos
 amostra_10p$TP_PRESENCA_MT <- factor(
   amostra_10p$TP_PRESENCA_MT,
   levels = c(0, 1, 2),
   labels = c("Ausente", "Presente", "Eliminado")
 )
 
-# Criar tabelas de frequência
-freq_abs <- table(amostra_10p$TP_PRESENCA_MT)
-freq_rel <- prop.table(freq_abs)
-
-# Montar tabela final com símbolo de %
-tabela <- data.frame(
-  Presença_na_prova = names(freq_abs),
-  Frequência = as.vector(freq_abs),
-  Proporção = round(as.vector(freq_rel), 12),
-  Percentual = paste0(round(100 * as.vector(freq_rel), 2), "%")
+amostra_10p$CO_PROVA_MT <- factor(
+  amostra_10p$CO_PROVA_MT,
+  levels = c(1407, 1408, 1409, 1410, 1411, 1412, 1414, 1415, 1416, 1363, 1364, 1365, 1366, 1367, 1368, 1370),
+  labels = c("Azul", "Amarela", "Verde", "Cinza", "Verde - Ampliada", "Verde - Superampliada", "Laranja - Adaptada Ledor", "Roxa - Videoprova - Libras", "Roxa - Videoprova - Libras - Ampliada", "Azul (Reaplicação)", "Amarela (Reaplicação)", "Verde (Reaplicação)", "Cinza (Reaplicação)", "Verde - Ampliada (Reaplicação)", "Verde - Superampliada (Reaplicação)", "Laranja - Adaptada Ledor (Reaplicação)")
 )
-
-# Exibir tabela formatada
-library(kableExtra)
-knitr::kable(tabela, caption = "Tabela de Frequência - Presença na Prova de Matemática") %>%
-  kable_styling(full_width = FALSE, bootstrap_options = c("striped", "hover"))
-
-
-barplot(table(amostra_10p$TP_PRESENCA_MT),
-        main = "Presença na prova",
-        col = c("tomato", "lightgreen", "skyblue"),
-        xlab = "Situação", ylab = "Frequência")
-
 ```
 
+<!-- LINHA 1: Tabela 1 e Gráfico 1, lado a lado -->
+\noindent
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\textbf{Tabela 1:} Frequência - Presença na Prova de Matemática
+\par\vspace{1ex}
+
+```{r tabela-presenca}
+freq_abs_presenca <- table(amostra_10p$TP_PRESENCA_MT)
+freq_rel_presenca <- prop.table(freq_abs_presenca)
+tabela <- data.frame(
+  `Presença na prova` = names(freq_abs_presenca),
+  Percentual = paste0(round(100 * as.vector(freq_rel_presenca), 2), "%"),
+  Proporção = round(as.vector(freq_rel_presenca), 4),
+  check.names = FALSE
+)
+knitr::kable(tabela, format = "latex", booktabs = TRUE)
+```
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\textbf{Gráfico 1:} Presença na Prova
+\par\vspace{1ex}
+
+```{r grafico-presenca, out.width = "\\linewidth"}
+df_presenca <- as.data.frame(table(amostra_10p$TP_PRESENCA_MT))
+colnames(df_presenca) <- c("Situacao", "Frequencia")
+ggplot(df_presenca, aes(x = Situacao, y = Frequencia, fill = Situacao)) +
+  geom_bar(stat = "identity", show.legend = FALSE) +
+  geom_text(aes(label = Frequencia), vjust = -0.5) +
+  labs(x = "Situação", y = "Frequência") +
+  scale_fill_manual(values = c("Ausente" = "tomato", "Presente" = "lightgreen", "Eliminado" = "skyblue")) +
+  theme_minimal() +
+  theme(panel.grid.major.x = element_blank())
+```
+\end{minipage}
+
+\vfill
+
+<!-- CÁLCULO OCULTO: O código aqui é executado, mas a tabela não é mostrada -->
+```{r calcula-dados-gerais, include=FALSE}
+freq_abs_tipo_de_prova <- table(amostra_10p$CO_PROVA_MT)
+freq_rel_tipo_de_prova <- prop.table(freq_abs_tipo_de_prova)
+tabela_geral <- data.frame(
+  `Tipo de prova` = names(freq_abs_tipo_de_prova),
+  Frequência = as.vector(freq_abs_tipo_de_prova),
+  Proporção = round(as.vector(freq_rel_tipo_de_prova), 4),
+  Percentual = paste0(round(100 * as.vector(freq_rel_tipo_de_prova), 2), "%"),
+  check.names = FALSE
+)
+```
+
+<!-- LINHA 2: Tabela 2 e Gráfico 2, lado a lado -->
+\noindent
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\textbf{Tabela 2:} Provas Padrão vs. Acessibilidade
+\par\vspace{1ex}
+
+```{r tabela-acessibilidade}
+tabela_resumida <- tabela_geral %>%
+  mutate(Categoria = ifelse(
+    grepl("Ampliada|Superampliada|Adaptada|Videoprova", `Tipo de prova`),
+    "Prova com acessibilidade", "Prova padrão"
+  )) %>%
+  group_by(Categoria) %>%
+  summarise(Frequência = sum(Frequência), .groups = 'drop') %>%
+  mutate(
+    Proporção = Frequência / sum(Frequência),
+    Percentual = paste0(round(Proporção * 100, 2), "%")
+  )
+
+tabela_para_exibir <- tabela_resumida %>%
+  select(Categoria, Percentual, Proporção)
+
+knitr::kable(
+  tabela_para_exibir, 
+  format = "latex", 
+  booktabs = TRUE,
+  digits = 4
+)
+```
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\textbf{Gráfico 2:} Proporção de Provas com Acessibilidade
+\par\vspace{1ex}
+
+```{r grafico-acessibilidade, out.width = "\\linewidth", fig.asp = 1}
+ggplot(tabela_resumida, aes(x = "", y = Frequência, fill = Categoria)) +
+  geom_bar(stat = "identity", width = 1, color = "white") +
+  coord_polar(theta = "y") +
+  geom_text(
+    aes(label = Percentual),
+    position = position_stack(vjust = 0.5),
+    color = "white", size = 5, fontface = "bold"
+  ) +
+  scale_fill_manual(values = c("Prova com acessibilidade" = "#ff7f0e", "Prova padrão" = "#1f77b4")) +
+  theme_void() +
+  labs(title = NULL) +
+  theme(
+    legend.title = element_blank(),
+    legend.position = "bottom"
+  )
+```
+\end{minipage}

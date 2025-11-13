@@ -1,0 +1,152 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[portuguese]{babel}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Relatório},
+  pdfauthor={Fabio Firanzi, Heitor Dias, Julia Fideles, Matheus Soares, Tiago Braga},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Relatório}
+\author{Fabio Firanzi, Heitor Dias, Julia Fideles, Matheus Soares, Tiago
+Braga}
+\date{2025-11-11}
+
+\begin{document}
+\maketitle
+
+\noindent
+
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\textbf{Tabela 1:} Frequência - Presença na Prova de Matemática
+\par\vspace{1ex}
+
+
+\begin{tabular}{llr}
+\toprule
+Presença na prova & Percentual & Proporção\\
+\midrule
+Ausente & 30.56\% & 0.3056\\
+Presente & 69.38\% & 0.6938\\
+Eliminado & 0.06\% & 0.0006\\
+\bottomrule
+\end{tabular}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\textbf{Gráfico 1:} Presença na Prova
+\par\vspace{1ex}
+
+
+\includegraphics[width=\linewidth]{relatorio-figs/grafico-presenca-1} 
+\end{minipage}
+
+\vfill
+
+\noindent
+
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\textbf{Tabela 2:} Provas Padrão vs. Acessibilidade
+\par\vspace{1ex}
+
+
+\begin{tabular}{llr}
+\toprule
+Categoria & Percentual & Proporção\\
+\midrule
+Prova com acessibilidade & 0.22\% & 0.0022\\
+Prova padrão & 99.78\% & 0.9978\\
+\bottomrule
+\end{tabular}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\textbf{Gráfico 2:} Proporção de Provas com Acessibilidade
+\par\vspace{1ex}
+
+
+\includegraphics[width=\linewidth]{relatorio-figs/grafico-acessibilidade-1} 
+\end{minipage}
+
+\end{document}
