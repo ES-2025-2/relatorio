@@ -28,7 +28,7 @@ names(freq_abs_le) <- c("Inglês", "Espanhol")
 
 tabela_freq_le <- data.frame(
   'Língua Estrangeira' = names(freq_abs_le),
-  percentual = paste0(round(100 * as.vector(freq_rel_le), 2), "%"),
+  Percentual = paste0(round(100 * as.vector(freq_rel_le), 2), "%"),
   Proporção = round(as.vector(freq_rel_le), 4),
   check.names = FALSE
 )
@@ -45,4 +45,56 @@ pie(freq_abs_le,
     col = c("#FFBEE0", "#D56D6D"),
     labels = rotulo_le
 )
+```
+
+```{r notaCompetencias}
+# Padronização de linhas
+notas <- c(0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200)
+
+freq_abs_comp1 <- table(amostra_10p$NU_NOTA_COMP1)
+freq_rel_comp1 <- prop.table(freq_abs_comp1)
+
+comp2 <- factor(amostra_10p$NU_NOTA_COMP2, levels = notas)
+freq_abs_comp2 <- table(comp2)
+freq_rel_comp2 <- prop.table(freq_abs_comp2)
+
+freq_abs_comp3 <- table(amostra_10p$NU_NOTA_COMP3)
+freq_rel_comp3 <- prop.table(freq_abs_comp3)
+
+freq_abs_comp4 <- table(amostra_10p$NU_NOTA_COMP4)
+freq_rel_comp4 <- prop.table(freq_abs_comp4)
+
+freq_abs_comp5 <- table(amostra_10p$NU_NOTA_COMP5)
+freq_rel_comp5 <- prop.table(freq_abs_comp5)
+
+
+# Resolver o problema das linhas aaaaaaaaaaaaa
+tabela_freq_comp1 <- data.frame(
+  Nota = names(notas),
+  'Frequência na Competência 1' = as.vector(freq_abs_comp1),
+  'Porcentagem de Frequência' = paste0(round(100 * as.vector(freq_rel_comp1), 2), "%"),
+  'Frequência na Competência 2' = as.vector(freq_abs_comp2),
+  'Porcentagem de Frequência' = paste0(round(100 * as.vector(freq_rel_comp2), 2), "%"),
+  'Frequência na Competência 3' = as.vector(freq_abs_comp3),
+  'Porcentagem de Frequência' = paste0(round(100 * as.vector(freq_rel_comp3), 2), "%"),
+  'Frequência na Competência 4' = as.vector(freq_abs_comp4),
+  'Porcentagem de Frequência' = paste0(round(100 * as.vector(freq_rel_comp4), 2), "%"),
+  'Frequência na Competência 5' = as.vector(freq_abs_comp5),
+  'Porcentagem de Frequência' = paste0(round(100 * as.vector(freq_rel_comp5), 2), "%"),
+  check.names = FALSE
+)
+
+print(tabela_freq_comp1)
+```
+
+```{r notaCompetencias}
+freq_abs_comp2 <- table(comp2)
+freq_rel_comp2 <- prop.table(freq_abs_comp2)
+
+tabela_freq_comp1 <- data.frame(
+  Nota = names(freq_abs_comp2),
+  'Frequência na Competência 2' = round(as.vector(freq_abs_comp2), 4),
+  'Porcentagem de Frequência' = paste0(round(100 * as.vector(freq_rel_comp2), 2), "%")
+)
+print(tabela_freq_comp1)
 ```
