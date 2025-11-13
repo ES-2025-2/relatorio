@@ -29,7 +29,7 @@ library(readxl)
 library(dplyr)
 library(ggplot2)
 library(kableExtra)
-
+library(knitr)
 ```
 
 
@@ -88,6 +88,9 @@ ggplot(tabela_presenca, aes(x = reorder(Presenca, -n), y = n)) +
 ```
 
 Com base na analise do gráfico "Presença na Prova Ciências Humanas" e da tabela "Frequência da Presença na Prova de Ciências Humanas" foi possível determinar que no Exame Nacional do Ensino Médio (ENEM), edição de 2024, o número de alunos presentes foi de aproximadamente 2,73 vezes maior que o número de alunos ausentes. Isso se revela, atraves da variavel 
+
+
+# 1.2 Analise da variavel código da prova
 
 ```{r}
 # Item 1: Tabela de Frequências (Códigos da Prova)
@@ -197,73 +200,116 @@ ggplot(tabela_prova, aes(x = 2, y = Percentual, fill = factor(CO_PROVA_CH))) +
 ```
 
 
-```{r analise-continua-nota-1, echo=FALSE}
 
-# Cria um dataframe filtrado SÓ para as notas de CH dos PRESENTES
-dados_notas_ch <- amostra_10p %>%
-  filter(TP_PRESENCA_CH == 1) %>%
-  filter(!is.na(NU_NOTA_CH))
+# 1.3 Analise da variavel de presença na prova de humanas
 
-# Item 3: Calcular e interpretar as medidas descritivas
-# summary() já nos dá as separatrizes (Min, Q1, Mediana, Q3, Max) e a Média
-medidas_resumo <- summary(dados_notas_ch$NU_NOTA_CH)
 
-# Calculamos as medidas de dispersão que faltam
-desvio_padrao <- sd(dados_notas_ch$NU_NOTA_CH)
-variancia <- var(dados_notas_ch$NU_NOTA_CH)
+```{r}
+# 1. Carregar o arquivo de dados
+dados <- read.csv("amostra_10p.csv")
 
-# Item 1: Tabela de Frequências (com Classes)
-# 1. Definimos os limites (breaks) das classes
-limites_classes <- seq(floor(min(dados_notas_ch$NU_NOTA_CH)),
-                       ceiling(max(dados_notas_ch$NU_NOTA_CH)),
-                       by = 100) # (Classes de tamanho 100, ajuste se necessário)
+# 2. Criar a tabela resumo
+# O símbolo %>% (pipe) significa "e então..."
+tabela_resumo_estados <- dados %>%
+  
+  # PASSO 1: FILTRAR
+  # Vamos usar a nota de Ciências Humanas (NU_NOTA_CH)
+  # Filtra apenas quem estava PRESENTE e tinha nota
+  filter(TP_PRESENCA_CH == 1, !is.na(NU_NOTA_CH)) %>%
+  
+  # PASSO 2: AGRUPAR
+  # Agrupa os dados por Estado
+  group_by(SG_UF_PROVA) %>%
+  
+  # PASSO 3: CALCULAR AS ESTATÍSTICAS
+  # Cria o sumário com as colunas que você pediu
+  summarise(
+    Media = mean(NU_NOTA_CH),
+    Mediana = median(NU_NOTA_CH),
+    Variancia = var(NU_NOTA_CH),
+    Desvio_Padrao = sd(NU_NOTA_CH),
+    Minimo = min(NU_NOTA_CH),
+    Maximo = max(NU_NOTA_CH),
+    N_Alunos = n() # Adicionei a contagem de alunos (N)
+  ) %>%
+  
+  # PASSO 4: ORDENAR (Opcional, mas ajuda)
+  # Ordena pela Média, da maior para a menor
+  arrange(desc(Media))
 
-# 2. Cortamos os dados nas classes
-dados_notas_ch <- dados_notas_ch %>%
-  mutate(Classe_Nota = cut(NU_NOTA_CH, breaks = limites_classes, right = FALSE))
+# 3. Exibir a tabela formatada
+# (Usando kable e kableExtra para ficar bonito)
+tabela_resumo_estados %>%
+  kable(
+    caption = "Tabela Resumo: Estatísticas das Notas de CH por Estado",
+    col.names = c("Estado", "Média", "Mediana", "Variância", "Desv. Padrão", "Mínimo", "Máximo", "Nº de Alunos"),
+    digits = 2, # Arredonda os números para 2 casas decimais
+    format = "html" # Formato para o RMarkdown
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width = FALSE,
+    position = "center"
+  )
 
-# 3. Contamos as classes
-tabela_classes_notas <- dados_notas_ch %>%
-  count(Classe_Nota) %>%
-  mutate(Percentual = prop.table(n) * 100)
+```
 
-# Mostra a tabela
-kable(tabela_classes_notas,
-      caption = "Tabela 3: Distribuição de Frequência das Notas de CH (por classe)",
-      col.names = c("Faixa de Nota", "Frequência (N)", "Percentual (%)"),
-      digits = 2,
-      format = "html") %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), 
-                full_width = FALSE, 
-                position = "center") %>%
-  row_spec(0, bold = TRUE, background = "#D3D3D3")
 
-# 2. Gráfico: Histograma
-hist(dados_notas_ch$NU_NOTA_CH,
-     main="Gráfico 3: Distribuição das Notas de Humanas (GO)",
-     xlab="Nota de Humanas",
-     ylab="Frequência",
-     col="darkred",
-     breaks = 20)
 
-# Item 2: Gráficos para dados contínuos (Histograma)
-ggplot(dados_notas_ch, aes(x = NU_NOTA_CH)) +
-  geom_histogram(aes(y = after_stat(density)), 
-                 binwidth = 50, # Ajuste a largura da barra (bin)
-                 color = "black", fill = "lightblue") +
-  geom_density(color = "red", linewidth = 1) + # Adiciona uma linha de densidade
-  labs(title = "Gráfico 3: Histograma das Notas de CH",
-       x = "Nota de Ciências Humanas",
-       y = "Densidade") +
-  theme_minimal()
+```{r analise-medidas-estatistica, echo=FALSE}
+# 1. Carregar o arquivo de dados
+# (Assumindo que você já o carregou como 'amostra_10p')
+dados <- read.csv("amostra_10p.csv") 
 
-# Item 4: Construir o Boxplot
-ggplot(dados_notas_ch, aes(y = NU_NOTA_CH)) +
-  geom_boxplot() +
-  labs(title = "Gráfico 4: Boxplot das Notas de CH",
-       x = "",
-       y = "Nota de Ciências Humanas") +
-  theme_minimal()
+# 2. Criar a Tabela Resumo por Região
+tabela_resumo_regiao <- amostra_10p %>%
+  
+  # PASSO 1: FILTRAR
+  # Filtra apenas quem estava PRESENTE e tinha nota de CH
+  filter(TP_PRESENCA_CH == 1, !is.na(NU_NOTA_CH), NU_NOTA_CH > 0) %>%
+  
+  # PASSO 2: "ETIQUETAR" (MUTATE)
+  # Cria a nova coluna "Regiao" com base no seu critério
+  mutate(Regiao = case_when(
+    SG_UF_PROVA %in% c('AM', 'AC', 'RO', 'RR', 'AP', 'PA', 'TO') ~ "Norte",
+    SG_UF_PROVA %in% c('MA', 'PI', 'CE', 'RN', 'PB', 'PE', 'AL', 'SE', 'BA') ~ "Nordeste",
+    SG_UF_PROVA %in% c('SP', 'MG', 'RJ', 'ES') ~ "Sudeste",
+    SG_UF_PROVA %in% c('GO', 'DF', 'MT', 'MS') ~ "Centro-Oeste",
+    SG_UF_PROVA %in% c('PR', 'SC', 'RS') ~ "Sul"
+  )) %>%
+  
+  # PASSO 3: AGRUPAR
+  # Agora agrupamos pela nova coluna
+  group_by(Regiao) %>%
+  
+  # PASSO 4: CALCULAR AS ESTATÍSTICAS
+  # Resumimos os dados para cada Regiao
+  summarise(
+    Media = mean(NU_NOTA_CH),
+    Mediana = median(NU_NOTA_CH),
+    Variancia = var(NU_NOTA_CH),
+    Desvio_Padrao = sd(NU_NOTA_CH),
+    Minimo = min(NU_NOTA_CH),
+    Maximo = max(NU_NOTA_CH),
+    N_Alunos = n()
+  ) %>%
+  
+  # PASSO 5: ORDENAR (Opcional)
+  arrange(desc(Media))
+
+# 3. Exibir a tabela formatada
+tabela_resumo_regiao %>%
+  kable(
+    caption = "Tabela Resumo: Estatísticas das Notas de CH por Região",
+    col.names = c("Região", "Média", "Mediana", "Variância", "Desv. Padrão", "Mínimo", "Máximo", "Nº de Alunos"),
+    digits = 2, # Arredonda os números
+    format = "html"
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width = FALSE,
+    position = "center"
+  )
 
 ```
 
