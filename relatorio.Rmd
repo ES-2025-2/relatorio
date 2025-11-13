@@ -2,29 +2,47 @@
 title: "Relatorio"
 author: "Fabio Firanzi, Heitor Dias, Julia Fideles, Matheus Soares, Tiago Braga"
 date: "2025-11-11"
-output: html_document
+output:
+  pdf_document:
+    latex_engine: pdflatex
+    keep_tex: true
+header-includes:
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage[portuguese]{babel}
+  \usepackage{booktabs}
+  \usepackage{float}
+  \usepackage{graphicx}
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
+
+amostra_10p <- read.csv("amostra_10p.csv")
 ```
 
-## R Markdown
+```{r linguaEstrangeira}
+freq_abs_le <- table(amostra_10p$TP_LINGUA)
+freq_rel_le <- prop.table(freq_abs_le)
+names(freq_abs_le) <- c("Inglês", "Espanhol")
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+tabela_freq_le <- data.frame(
+  'Língua Estrangeira' = names(freq_abs_le),
+  percentual = paste0(round(100 * as.vector(freq_rel_le), 2), "%"),
+  Proporção = round(as.vector(freq_rel_le), 4),
+  check.names = FALSE
+)
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+print(tabela_freq_le)
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r grafico-linguaEstrangeira, out.width = "\\linewidth", fig.asp = 1}
+percent_le <- paste0(round(100 * as.vector(freq_rel_le), 2), "%")
+rotulo_le <- paste(names(freq_abs_le), " (", percent_le, "%)", sep="")
+rotulo_le
+pie(freq_abs_le,
+    main = "Língua Estrangeira Selecionada",
+    col = c("#FFBEE0", "#D56D6D"),
+    labels = rotulo_le
+)
 ```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
