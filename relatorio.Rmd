@@ -39,13 +39,39 @@ print(tabela_freq_le)
 ```{r grafico-linguaEstrangeira, out.width = "\\linewidth", fig.asp = 1}
 percent_le <- paste0(round(100 * as.vector(freq_rel_le), 2), "%")
 rotulo_le <- paste(names(freq_abs_le), " (", percent_le, "%)", sep="")
-rotulo_le
+
 pie(freq_abs_le,
     main = "Língua Estrangeira Selecionada",
     col = c("#FFBEE0", "#D56D6D"),
     labels = rotulo_le
 )
 ```
+```{r statusRedacao}
+library(dplyr)
+library(ggplot2)
+amostra_10p$TP_REDACAO <- ifelse(
+  amostra_10p$TP_STATUS_REDACAO == 1,
+  "0",
+  "1"
+)
+
+redacoes_zeradas <- amostra_10p %>% filter(TP_STATUS_REDACAO >= 2 & TP_STATUS_REDACAO <= 9)
+redacoes_zeradas <- redacoes_zeradas %>% select(TP_STATUS_REDACAO)
+
+  
+freq_abs_red_zero <- table(redacoes_zeradas)
+freq_rel_red_zero <- prop.table(freq_abs_red_zero)
+names(freq_abs_red_zero) <- c("Anulada", "Cópia Texto Motivador", "Em Branco", "Fuga ao Tema", "Não atendimento ao tipo textual", "Texto insuficiente", "Parte desconectada")
+
+tabela_motivo_zero <- data.frame(
+  Motivo = names(freq_abs_red_zero),
+  Percentual = paste0(round(100 * as.vector(freq_rel_red_zero), 2), "%"),
+  check.names = FALSE
+)
+
+print(tabela_motivo_zero)
+```
+
 
 ```{r notaCompetencias}
 # Padronização de linhas
@@ -67,7 +93,7 @@ freq_rel_comp4 <- prop.table(freq_abs_comp4)
 freq_abs_comp5 <- table(amostra_10p$NU_NOTA_COMP5)
 freq_rel_comp5 <- prop.table(freq_abs_comp5)
 
-tabela_freq_comp1 <- data.frame(
+tabela_freq_comp <- data.frame(
   Nota = names(freq_abs_comp1),
   'Frequência na Competência 1' = as.vector(freq_abs_comp1),
   'Porcentagem de Frequência' = paste0(round(100 * as.vector(freq_rel_comp1), 2), "%"),
@@ -82,5 +108,29 @@ tabela_freq_comp1 <- data.frame(
   check.names = FALSE
 )
 
-print(tabela_freq_comp1)
+print(tabela_freq_comp)
 ```
+
+```{r notaRedacao}
+grupos_red <- seq(0, 1000, by = 100)
+grupo_notas_red <- cut(
+  amostra_10p$NU_NOTA_REDACAO,
+  breaks = grupos_red,
+  include.lowest = TRUE,
+  left = FALSE
+)
+
+freq_abs_red <- table(grupo_notas_red)
+freq_rel_red <- prop.table(freq_abs_red)
+names(freq_abs_red) <- c("x <= 100", "100 < x <= 200", "200 < x <= 300", "300 < x <= 400", "400 < x <= 500", "500 < x <= 600", "600 < x <= 700", "700 < x <= 800", "800 < x <= 900", "900 < x")
+
+tabela_freq_red <- data.frame(
+  'Intervalo de Notas' = names(freq_abs_red),
+  Percentual = paste0(round(100 * as.vector(freq_rel_red), 2), "%"),
+  Frequência = as.vector(freq_abs_red),
+  check.names = FALSE
+)
+
+print(tabela_freq_red)
+```
+
