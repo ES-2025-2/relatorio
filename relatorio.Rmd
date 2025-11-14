@@ -3,8 +3,6 @@ title: "Relatorio"
 author: "Fabio Firanzi, Heitor Dias, Julia Fideles, Matheus Soares, Tiago Braga"
 date: "2025-11-11"
 output:
-  html_document:
-    df_print: paged
   pdf_document:
     latex_engine: pdlatex
     keep_tex: true
@@ -19,11 +17,6 @@ header-includes:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-```
-
-###Analise da area de conhecimento de Humanas: Heitor
-
-```{r, message=FALSE, warning=FALSE}
 #Carregar as bibliotecas necessárias
 library(readxl)
 library(dplyr)
@@ -32,6 +25,7 @@ library(kableExtra)
 library(knitr)
 ```
 
+# Analise da area de conhecimento de Humanas: Heitor
 
 ```{r setup-e-carga, message=FALSE, warning=FALSE}
 #Carregar o banco de dados
@@ -41,7 +35,9 @@ amostra_10p <- read.csv("amostra_10p.csv")
 ```
 
 # 1.1 Analise da variavel de presença na prova de humanas
-## 1.2 Tabela e Gráfico de Frequências
+Foi feita uma analise da area de conhecimento de Ciências Humanas do Enem, utilizando a varivel: TP_PRESENCA_CH
+
+## 1.1 Tabela e Gráfico de Frequências
 Busca indentificar se o aluno estava presente, ausente ou se foi eliminado da prova de ciências humanas, e, com isso, expressar a porcentagem e os valores absolutos da variável TP_PRESENCA_CH.
 
 ```{r analise_variavel_presenca, message=FALSE, warning=FALSE}
@@ -87,176 +83,15 @@ ggplot(tabela_presenca, aes(x = reorder(Presenca, -n), y = n)) +
 
 ```
 
-Com base na analise do gráfico "Presença na Prova Ciências Humanas" e da tabela "Frequência da Presença na Prova de Ciências Humanas" foi possível determinar que no Exame Nacional do Ensino Médio (ENEM), edição de 2024, o número de alunos presentes foi de aproximadamente 2,73 vezes maior que o número de alunos ausentes. Isso se revela, atraves da variavel 
+No "Gráfico 1: Presença na Prova de CH"
+Com base na analise do gráfico "Presença na Prova Ciências Humanas" e da tabela "Frequência da Presença na Prova de Ciências Humanas" foi possível determinar que no Exame Nacional do Ensino Médio (ENEM), edição de 2024, o número de alunos presentes foi de aproximadamente 2,73 vezes maior que o número de alunos ausentes. Isso se revela, atraves da variavel
 
-
-# 1.2 Analise da variavel código da prova
-
-```{r}
-# Item 1: Tabela de Frequências (Códigos da Prova)
-
-library(dplyr)
-
-# 1. Criar tabela para as provas de acessibilidade
-dados_acessibilidade <- amostra_10p %>%
-  filter(CO_PROVA_CH %in% c(1387, 1390, 1391, 1388)) 
-
-# 2. Criar tabela para as provas de normais
-dados_normais <- amostra_10p %>%
-  filter(CO_PROVA_CH %in% c(1386, 1384, 1383, 1385))
-
-tabela_prova <- amostra_10p %>%
-  filter(TP_PRESENCA_CH == 1) %>% # Filtra APENAS os presentes
-  count(CO_PROVA_CH, sort = TRUE) %>%
-  mutate(Percentual = prop.table(n) * 100)
-
-# Item 3: Medida Descritiva (Moda)
-# A moda é o primeiro valor da tabela (o mais frequente)
-moda_prova <- tabela_prova$CO_PROVA_CH[1]
-# (Você pode citar a moda no seu texto)
-
-# Mostra a tabela
-kable(tabela_prova,
-      caption = "Tabela 2: Frequência dos Códigos de Prova de CH (entre presentes)",
-      col.names = c("Código da Prova", "Frequência (N)", "Percentual (%)"),
-      digits = 2) %>%
-      kable_styling(bootstrap_options = c("striped", "hover", "condensed"), 
-      full_width = FALSE, 
-      position = "center") %>%
-      row_spec(0, bold = TRUE, background = "#D3D3D3")
-
-library(dplyr)
-library(ggplot2)
-
-# Preparar os dados - criar a 
-tabela_acessibilidade <- dados_acessibilidade %>%
-  count(CO_PROVA_CH) %>% # <--- Isso cria a coluna 'n'
-  mutate(Percentual = prop.table(n) * 100)
-
-tabela_normais <- dados_normais %>%
-  count(CO_PROVA_CH) %>%                 # Conta quantos alunos fizeram cada prova
-  mutate(Percentual = prop.table(n) * 100) # Calcula a %
-
-# Gerar o Gráfico de Pizza - dados normais
-ggplot(tabela_normais, aes(x = 2, y = Percentual, fill = factor(CO_PROVA_CH))) +
-  geom_col(width = 1) + 
-  coord_polar(theta = "y") +
-  geom_text(
-    aes(label = paste0(round(Percentual, 1), "%")),
-    position = position_stack(vjust = 0.5),
-    color = "black", # Dica: Se o fundo for escuro, mude para "white"
-    size = 4
-  ) +
-  
-  # Títulos e Legendas
-  labs(
-    title = "Distribuição: Provas Normais (Rosca)",
-    fill = "Código da Prova",
-    x = NULL,
-    y = NULL
-  ) +
-  theme_void()
-
-# Gerar o Gráfico de Pizza - dados acessibilidade
-ggplot(tabela_acessibilidade, aes(x = 2, y = Percentual, fill = factor(CO_PROVA_CH))) +
-  geom_col(width = 1) + 
-  coord_polar(theta = "y") +
-  geom_text(
-    aes(label = paste0(round(Percentual, 1), "%")),
-    position = position_stack(vjust = 0.5),
-    color = "black", # Dica: Se o fundo for escuro, mude para "white"
-    size = 4
-  ) +
-  
-  # Títulos e Legendas
-  labs(
-    title = "Distribuição: Provas de Acessibilidade",
-    fill = "Código da Prova",
-    x = NULL,
-    y = NULL
-  ) +
-  theme_void()
-
-# Gerar o Gráfico de Pizza - dados acessibilidade + dados normais
-ggplot(tabela_prova, aes(x = 2, y = Percentual, fill = factor(CO_PROVA_CH))) +
-  geom_col(width = 1) + 
-  coord_polar(theta = "y") +
-  geom_text(
-    aes(label = paste0(round(Percentual, 1), "%")),
-    position = position_stack(vjust = 0.5),
-    color = "black", # Dica: Se o fundo for escuro, mude para "white"
-    size = 4
-  ) +
-  
-  # Títulos e Legendas
-  labs(
-    title = "Distribuição: Provas de Acessibilidade",
-    fill = "Código da Prova",
-    x = NULL,
-    y = NULL
-  ) +
-  theme_void()
-
-```
 
 
 
 # 1.3 Analise da variavel de presença na prova de humanas
 
-
-```{r}
-# 1. Carregar o arquivo de dados
-dados <- read.csv("amostra_10p.csv")
-
-# 2. Criar a tabela resumo
-# O símbolo %>% (pipe) significa "e então..."
-tabela_resumo_estados <- dados %>%
-  
-  # PASSO 1: FILTRAR
-  # Vamos usar a nota de Ciências Humanas (NU_NOTA_CH)
-  # Filtra apenas quem estava PRESENTE e tinha nota
-  filter(TP_PRESENCA_CH == 1, !is.na(NU_NOTA_CH)) %>%
-  
-  # PASSO 2: AGRUPAR
-  # Agrupa os dados por Estado
-  group_by(SG_UF_PROVA) %>%
-  
-  # PASSO 3: CALCULAR AS ESTATÍSTICAS
-  # Cria o sumário com as colunas que você pediu
-  summarise(
-    Media = mean(NU_NOTA_CH),
-    Mediana = median(NU_NOTA_CH),
-    Variancia = var(NU_NOTA_CH),
-    Desvio_Padrao = sd(NU_NOTA_CH),
-    Minimo = min(NU_NOTA_CH),
-    Maximo = max(NU_NOTA_CH),
-    N_Alunos = n() # Adicionei a contagem de alunos (N)
-  ) %>%
-  
-  # PASSO 4: ORDENAR (Opcional, mas ajuda)
-  # Ordena pela Média, da maior para a menor
-  arrange(desc(Media))
-
-# 3. Exibir a tabela formatada
-# (Usando kable e kableExtra para ficar bonito)
-tabela_resumo_estados %>%
-  kable(
-    caption = "Tabela Resumo: Estatísticas das Notas de CH por Estado",
-    col.names = c("Estado", "Média", "Mediana", "Variância", "Desv. Padrão", "Mínimo", "Máximo", "Nº de Alunos"),
-    digits = 2, # Arredonda os números para 2 casas decimais
-    format = "html" # Formato para o RMarkdown
-  ) %>%
-  kable_styling(
-    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
-    full_width = FALSE,
-    position = "center"
-  )
-
-```
-
-
-
-```{r analise-medidas-estatistica, echo=FALSE}
+```{r analise-medidas-estatistica}
 # 1. Carregar o arquivo de dados
 # (Assumindo que você já o carregou como 'amostra_10p')
 dados <- read.csv("amostra_10p.csv") 
@@ -398,7 +233,7 @@ dados_analise <- amostra_10p %>%
 
 
 
-# 2. Tabela de Frequências (por Classes)
+# 1.3.1 Tabela de Frequências (por Classes)
 
 Para dados quantitativos contínuos, criamos classes (faixas de valores) para a tabela de frequências.
 
@@ -445,7 +280,7 @@ tabela_freq %>%
 
 Interpretação da Tabela 1: A faixa de nota com maior frequência (a Classe Modal) é [500, 550), contendo 21.05% dos alunos.
 
-# 3. Medidas Descritivas
+# 1.3.2 Medidas Descritivas
 
 Calculamos as principais medidas de tendência central, dispersão e posição.
 
@@ -495,4 +330,55 @@ tabela_medidas %>%
 ```
 
 Sobre a Moda: Para dados contínuos, não se calcula uma "Moda" (valor único), pois é raro um valor se repetir. Analisamos a Classe Modal, como visto na Tabela 1 (a faixa de valores mais frequente).
+
+
+
+
+# 1.4 Correlação e Regressão Linear Simples
+
+```{r}
+# 2. Filtrar os dados para a regressão
+# É MUITO IMPORTANTE filtrar os dados corretamente:
+# - Aluno deve estar PRESENTE em AMBAS as provas (CH e LC)
+# - Aluno deve ter nota válida (não-NA) em AMBAS
+# - Aluno deve ter nota > 0 em AMBAS (para remover notas zeradas)
+
+dados_regressao <- amostra_10p %>%
+  filter(
+    TP_PRESENCA_CH == 1,
+    TP_PRESENCA_LC == 1,
+    !is.na(NU_NOTA_CH),
+    !is.na(NU_NOTA_LC),
+    NU_NOTA_CH > 0,
+    NU_NOTA_LC > 0
+  ) %>%
+  # Seleciona apenas as colunas que vamos usar
+  select(NU_NOTA_CH, NU_NOTA_LC)
+
+# Mostra o número de observações válidas para esta análise
+paste("Total de observações válidas para a regressão:", nrow(dados_regressao))
+
+# Calcula a correlação
+cor_coef <- cor(dados_regressao$NU_NOTA_LC, dados_regressao$NU_NOTA_CH)
+
+# Exibe o resultado
+cat(paste0("O Coeficiente de Correlação (r) entre LC e CH é: ", round(cor_coef, 4)))
+
+ggplot(dados_regressao, aes(x = NU_NOTA_LC, y = NU_NOTA_CH)) +
+  # 1. Nuvem de pontos
+  geom_point(alpha = 0.2, color = "blue") + # 'alpha' ajuda a ver a densidade
+  
+  # 2. Reta de Regressão (calculada automaticamente pelo ggplot)
+  geom_smooth(method = "lm", color = "red", linewidth = 1.5, se = TRUE) +
+  
+  # Títulos e formatação
+  labs(
+    title = "Gráfico de Regressão: Nota de Humanas vs. Nota de Linguagens",
+    x = "Nota de Linguagens e Códigos (LC)",
+    y = "Nota de Ciências Humanas (CH)"
+  ) +
+  theme_minimal()
+
+
+```
 
