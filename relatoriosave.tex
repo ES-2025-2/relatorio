@@ -1,0 +1,238 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[portuguese]{babel}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Relatório - Ciências da Natureza},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Relatório - Ciências da Natureza}
+\author{}
+\date{\vspace{-2.5em}2025-11-11}
+
+\begin{document}
+\maketitle
+
+\{r setup, include=FALSE\} knitr::opts\_chunk\$set( echo = FALSE,
+message = FALSE, warning = FALSE, fig.pos = ``H'', fig.path =
+``relatorio-figs/'', fig.crop = FALSE, \# evita pdfcrop/ghostscript dev
+= ``pdf'' \# usa o dispositivo PDF base (independe de X11/Cairo) )
+
+\section{Limpeza opcional da pasta de figuras antes de
+renderizar}\label{limpeza-opcional-da-pasta-de-figuras-antes-de-renderizar}
+
+try( unlink( list.files(``relatorio-figs'', pattern =
+``\^{}(reg\textbar grafico\textbar hist).*\textbackslash.(pdf\textbar png)\$``,
+full.names = TRUE), force = TRUE ), silent = TRUE )
+
+\{r setup-e-carga, message=FALSE, warning=FALSE\} library(ggplot2)
+library(kableExtra) library(dplyr)
+
+amostra\_10p \textless- read.csv(``amostra\_10p.csv'', fileEncoding =
+``latin1'')
+
+\section{Presença na prova de Ciências da
+Natureza}\label{presenuxe7a-na-prova-de-ciuxeancias-da-natureza}
+
+amostra\_10p\(TP_PRESENCA_CN <- factor(
+  amostra_10p\)TP\_PRESENCA\_CN, levels = c(0, 1, 2), labels =
+c(``Ausente'', ``Presente'', ``Eliminado'') )
+
+\noindent \textbackslash begin\{minipage\}{[}t{]}\{0.48\textwidth\}
+\centering \textbf{Tabela 1:} Frequência - Presença na Prova de Ciências
+da Natureza
+
+\par\vspace{1ex}
+
+\{\footnotesize \{r tabela-presenca-cn, results=`asis'\}
+freq\_abs\_presenca\_cn \textless- table(amostra\_10p\$TP\_PRESENCA\_CN)
+freq\_rel\_presenca\_cn \textless- prop.table(freq\_abs\_presenca\_cn)
+
+tabela\_cn \textless- data.frame( \texttt{Presença\ na\ prova} =
+names(freq\_abs\_presenca\_cn), Percentual = paste0(round(100 *
+as.vector(freq\_rel\_presenca\_cn), 2), ``\%''), Frequência =
+as.vector(freq\_abs\_presenca\_cn), check.names = FALSE )
+
+tab\_cn \textless- knitr::kable( tabela\_cn, format = ``latex'',
+booktabs = TRUE, longtable = FALSE )
+
+cat(tab\_cn) \# solta o LaTeX direto
+
+\} \textbackslash{} A partir da Tabela 1, observa-se a distribuição dos
+participantes em relação à presença na prova de Ciências da Natureza,
+destacando-se a proporção de estudantes que compareceram, se ausentaram
+ou foram eliminados. Essa informação é importante para entender o
+engajamento dos inscritos na aplicação da prova.
+\textbackslash end\{minipage\} \hfill
+
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\textbf{Gráfico 1:} Presença na Prova de Ciências da Natureza
+\par\vspace{1ex}
+
+{r grafico-presenca-cn, out.width="\\linewidth"}
+df_presenca_cn <- as.data.frame(table(amostra_10p$TP_PRESENCA_CN))
+colnames(df_presenca_cn) <- c("Situacao", "Frequencia")
+
+# Calcular percentuais
+df_presenca_cn$Percentual <- df_presenca_cn$Frequencia / sum(df_presenca_cn$Frequencia) * 100
+
+ggplot(df_presenca_cn, aes(x = Situacao, y = Percentual, fill = Situacao)) +
+  geom_bar(stat = "identity", show.legend = FALSE) +
+  geom_text(aes(label = paste0(round(Percentual, 2), "%")), vjust = -0.5) +
+  labs(
+    x = "Situação",
+    y = "Percentual (%)"
+  ) +
+  scale_fill_manual(values = c(
+    "Ausente"   = "tomato",
+    "Presente"  = "lightgreen",
+    "Eliminado" = "skyblue"
+  )) +
+  theme_minimal() +
+  theme(panel.grid.major.x = element_blank())
+
+O Gráfico 1 apresenta visualmente a comparação entre estudantes presentes, ausentes e eliminados na prova de Ciências da Natureza, facilitando a interpretação da participação na avaliação.
+\end{minipage}
+
+\vfill
+
+\noindent \textbackslash begin\{minipage\}{[}t{]}\{0.48\textwidth\}
+\centering \textbf{Tabela 2:} Frequência Intervalar da Nota de Ciências
+da Natureza
+
+\par\vspace{1ex}
+
+\{\footnotesize \{r tabela-nota-cn, results=`asis'\} \# Intervalos de 0
+a 1000, de 100 em 100 breaks\_nota\_cn \textless- seq(0, 1000, by = 100)
+labels\_nota\_cn \textless- paste(head(breaks\_nota\_cn, -1), ``--'',
+tail(breaks\_nota\_cn, -1))
+
+faixa\_nota\_cn \textless- cut( amostra\_10p\$NU\_NOTA\_CN, breaks =
+breaks\_nota\_cn, include.lowest = TRUE, right = FALSE, labels =
+labels\_nota\_cn )
+
+freq\_abs\_cn \textless- table(faixa\_nota\_cn) freq\_rel\_cn \textless-
+prop.table(freq\_abs\_cn)
+
+tabela\_nota\_cn \textless- data.frame( \texttt{Intervalo\ de\ nota} =
+names(freq\_abs\_cn), Percentual = paste0(round(100 *
+as.vector(freq\_rel\_cn), 2), ``\%''), check.names = FALSE )
+
+tab2\_cn \textless- knitr::kable( tabela\_nota\_cn, format = ``latex'',
+booktabs = TRUE, longtable = FALSE )
+
+cat(tab2\_cn)
+
+\} \textbackslash{} A Tabela 2 apresenta a distribuição das notas de
+Ciências da Natureza em classes de 100 pontos, permitindo identificar em
+quais faixas se concentram os maiores e os menores desempenhos dos
+estudantes. \textbackslash end\{minipage\} \hfill
+
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\textbf{Gráfico 2:} Histograma das Notas de Ciências da Natureza com Curva Normal
+\par\vspace{1ex}
+{r hist-nota-cn-normal, out.width="\\linewidth", fig.asp=0.8}
+
+# Média e desvio padrão das notas de CN
+media_cn <- mean(amostra_10p$NU_NOTA_CN, na.rm = TRUE)
+sd_cn    <- sd(amostra_10p$NU_NOTA_CN, na.rm = TRUE)
+
+ggplot(amostra_10p, aes(x = NU_NOTA_CN)) +
+  
+  # Histograma em frequência relativa (%)
+  geom_histogram(
+    aes(y = after_stat(density * 100)),  # densidade convertida para %
+    binwidth = 100,
+    boundary = 0,
+    fill = "steelblue",
+    color = "white",
+    alpha = 0.7
+  ) +
+
+  # Curva normal ajustada, também em %
+  stat_function(
+    fun = function(x) dnorm(x, mean = media_cn, sd = sd_cn) * 100,
+    color = "red",
+    linewidth = 1.2
+  ) +
+
+  labs(
+    x = "Nota de Ciências da Natureza",
+    y = "Frequência relativa (%)"
+  ) +
+  theme_minimal() +
+  theme(
+    panel.grid.major.x = element_blank(),
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
+
+\\
+O Gráfico 2 compara a distribuição relativa das notas de Ciências da Natureza com uma curva normal ajustada pela média e pelo desvio padrão da amostra, permitindo avaliar se o desempenho se aproxima de um padrão aproximadamente normal ou se há assimetrias importantes.
+\end{minipage}
+
+\end{document}

@@ -2,29 +2,225 @@
 title: "Relatorio"
 author: "Fabio Firanzi, Heitor Dias, Julia Fideles, Matheus Soares, Tiago Braga"
 date: "2025-11-11"
-output: html_document
+output:
+  pdf_document:
+    latex_engine: pdlatex
+    keep_tex: true
+header-includes: 
+ \usepackage[T1]{fontenc} 
+ \usepackage[utf8]{inputenc} 
+ \usepackage[portuguese]{babel}
+ \usepackage{booktabs} 
+ \usepackage{float} 
+ \usepackage{graphicx}
 ---
 
+
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r, message=FALSE, warning=FALSE}
+#Carrega as bibliotecas necessárias
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+library(knitr)
 ```
 
-## Including Plots
+```{r setup-e-carga, message=FALSE, warning=FALSE}
+amostra_10p <- read.csv("amostra_10p.csv")
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r analise_variavel_presenca, message=FALSE, warning=FALSE}
+# Item 1: Tabela de Frequências (Absoluta e Relativa)
+
+# Vamos renomear os valores 0 e 1 para ficarem mais claros
+tabela_presenca <- amostra_10p %>%
+  mutate(Presenca = case_when(
+    TP_PRESENCA_LC == 0 ~ "Ausente",
+    TP_PRESENCA_LC == 1 ~ "Presente",
+    TRUE ~ "Eliminado"
+  )) %>%
+  count(Presenca, sort = TRUE) %>% # Conta as ocorrências
+  mutate(Percentual = prop.table(n) * 100) # Calcula o percentual
+
+# Mostra a tabela formatada (ótimo para o relatório)
+kable(tabela_presenca,
+      caption = "Tabela 1: Frequência de Presença na Prova de LC",
+      col.names = c("Status", "Frequência (N)", "Percentual (%)"),
+      digits = 2) %>%
+      kable_styling(bootstrap_options = c("striped", "hover", "condensed"), 
+      full_width = FALSE, 
+      position = "center") %>%
+      row_spec(0, bold = TRUE, background = "#D3D3D3")
+
+# Item 2: Gráfico (Gráfico de Barras com cores manuais)
+
+# 1. ALTERAÇÃO AQUI: 'fill = Presenca' foi para dentro do aes()
+ggplot(tabela_presenca, aes(x = reorder(Presenca, -n), y = n, fill = Presenca)) +
+  
+  # 2. ALTERAÇÃO AQUI: O 'fill' foi removido daqui
+  geom_bar(stat = "identity") +
+  
+  geom_text(aes(label = n), vjust = -0.5) + # Adiciona o número no topo
+  
+  # 3. ALTERAÇÃO AQUI: Adiciona a escala manual de cores
+  scale_fill_manual(values = c("Presente" = "forestgreen", 
+                               "Ausente" = "firebrick", 
+                               "Eliminado" = "goldenrod")) +
+  
+  scale_y_continuous(
+    labels = scales::label_number(big.mark = ".", decimal.mark = ","),
+    expand = expansion(mult = c(0, 0.1)) 
+  ) +
+  
+  labs(title = "Gráfico 1: Presença na Prova de LC",
+       x = "Status de Presença",
+       y = "Número de Alunos") +
+  theme_minimal() +
+  
+  # 4. ALTERAÇÃO AQUI: Remove a legenda, pois é redundante
+  theme(legend.position = "none")
+```
+
+```{r hist-nota-mt-normal, out.width="\\linewidth", fig.asp=0.8}
+# Média e desvio padrão
+media_LC <- mean(amostra_10p$NU_NOTA_LC, na.rm = TRUE)
+sd_LC    <- sd(amostra_10p$NU_NOTA_LC, na.rm = TRUE)
+
+# --- MELHORIA: Criar texto para anotação ---
+label_texto <- paste(
+  paste("Média =", round(media_LC, 2)),
+  paste("Desvio Padrão =", round(sd_LC, 2)),
+  sep = "\n" # Quebra a linha entre os dois
+)
+
+ggplot(amostra_10p, aes(x = NU_NOTA_LC)) +
+  
+  # Histograma em frequência relativa (%)
+  geom_histogram(
+    # --- MELHORIA: Adicionado 'aes(fill = ...)' para criar legenda ---
+    aes(y = after_stat(density * 100), fill = "Notas dos Alunos"), 
+    binwidth = 100,
+    boundary = 0,
+    color = "white",
+    alpha = 0.7
+  ) +
+  
+  # Curva normal ajustada, também em %
+  stat_function(
+    # --- MELHORIA: Adicionado 'aes(color = ...)' para criar legenda ---
+    aes(color = "Curva Normal Teórica"),
+    fun = function(x) dnorm(x, mean = media_LC, sd = sd_LC) * 100,
+    linewidth = 1.2
+  ) +
+  
+  # --- MELHORIA: Adiciona linha vertical para a média ---
+  geom_vline(
+    aes(xintercept = media_LC, linetype = "Média da Amostra"),
+    color = "darkblue",
+    linewidth = 1
+  ) +
+  
+  # --- MELHORIA: Adiciona texto com os valores da Média e DP ---
+  # Ajuste 'x' e 'y' para a melhor posição no seu gráfico
+  annotate(
+    "text",
+    x = 950, # Posição no eixo X (perto da direita)
+    y = 0.35, # Posição no eixo Y (perto do topo)
+    label = label_texto,
+    hjust = 1, # Alinha o texto à direita
+    color = "black",
+    size = 3.5
+  ) +
+
+  # --- MELHORIA: Escalas manuais para cores e legendas ---
+  scale_fill_manual(values = c("Notas dos Alunos" = "steelblue")) +
+  scale_color_manual(values = c("Curva Normal Teórica" = "red")) +
+  scale_linetype_manual(values = c("Média da Amostra" = "dashed")) +
+  
+  # --- MELHORIA: Formata os eixos X e Y ---
+  scale_x_continuous(breaks = seq(0, 1000, 100)) +
+  scale_y_continuous(labels = function(y) paste0(y, "%")) + # Adiciona o '%'
+
+  labs(
+    # --- MELHORIA: Título, Subtítulo e correção dos rótulos ---
+    title = "Histograma da Nota de Linguagens e Códigos (LC)",
+    subtitle = "Comparação da distribuição das notas com a Curva Normal",
+    x = "Nota de Linguagens e Códigos (LC)",
+    y = "Percentual de Alunos (%)",
+    # Remove títulos das legendas
+    fill = NULL, 
+    color = NULL,
+    linetype = NULL
+  ) +
+  theme_minimal() +
+  theme(
+    panel.grid.major.x = element_blank(),
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5),
+    # --- MELHORIA: Posiciona a legenda ---
+    legend.position = "bottom"
+  )
+```
+```{r analise_variavel_presenca, message=FALSE, warning=FALSE}
+# --- Chunk Corrigido: Boxplot Notas LC por Região (com N de alunos) ---
+
+# PASSO 1: Criar a variável Regiao e adicionar o N de alunos
+dados_para_boxplot <- amostra_10p %>%
+  mutate(
+    Regiao = case_when(
+      SG_UF_PROVA %in% c('AM', 'AC', 'RO', 'RR', 'AP', 'PA', 'TO') ~ "Norte",
+      SG_UF_PROVA %in% c('MA', 'PI', 'CE', 'RN', 'PB', 'PE', 'AL', 'SE', 'BA') ~ "Nordeste",
+      SG_UF_PROVA %in% c('SP', 'MG', 'RJ', 'ES') ~ "Sudeste",
+      SG_UF_PROVA %in% c('GO', 'DF', 'MT', 'MS') ~ "Centro-Oeste",
+      SG_UF_PROVA %in% c('PR', 'SC', 'RS') ~ "Sul"
+    )
+  ) %>%
+  # Filtra apenas quem tem nota válida para o boxplot
+  filter(!is.na(NU_NOTA_LC) & !is.na(Regiao)) %>%
+  
+  # --- ADIÇÃO AQUI: Calcula o N para cada região ---
+  group_by(Regiao) %>%
+  mutate(n_alunos = n()) %>%
+  ungroup() %>%
+  
+  # --- ALTERAÇÃO AQUI: Cria o novo rótulo (Regiao + N), removendo o "N=" ---
+  # Usamos 'format' para adicionar o separador de milhar (ponto)
+  mutate(Regiao_com_N = paste0(Regiao, " (", format(n_alunos, big.mark = "."), ")"))
+
+# PASSO 2: Criar o Gráfico Boxplot para NU_NOTA_LC
+ggplot(dados_para_boxplot, aes(
+          # --- ALTERAÇÃO AQUI: Usa a nova coluna 'Regiao_com_N' ---
+          x = reorder(Regiao_com_N, NU_NOTA_LC, FUN = median, na.rm = TRUE), 
+          y = NU_NOTA_LC,
+          fill = Regiao)) + # 'fill' ainda usa 'Regiao' para a cor
+  
+  geom_boxplot(
+    show.legend = FALSE, # Remove legenda redundante
+    outlier.shape = 21, 
+    outlier.size = 1.5,
+    na.rm = TRUE
+  ) +
+  
+  # "Deita" o gráfico para facilitar a leitura
+  coord_flip() + 
+  
+  labs(
+    title = "Boxplot das Notas de linguagens por Região",
+    subtitle = "Ordenado pela Mediana",
+    x = "Região com total de alunos", # Texto do eixo
+    y = "Nota de Linguagens e Códigos"
+  ) +
+  theme_minimal() +
+  theme(
+    # --- CORREÇÃO AQUI: Trocado '.' por '_' ---
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5)
+  )
+
+
+```
