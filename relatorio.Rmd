@@ -68,6 +68,7 @@ tab <- knitr::kable(
 
 cat(tab)
 ```
+}
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.48\textwidth}
@@ -85,7 +86,7 @@ pie(freq_abs_le,
     labels = rotulo_le
 )
 ```
-\end(minipage)
+\end{minipage}
 
 \vfill
 
@@ -107,7 +108,7 @@ amostra_10p$TP_REDACAO <- ifelse(
 \textbf{Tabela 2:} Frequência - Motivo do Zero na Redação
 \par\vspace{1ex}
 {\footnotesize
-```{r tabela-motivoZero}
+```{r tabela-motivoZero, results='asis'}
 # Tabela de motivos para o zero na redação
 redacoes_zeradas <- amostra_10p %>% filter(TP_STATUS_REDACAO >= 2 & TP_STATUS_REDACAO <= 9)
 redacoes_zeradas <- redacoes_zeradas %>% select(TP_STATUS_REDACAO)
@@ -132,11 +133,12 @@ tab <- knitr::kable(
 
 cat(tab)
 ```
+}
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.48\textwidth}
 \centering
-\textbf{Gráfico 1:} Presença na Prova
+\textbf{Gráfico 2:} Motivos para Redação Zerada
 \par\vspace{1ex}
 
 ```{r grafico-motivoZero, out.width = "\\linewidth", fig.asp = 0.8, fig.width = 10, fig.height = 8}
@@ -180,7 +182,7 @@ amostra_redacao <- amostra_redacao %>%
 \textbf{Tabela 3:} Frequência - Notas nas Competências
 \par\vspace{1ex}
 {\footnotesize
-```{r tabela-notaCompetencias}
+```{r tabela-notaCompetencias, results='asis'}
 # Padronização de linhas
 notas <- c(0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200)
 
@@ -202,11 +204,11 @@ freq_rel_comp5 <- prop.table(freq_abs_comp5)
 
 tabela_freq_comp <- data.frame(
   Nota = names(freq_abs_comp1),
-  'Competência 1' = paste0(round(100 * as.vector(freq_rel_comp1), 2), "%"),
-  'Competência 2' = paste0(round(100 * as.vector(freq_rel_comp2), 2), "%"),
-  'Competência 3' = paste0(round(100 * as.vector(freq_rel_comp3), 2), "%"),
-  'Competência 4' = paste0(round(100 * as.vector(freq_rel_comp4), 2), "%"),
-  'Competência 5' = paste0(round(100 * as.vector(freq_rel_comp5), 2), "%"),
+  'Comp 1' = paste0(round(100 * as.vector(freq_rel_comp1), 2), "%"),
+  'Comp 2' = paste0(round(100 * as.vector(freq_rel_comp2), 2), "%"),
+  'Comp 3' = paste0(round(100 * as.vector(freq_rel_comp3), 2), "%"),
+  'Comp 4' = paste0(round(100 * as.vector(freq_rel_comp4), 2), "%"),
+  'Comp 5' = paste0(round(100 * as.vector(freq_rel_comp5), 2), "%"),
   check.names = FALSE
 )
 
@@ -219,14 +221,15 @@ tab <- knitr::kable(
 
 cat(tab)
 ```
+}
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.48\textwidth}
 \centering
-\textbf{Gráfico 1:} Presença na Prova
+\textbf{Gráfico 3:} Distribuição das Notas por Competência
 \par\vspace{1ex}
 
-```{r boxplot-notaCompetencias}
+```{r boxplot-notaCompetencias, out.width="\\linewidth"}
 df_long_comp <- amostra_redacao %>%
   select(starts_with("NU_NOTA_COMP")) %>%
   
@@ -283,18 +286,17 @@ ggplot(
 \textbf{Tabela 4:} Frequência - Notas da Redação
 \par\vspace{1ex}
 {\footnotesize
-```{r tabela-notaRedacao}
+```{r tabela-notaRedacao, results='asis'}
 grupos_red <- seq(0, 1000, by = 100)
 grupo_notas_red <- cut(
   amostra_redacao$NU_NOTA_REDACAO,
   breaks = grupos_red,
   include.lowest = TRUE,
-  left = FALSE
+  right = TRUE
 )
 
 freq_abs_red <- table(grupo_notas_red)
 freq_rel_red <- prop.table(freq_abs_red)
-names(freq_abs_red) <- c("x <= 100", "100 < x <= 200", "200 < x <= 300", "300 < x <= 400", "400 < x <= 500", "500 < x <= 600", "600 < x <= 700", "700 < x <= 800", "800 < x <= 900", "900 < x")
 
 dados_red <- amostra_redacao$NU_NOTA_REDACAO
 media_red <- mean(dados_red, na.rm = TRUE)
@@ -303,7 +305,6 @@ sd_red <- sd(dados_red, na.rm = TRUE)
 tabela_freq_red <- data.frame(
   'Intervalo de Notas' = names(freq_abs_red),
   Percentual = paste0(round(100 * as.vector(freq_rel_red), 2), "%"),
-  Média = media_red,
   check.names = FALSE
 )
 
@@ -316,14 +317,20 @@ tab <- knitr::kable(
 
 cat(tab)
 ```
+}
+\par\vspace{1ex}
+\centering
+\footnotesize
+Média das notas: `r sprintf("%.2f", media_red)` \\
+Desvio Padrão: `r sprintf("%.2f", sd_red)`
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.48\textwidth}
 \centering
-\textbf{Gráfico 1:} Presença na Prova
+\textbf{Gráfico 4:} Distribuição das Notas da Redação
 \par\vspace{1ex}
 
-```{r histograma-notaRedacao}
+```{r histograma-notaRedacao, out.width="\\linewidth"}
 ggplot(amostra_redacao, aes(x = NU_NOTA_REDACAO)) +
   geom_histogram(
     aes(y = after_stat(density)),
