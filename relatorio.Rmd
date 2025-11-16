@@ -181,6 +181,9 @@ dados_analise <- amostra_10p %>%
 ## 1.2.1 Tabela de Frequências (por Classes)
 
 Para dados quantitativos contínuos, criamos classes (faixas de valores) para a tabela de frequências.
+```{r}
+
+```
 
 ```{r}
 # 1. Definir os limites das classes (ex: de 50 em 50 pontos)
