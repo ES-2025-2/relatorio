@@ -1,0 +1,205 @@
+---
+title: "Relatório - Ciências da Natureza"
+author: "Fabio Firanzi, Heitor Dias, Julia Fideles, Matheus Soares, Tiago Braga"
+date: "2025-11-11"
+output:
+  pdf_document:
+    latex_engine: pdflatex
+    keep_tex: true
+  word_document: default
+header-includes: |
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage[portuguese]{babel}
+  \usepackage{booktabs}
+  \usepackage{float}
+  \usepackage{graphicx}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo     = FALSE,
+  message  = FALSE,
+  warning  = FALSE,
+  fig.pos  = "H",
+  fig.path = "relatorio-figs/",
+  fig.crop = FALSE,
+  dev      = "pdf"
+)
+
+
+try(
+  unlink(
+    list.files("relatorio-figs",
+               pattern = "^(reg|grafico|hist).*\\.(pdf|png)$",
+               full.names = TRUE),
+    force = TRUE
+  ),
+  silent = TRUE
+)
+```
+
+```{r setup-e-carga, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(kableExtra)
+library(dplyr)
+
+amostra_10p <- read.csv("amostra_10p.csv", fileEncoding = "latin1")
+
+
+amostra_10p$TP_PRESENCA_CN <- factor(
+  amostra_10p$TP_PRESENCA_CN,
+  levels = c(0, 1, 2),
+  labels = c("Ausente", "Presente", "Eliminado")
+)
+```
+
+# Análise das variáveis de Ciências da Natureza
+
+\noindent
+
+````{=tex}
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\textbf{Tabela 1:} Frequência - Presença na Prova de Ciências da Natureza
+\par\vspace{1ex}
+{\footnotesize
+```{r tabela-presenca-cn, results='asis'}
+freq_abs_presenca_cn <- table(amostra_10p$TP_PRESENCA_CN)
+freq_rel_presenca_cn <- prop.table(freq_abs_presenca_cn)
+
+tabela_cn <- data.frame(
+  `Presença na prova` = names(freq_abs_presenca_cn),
+  Percentual = paste0(round(100 * as.vector(freq_rel_presenca_cn), 2), "%"),
+  Frequência = as.vector(freq_abs_presenca_cn),
+  check.names = FALSE
+)
+
+tab_cn <- knitr::kable(
+  tabela_cn,
+  format    = "latex",
+  booktabs  = TRUE,
+  longtable = FALSE
+)
+
+cat(tab_cn)
+```
+}
+\\
+A partir da Tabela 1, observa-se a distribuição dos participantes em relação à presença na prova de Ciências da Natureza, destacando-se a proporção de estudantes que compareceram, se ausentaram ou foram eliminados. Essa informação é importante para entender o engajamento dos inscritos na aplicação da prova.
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\textbf{Gráfico 1:} Presença na Prova de Ciências da Natureza
+\par\vspace{1ex}
+
+```{r grafico-presenca-cn, out.width="\\linewidth"}
+df_presenca_cn <- as.data.frame(table(amostra_10p$TP_PRESENCA_CN))
+colnames(df_presenca_cn) <- c("Situacao", "Frequencia")
+
+
+df_presenca_cn$Percentual <- df_presenca_cn$Frequencia / sum(df_presenca_cn$Frequencia) * 100
+
+ggplot(df_presenca_cn, aes(x = Situacao, y = Percentual, fill = Situacao)) +
+  geom_bar(stat = "identity", show.legend = FALSE) +
+  geom_text(aes(label = paste0(round(Percentual, 2), "%")), vjust = -0.5) +
+  labs(
+    x = "Situação",
+    y = "Percentual (%)"
+  ) +
+  scale_fill_manual(values = c(
+    "Ausente"   = "tomato",
+    "Presente"  = "lightgreen",
+    "Eliminado" = "skyblue"
+  )) +
+  theme_minimal() +
+  theme(panel.grid.major.x = element_blank())
+```
+O Gráfico 1 apresenta visualmente a comparação entre estudantes presentes, ausentes e eliminados na prova de Ciências da Natureza, facilitando a interpretação da participação na avaliação.
+\end{minipage}
+````
+
+\vfill
+
+\noindent
+
+````{=tex}
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\textbf{Tabela 2:} Frequência Intervalar da Nota de Ciências da Natureza
+\par\vspace{1ex}
+{\footnotesize
+```{r tabela-nota-cn, results='asis'}
+
+breaks_nota_cn  <- seq(0, 1000, by = 100)
+labels_nota_cn  <- paste(head(breaks_nota_cn, -1), "–", tail(breaks_nota_cn, -1))
+
+faixa_nota_cn <- cut(
+  amostra_10p$NU_NOTA_CN,
+  breaks = breaks_nota_cn,
+  include.lowest = TRUE,
+  right = FALSE,
+  labels = labels_nota_cn
+)
+
+freq_abs_cn <- table(faixa_nota_cn)
+freq_rel_cn <- prop.table(freq_abs_cn)
+
+tabela_nota_cn <- data.frame(
+  `Intervalo de nota` = names(freq_abs_cn),
+  Percentual = paste0(round(100 * as.vector(freq_rel_cn), 2), "%"),
+  check.names = FALSE
+)
+
+tab2_cn <- knitr::kable(
+  tabela_nota_cn,
+  format    = "latex",
+  booktabs  = TRUE,
+  longtable = FALSE
+)
+
+cat(tab2_cn)
+```
+}
+\\
+A Tabela 2 apresenta a distribuição das notas de Ciências da Natureza em classes de 100 pontos, permitindo identificar em quais faixas se concentram os maiores e os menores desempenhos dos estudantes.
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\textbf{Gráfico 2:} Histograma das Notas de Ciências da Natureza com Curva Normal
+\par\vspace{1ex}
+```{r hist-nota-cn-normal, out.width="\\linewidth", fig.asp=0.8}
+
+media_cn <- mean(amostra_10p$NU_NOTA_CN, na.rm = TRUE)
+sd_cn    <- sd(amostra_10p$NU_NOTA_CN, na.rm = TRUE)
+
+ggplot(amostra_10p, aes(x = NU_NOTA_CN)) +
+  geom_histogram(
+    aes(y = after_stat(density * 100)),  
+    binwidth = 100,
+    boundary = 0,
+    fill = "steelblue",
+    color = "white",
+    alpha = 0.7
+  ) +
+  stat_function(
+    fun = function(x) dnorm(x, mean = media_cn, sd = sd_cn) * 100,
+    color = "red",
+    linewidth = 1.2
+  ) +
+  labs(
+    x = "Nota de Ciências da Natureza",
+    y = "Frequência relativa (%)"
+  ) +
+  theme_minimal() +
+  theme(
+    panel.grid.major.x = element_blank(),
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
+```
+\\
+O Gráfico 2 compara a distribuição relativa das notas de Ciências da Natureza com uma curva normal ajustada pela média e pelo desvio padrão da amostra, permitindo avaliar se o desempenho se aproxima de um padrão aproximadamente normal ou se há assimetrias importantes.
+\end{minipage}
+````
