@@ -2,7 +2,7 @@
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
 \documentclass[
-]{article}
+  twocolumn]{article}
 \usepackage{xcolor}
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb}
@@ -55,12 +55,8 @@
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[portuguese]{babel}
-\usepackage{booktabs}
-\usepackage{float}
-\usepackage{graphicx}
+\usepackage{multicol}
+\setlength{\columnsep}{0.7cm}
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{array}
@@ -92,13 +88,7 @@ Braga}
 \begin{document}
 \maketitle
 
-\noindent
-
-\begin{minipage}[t]{0.48\textwidth}
-\centering
 \textbf{Tabela 1:} Frequência - Presença na Prova de Matemática
-\par\vspace{1ex}
-{\footnotesize
 
 \begin{tabular}{llr}
 \toprule
@@ -109,30 +99,20 @@ Presente & 69.38\% & 300640\\
 Eliminado & 0.06\% & 239\\
 \bottomrule
 \end{tabular}
-}
-\\
-A partir da Tabela 1, observa-se que aproximadamente 30\% dos estudantes inscritos estavam ausentes no dia da prova de matemática. Cerca de 70\% compareceram e aproximadamente 0,06\% foram eliminados. Esses valores evidenciam que a grande maioria dos participantes realizou a avaliação, apesar de uma parcela expressiva de ausentes.
-\end{minipage}
-\hfill
-\begin{minipage}[t]{0.48\textwidth}
-\centering
+
+A partir da Tabela 1, observa-se que aproximadamente 30\% dos estudantes
+inscritos estavam ausentes no dia da prova de matemática. Cerca de 70\%
+compareceram e aproximadamente 0,06\% foram eliminados. Esses valores
+evidenciam que a grande maioria dos participantes realizou a avaliação,
+apesar de uma parcela expressiva de ausentes.
+
 \textbf{Gráfico 1:} Presença na Prova
-\par\vspace{1ex}
 
+\includegraphics[width=\linewidth]{relatorio-figs/grafico-presenca-1} O
+Gráfico 1 demonstra de forma visual a comparação da quantidade de
+estudantes que compareceram ou não à prova ou foram eliminados.
 
-\includegraphics[width=\linewidth]{relatorio-figs/grafico-presenca-1} 
-O Gráfico 1 demonstra de forma visual a comparação da quantidade de estudantes que compareceram ou não à prova ou foram eliminados.
-\end{minipage}
-
-\vfill
-
-\noindent
-
-\begin{minipage}[t]{0.48\textwidth}
-\centering
-\textbf{Tabela 2:} Provas Padrão vs. Acessibilidade
-\par\vspace{1ex}
-{\footnotesize
+\textbf{Tabela 2:} Provas Padrão vs.~Acessibilidade
 
 \begin{tabular}{llr}
 \toprule
@@ -142,30 +122,20 @@ Prova com acessibilidade & 0.22\% & 676\\
 Prova padrão & 99.78\% & 299964\\
 \bottomrule
 \end{tabular}
-\\
-A partir da tabela 2, conclui-se que somente aproximadamente 0,22\% dos inscritos na prova solicitaram recursos de acessbilidade para a prova de matemática
-}
-\end{minipage}
-\hfill
-\begin{minipage}[t]{0.48\textwidth}
-\centering
+
+A partir da tabela 2, conclui-se que somente aproximadamente 0,22\% dos
+inscritos na prova solicitaram recursos de acessbilidade para a prova de
+matemática
+
 \textbf{Gráfico 2:} Proporção de Provas com Acessibilidade
-\par\vspace{1ex}
 
+\includegraphics[width=\linewidth]{relatorio-figs/grafico-acessibilidade-1}
+O Gráfico 2 mostra a distribuição percentual dos tipos de provas com
+acessibilidade. A modalidade Ampliada é a mais utilizada, seguida pelas
+versões Adaptada Ledor, Videoprova -- Libras e Superampliada. A
+categoria Libras -- Ampliada não apresentou registros na amostra.
 
-\includegraphics[width=\linewidth]{relatorio-figs/grafico-acessibilidade-1} 
-\\
-O Gráfico 2 mostra a distribuição percentual dos tipos de provas com acessibilidade. A modalidade Ampliada é a mais utilizada, seguida pelas versões Adaptada Ledor, Videoprova – Libras e Superampliada. A categoria Libras – Ampliada não apresentou registros na amostra.
-\end{minipage}
-\vfill
-
-\noindent
-
-\begin{minipage}[t]{0.48\textwidth}
-\centering
 \textbf{Tabela 3:} Frequência Intervalar da Nota de Matemática
-\par\vspace{1ex}
-{\footnotesize
 
 \begin{tabular}{ll}
 \toprule
@@ -184,17 +154,17 @@ Intervalo de nota & Percentual\\
 900 – 1000 & 0.18\%\\
 \bottomrule
 \end{tabular}
-}
-\\A Tabela 3 apresenta a distribuição das notas de matemática em classes de 100 pontos, permitindo visualizar em quais faixas se concentra a maior proporção de estudantes. 
-\end{minipage} 
-\hfill 
-\begin{minipage}[t]{0.48\textwidth} 
-\centering \textbf{Gráfico 3:} Histograma das Notas de Matemática com Curva Normal 
-\par
-\vspace{1ex}
 
-\includegraphics[width=\linewidth]{relatorio-figs/hist-nota-mt-normal-1} 
-\\ O Gráfico 3 compara a distribuição relativa das notas de matemática com uma curva normal ajustada pela média e pelo desvio padrão da amostra, evidenciando a concentração de estudantes em torno da média e a menor frequência de desempenhos extremos. 
-\end{minipage}
+A Tabela 3 apresenta a distribuição das notas de matemática em classes
+de 100 pontos, permitindo visualizar em quais faixas se concentra a
+maior proporção de estudantes.
+
+\textbf{Gráfico 3:} Histograma das Notas de Matemática com Curva Normal
+
+\includegraphics[width=\linewidth]{relatorio-figs/hist-nota-mt-normal-1}
+O Gráfico 3 compara a distribuição relativa das notas de matemática com
+uma curva normal ajustada pela média e pelo desvio padrão da amostra,
+evidenciando a concentração de estudantes em torno da média e a menor
+frequência de desempenhos extremos.
 
 \end{document}

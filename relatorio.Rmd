@@ -6,13 +6,9 @@ output:
   pdf_document:
     latex_engine: pdflatex
     keep_tex: true
-header-includes: |
-  \usepackage[T1]{fontenc}
-  \usepackage[utf8]{inputenc}
-  \usepackage[portuguese]{babel}
-  \usepackage{booktabs}
-  \usepackage{float}
-  \usepackage{graphicx}
+    includes:
+      in_header: header.tex
+classoption: twocolumn
 ---
 
 ```{r setup, include=FALSE}
@@ -58,14 +54,7 @@ amostra_10p$CO_PROVA_MT <- factor(
   labels = c("Azul", "Amarela", "Verde", "Cinza", "Verde - Ampliada", "Verde - Superampliada", "Laranja - Adaptada Ledor", "Roxa - Videoprova - Libras", "Roxa - Videoprova - Libras - Ampliada", "Azul (Reaplicação)", "Amarela (Reaplicação)", "Verde (Reaplicação)", "Cinza (Reaplicação)", "Verde - Ampliada (Reaplicação)", "Verde - Superampliada (Reaplicação)", "Laranja - Adaptada Ledor (Reaplicação)")
 )
 ```
-
-<!-- LINHA 1: Tabela 1 e Gráfico 1, lado a lado -->
-\noindent
-\begin{minipage}[t]{0.48\textwidth}
-\centering
-\textbf{Tabela 1:} Frequência - Presença na Prova de Matemática
-\par\vspace{1ex}
-{\footnotesize
+**Tabela 1:** Frequência - Presença na Prova de Matemática
 ```{r tabela-presenca, results='asis'}
 freq_abs_presenca <- table(amostra_10p$TP_PRESENCA_MT)
 freq_rel_presenca <- prop.table(freq_abs_presenca)
@@ -87,16 +76,9 @@ tab <- knitr::kable(
 cat(tab)  # solta o LaTeX direto
 
 ```
-}
-\\
 A partir da Tabela 1, observa-se que aproximadamente 30\% dos estudantes inscritos estavam ausentes no dia da prova de matemática. Cerca de 70\% compareceram e aproximadamente 0,06\% foram eliminados. Esses valores evidenciam que a grande maioria dos participantes realizou a avaliação, apesar de uma parcela expressiva de ausentes.
-\end{minipage}
-\hfill
-\begin{minipage}[t]{0.48\textwidth}
-\centering
-\textbf{Gráfico 1:} Presença na Prova
-\par\vspace{1ex}
 
+**Gráfico 1:** Presença na Prova
 ```{r grafico-presenca, out.width="\\linewidth"}
 df_presenca <- as.data.frame(table(amostra_10p$TP_PRESENCA_MT))
 colnames(df_presenca) <- c("Situacao", "Frequencia")
@@ -120,11 +102,7 @@ ggplot(df_presenca, aes(x = Situacao, y = Percentual, fill = Situacao)) +
   theme(panel.grid.major.x = element_blank())
 ```
 O Gráfico 1 demonstra de forma visual a comparação da quantidade de estudantes que compareceram ou não à prova ou foram eliminados.
-\end{minipage}
 
-\vfill
-
-<!-- CÁLCULO OCULTO: O código aqui é executado, mas a tabela não é mostrada -->
 ```{r calcula-dados-gerais, include=FALSE}
 freq_abs_tipo_de_prova <- table(amostra_10p$CO_PROVA_MT)
 freq_rel_tipo_de_prova <- prop.table(freq_abs_tipo_de_prova)
@@ -136,14 +114,7 @@ tabela_geral <- data.frame(
   check.names = FALSE
 )
 ```
-
-<!-- LINHA 2: Tabela 2 e Gráfico 2, lado a lado -->
-\noindent
-\begin{minipage}[t]{0.48\textwidth}
-\centering
-\textbf{Tabela 2:} Provas Padrão vs. Acessibilidade
-\par\vspace{1ex}
-{\footnotesize
+**Tabela 2:** Provas Padrão vs. Acessibilidade
 ```{r tabela-acessibilidade, results='asis'}
 tabela_resumida <- tabela_geral %>%
   mutate(Categoria = ifelse(
@@ -169,16 +140,9 @@ tab2 <- knitr::kable(
 
 cat(tab2)
 ```
-\\
 A partir da tabela 2, conclui-se que somente aproximadamente 0,22\% dos inscritos na prova solicitaram recursos de acessbilidade para a prova de matemática
-}
-\end{minipage}
-\hfill
-\begin{minipage}[t]{0.48\textwidth}
-\centering
-\textbf{Gráfico 2:} Proporção de Provas com Acessibilidade
-\par\vspace{1ex}
 
+**Gráfico 2:** Proporção de Provas com Acessibilidade
 ```{r grafico-acessibilidade, out.width="\\linewidth", fig.asp=0.8}
 
 # Criar categorias de acessibilidade conforme o dicionário
@@ -220,17 +184,9 @@ ggplot(tabela_acessiveis, aes(x = Categoria, y = Percentual_relativo, fill = Cat
   )
 
 ```
-\\
 O Gráfico 2 mostra a distribuição percentual dos tipos de provas com acessibilidade. A modalidade Ampliada é a mais utilizada, seguida pelas versões Adaptada Ledor, Videoprova – Libras e Superampliada. A categoria Libras – Ampliada não apresentou registros na amostra.
-\end{minipage}
-\vfill
 
-\noindent
-\begin{minipage}[t]{0.48\textwidth}
-\centering
-\textbf{Tabela 3:} Frequência Intervalar da Nota de Matemática
-\par\vspace{1ex}
-{\footnotesize
+**Tabela 3:** Frequência Intervalar da Nota de Matemática
 ```{r tabela-nota-mt, results='asis'}
 # Intervalos de 0 a 1000, de 100 em 100
 breaks_nota  <- seq(0, 1000, by = 100)
@@ -262,14 +218,9 @@ tab3 <- knitr::kable(
 
 cat(tab3)
 ```
-}
-\\A Tabela 3 apresenta a distribuição das notas de matemática em classes de 100 pontos, permitindo visualizar em quais faixas se concentra a maior proporção de estudantes. 
-\end{minipage} 
-\hfill 
-\begin{minipage}[t]{0.48\textwidth} 
-\centering \textbf{Gráfico 3:} Histograma das Notas de Matemática com Curva Normal 
-\par
-\vspace{1ex}
+A Tabela 3 apresenta a distribuição das notas de matemática em classes de 100 pontos, permitindo visualizar em quais faixas se concentra a maior proporção de estudantes. 
+
+**Gráfico 3:** Histograma das Notas de Matemática com Curva Normal 
 ```{r hist-nota-mt-normal, out.width="\\linewidth", fig.asp=0.8}
 
 # Média e desvio padrão
@@ -305,5 +256,4 @@ ggplot(amostra_10p, aes(x = NU_NOTA_MT)) +
     plot.title = element_text(hjust = 0.5, face = "bold")
   )
 ```
-\\ O Gráfico 3 compara a distribuição relativa das notas de matemática com uma curva normal ajustada pela média e pelo desvio padrão da amostra, evidenciando a concentração de estudantes em torno da média e a menor frequência de desempenhos extremos. 
-\end{minipage}
+O Gráfico 3 compara a distribuição relativa das notas de matemática com uma curva normal ajustada pela média e pelo desvio padrão da amostra, evidenciando a concentração de estudantes em torno da média e a menor frequência de desempenhos extremos. 
