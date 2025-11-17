@@ -7,6 +7,9 @@ output:
   pdf_document:
     latex_engine: pdflatex
     keep_tex: true
+    includes:
+      in_header: header.tex
+classoption: twocolumn
 header-includes: 
  \usepackage[T1]{fontenc} 
  \usepackage[utf8]{inputenc} 
