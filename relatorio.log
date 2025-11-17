@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.11.12)  17 NOV 2025 19:21
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.11.12)  17 NOV 2025 19:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -723,10 +723,16 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 File: relatorio-figs/grafico-presenca-1.pdf Graphic file (type pdf)
 <use relatorio-figs/grafico-presenca-1.pdf>
 Package pdftex.def Info: relatorio-figs/grafico-presenca-1.pdf  used on input l
-ine 111.
+ine 105.
 (pdftex.def)             Requested size: 224.91908pt x 153.71158pt.
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 1
+29.
+(/usr/local/texlive/2025/texmf-dist/tex/latex/lm/ts1lmr.fd
+File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
 
-Overfull \hbox (13.0813pt too wide) in paragraph at lines 117--125
+
+Overfull \hbox (13.0813pt too wide) in paragraph at lines 143--151
 [][] 
  []
 
@@ -734,60 +740,70 @@ Overfull \hbox (13.0813pt too wide) in paragraph at lines 117--125
 File: relatorio-figs/grafico-acessibilidade-1.pdf Graphic file (type pdf)
 <use relatorio-figs/grafico-acessibilidade-1.pdf>
 Package pdftex.def Info: relatorio-figs/grafico-acessibilidade-1.pdf  used on i
-nput line 132.
+nput line 154.
 (pdftex.def)             Requested size: 224.91908pt x 176.79288pt.
-
-
-
-Underfull \hbox (badness 1014) in paragraph at lines 138--139
-[]\T1/lmr/bx/n/10 (+20) Tabela 3: \T1/lmr/m/n/10 (+20) Fre-quên-cia In-ter-vala
-r da Nota de
- []
-
-<relatorio-figs/hist-nota-mt-normal-1.pdf, id=6, 459.7175pt x 363.3575pt>
-File: relatorio-figs/hist-nota-mt-normal-1.pdf Graphic file (type pdf)
-<use relatorio-figs/hist-nota-mt-normal-1.pdf>
-Package pdftex.def Info: relatorio-figs/hist-nota-mt-normal-1.pdf  used on inpu
-t line 164.
-(pdftex.def)             Requested size: 224.91908pt x 177.77504pt.
-
-Underfull \vbox (badness 4569) has occurred while \output is active []
-
 
 
 [1{/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/l
 ocal/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}
 
 
- <./relatorio-figs/grafico-presenca-1.pdf> <./relatorio-figs/grafico-acessibili
-dade-1.pdf>]
+{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc} <./relatorio
+-figs/grafico-presenca-1.pdf> <./relatorio-figs/grafico-acessibilidade-1.pdf>]
+Underfull \hbox (badness 1014) in paragraph at lines 200--201
+[]\T1/lmr/bx/n/10 (+20) Tabela 3: \T1/lmr/m/n/10 (+20) Fre-quên-cia In-ter-vala
+r da Nota de
+ []
+
+
+Underfull \hbox (badness 5847) in paragraph at lines 221--221
+[][]\T1/lmr/bx/n/12 (+20) 3. Dis-tribuição das No-tas de
+ []
 
 
 
-[2
+<relatorio-figs/hist-nota-mt-normal-1.pdf, id=36, 459.7175pt x 363.3575pt>
+File: relatorio-figs/hist-nota-mt-normal-1.pdf Graphic file (type pdf)
+<use relatorio-figs/hist-nota-mt-normal-1.pdf>
+Package pdftex.def Info: relatorio-figs/hist-nota-mt-normal-1.pdf  used on inpu
+t line 272.
+(pdftex.def)             Requested size: 224.91908pt x 177.77504pt.
 
- <./relatorio-figs/hist-nota-mt-normal-1.pdf>] (./relatorio.aux)
+
+[2 <./relatorio-figs/hist-nota-mt-normal-1.pdf>]
+Underfull \hbox (badness 2181) in paragraph at lines 300--301
+[]\T1/lmr/m/n/10 (+20) Há equi-líbrio en-tre questões fá-ceis, in-ter-
+ []
+
+
+
+
+
+[3
+
+] (./relatorio.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 15228 strings out of 473190
- 239725 string characters out of 5715799
- 698834 words of memory out of 5000000
- 38161 multiletter control sequences out of 15000+600000
- 598338 words of font info for 101 fonts, out of 8000000 for 9000
+ 15323 strings out of 473190
+ 241729 string characters out of 5715799
+ 699620 words of memory out of 5000000
+ 38220 multiletter control sequences out of 15000+600000
+ 602462 words of font info for 112 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 83i,9n,93p,1006b,450s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 83i,9n,93p,1006b,523s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></usr/lo
-cal/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive
-/2025/texmf-dist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2025/texmf
--dist/fonts/type1/public/lm/lmr17.pfb>
-Output written on relatorio.pdf (2 pages, 124845 bytes).
+cal/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texliv
+e/2025/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2025/texm
+f-dist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2025/texmf-dist/font
+s/type1/public/lm/lmr17.pfb>
+Output written on relatorio.pdf (3 pages, 161303 bytes).
 PDF statistics:
- 65 PDF objects out of 1000 (max. 8388607)
- 43 compressed objects within 1 object stream
- 3 named destinations out of 1000 (max. 500000)
- 20496 words of extra memory for PDF output out of 20736 (max. 10000000)
+ 126 PDF objects out of 1000 (max. 8388607)
+ 100 compressed objects within 1 object stream
+ 15 named destinations out of 1000 (max. 500000)
+ 24680 words of extra memory for PDF output out of 24883 (max. 10000000)
 

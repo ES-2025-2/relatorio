@@ -76,8 +76,6 @@ tab <- knitr::kable(
 cat(tab)  # solta o LaTeX direto
 
 ```
-A partir da Tabela 1, observa-se que aproximadamente 30\% dos estudantes inscritos estavam ausentes no dia da prova de matemática. Cerca de 70\% compareceram e aproximadamente 0,06\% foram eliminados. Esses valores evidenciam que a grande maioria dos participantes realizou a avaliação, apesar de uma parcela expressiva de ausentes.
-
 **Gráfico 1:** Presença na Prova
 ```{r grafico-presenca, out.width="\\linewidth"}
 df_presenca <- as.data.frame(table(amostra_10p$TP_PRESENCA_MT))
@@ -101,7 +99,28 @@ ggplot(df_presenca, aes(x = Situacao, y = Percentual, fill = Situacao)) +
   theme_minimal() +
   theme(panel.grid.major.x = element_blank())
 ```
-O Gráfico 1 demonstra de forma visual a comparação da quantidade de estudantes que compareceram ou não à prova ou foram eliminados.
+
+## 1. Análise da Presença na Prova de Matemática
+
+A Tabela 1 mostra que 30,56% dos inscritos não compareceram, enquanto 69,38% estiveram presentes e apenas 0,06% foram eliminados. Essa discrepância revela dois pontos centrais:
+
+### 1.1 Comparação entre presença e ausência
+
+A quantidade de presentes é mais do que o dobro da de ausentes, indicando que, embora a taxa de ausência seja significativa, a maior parte dos estudantes permanece engajada e comparece à prova.
+
+### 1.2 Ausências ainda são um desafio estrutural
+
+Com mais de 132 mil ausentes, observa-se uma dificuldade que pode estar associada a:
+
+* Logística de deslocamento
+
+* Realização da prova em dia único
+
+* Desmotivação ou insegurança com o exame
+
+O gráfico 1 reforça visualmente essa diferença, tornando evidente o contraste entre o volume de presentes e ausentes.
+
+---
 
 ```{r calcula-dados-gerais, include=FALSE}
 freq_abs_tipo_de_prova <- table(amostra_10p$CO_PROVA_MT)
@@ -140,7 +159,6 @@ tab2 <- knitr::kable(
 
 cat(tab2)
 ```
-A partir da tabela 2, conclui-se que somente aproximadamente 0,22\% dos inscritos na prova solicitaram recursos de acessbilidade para a prova de matemática
 
 **Gráfico 2:** Proporção de Provas com Acessibilidade
 ```{r grafico-acessibilidade, out.width="\\linewidth", fig.asp=0.8}
@@ -184,7 +202,32 @@ ggplot(tabela_acessiveis, aes(x = Categoria, y = Percentual_relativo, fill = Cat
   )
 
 ```
-O Gráfico 2 mostra a distribuição percentual dos tipos de provas com acessibilidade. A modalidade Ampliada é a mais utilizada, seguida pelas versões Adaptada Ledor, Videoprova – Libras e Superampliada. A categoria Libras – Ampliada não apresentou registros na amostra.
+
+## 2. Provas Padrão vs. Provas com Acessibilidade
+
+A Tabela 2 mostra que 99,78% dos candidatos fizeram prova padrão, enquanto apenas 0,22% demandaram acessibilidade (cerca de 676 estudantes.)
+
+### 2.1 Proporção extremamente baixa de necessidades especiais
+
+Esse valor sugere duas possíveis interpretações:
+
+* O número real de estudantes com necessidades específicas pode ser baixo.
+
+* Ou há subregistro de solicitação de acessibilidade, o que é comum em exames de grande porte, seja por desconhecimento ou receio de burocracias.
+
+### 2.2 Distribuição interna entre tipos de acessibilidade
+
+O gráfico da página 1 revela que, dentro das provas acessíveis:
+
+* Ampliada é a modalidade mais comum (quase metade dos casos).
+
+* Adaptada Ledor, Superampliada e Videoprova Libras aparecem em segundo plano.
+
+* Libras – Ampliada não ocorreu, indicando pouca demanda ou ausência de candidatos elegíveis.
+
+Essa distribuição mostra que deficiência visual é o principal motivo para solicitação de acessibilidade, seguido de necessidades pedagógicas específicas.
+
+---
 
 **Tabela 3:** Frequência Intervalar da Nota de Matemática
 ```{r tabela-nota-mt, results='asis'}
@@ -218,7 +261,38 @@ tab3 <- knitr::kable(
 
 cat(tab3)
 ```
-A Tabela 3 apresenta a distribuição das notas de matemática em classes de 100 pontos, permitindo visualizar em quais faixas se concentra a maior proporção de estudantes. 
+
+## 3. Distribuição das Notas de Matemática
+
+A Tabela 3 divide as notas em intervalos de 100 pontos, permitindo observar o comportamento geral do desempenho dos estudantes.
+
+### 3.1 Concentração forte em torno do meio da distribuição
+
+Os intervalos com maiores proporções são:
+
+* 400–500: 40,17%
+
+* 500–600: 22,48%
+
+Somando esses dois grupos, mais de 62% dos participantes estão entre 400 e 600 pontos, indicando que:
+
+* A maior parte dos estudantes teve desempenho mediano, nem muito baixo, nem muito alto.
+
+* A dificuldade da prova parece adequadamente calibrada para centralizar alunos em torno da média.
+
+## 3.2 Baixa incidência de notas extremas
+
+Notas muito baixas (<300) e muito altas (>800) representam percentual muito pequeno:
+
+* <100 pontos: 0,03%
+
+* 800–900: 1,52%
+
+* 900–1000: 0,18%
+
+Esses valores sugerem que a prova discrimina bem alunos com domínio intermediário, mas raramente produz desempenhos extremos.
+
+---
 
 **Gráfico 3:** Histograma das Notas de Matemática com Curva Normal 
 ```{r hist-nota-mt-normal, out.width="\\linewidth", fig.asp=0.8}
@@ -256,4 +330,29 @@ ggplot(amostra_10p, aes(x = NU_NOTA_MT)) +
     plot.title = element_text(hjust = 0.5, face = "bold")
   )
 ```
-O Gráfico 3 compara a distribuição relativa das notas de matemática com uma curva normal ajustada pela média e pelo desvio padrão da amostra, evidenciando a concentração de estudantes em torno da média e a menor frequência de desempenhos extremos. 
+
+## 4. Ajuste à Curva Normal da Distribuição
+
+O histograma com a curva normal ajustada mostra que:
+
+### 4.1 A distribuição é aproximadamente normal
+
+A forma do gráfico indica:
+
+* Picos de densidade próximos ao centro
+
+* Decaimento simétrico nos extremos
+
+* Ausência de longas caudas que caracterizariam assimetria acentuada
+
+Isso sugere que:
+
+* O exame conseguiu distribuir os alunos segundo um padrão próximo ao esperado estatisticamente.
+
+* Há equilíbrio entre questões fáceis, intermediárias e difíceis.
+
+4.2 Diferença entre curva teórica e real
+
+Pequenas diferenças entre a curva real e a curva normal ajustada indicam que:
+
+* Alguns níveis de nota são mais frequentes que o previsto pela normal (natural em testes educacionais).
