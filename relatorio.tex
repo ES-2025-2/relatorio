@@ -1,0 +1,169 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  twocolumn]{article}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{multicol}
+\setlength{\columnsep}{0.7cm}
+\usepackage[T1]{fontenc} \usepackage[utf8]{inputenc} \usepackage[portuguese]{babel} \usepackage{booktabs} \usepackage{float} \usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Relatorio},
+  pdfauthor={Fabio Firanzi, Heitor Dias, Julia Fideles, Matheus Soares, Tiago Braga},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Relatorio}
+\author{Fabio Firanzi, Heitor Dias, Julia Fideles, Matheus Soares, Tiago
+Braga}
+\date{2025-11-11}
+
+\begin{document}
+\maketitle
+
+\section{Análise das variáveis de Ciências da
+Natureza}\label{anuxe1lise-das-variuxe1veis-de-ciuxeancias-da-natureza}
+
+\noindent
+
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\textbf{Tabela 1:} Frequência - Presença na Prova de Ciências da Natureza
+\par\vspace{1ex}
+{\footnotesize
+
+\begin{tabular}{llr}
+\toprule
+Presença na prova & Percentual & Frequência\\
+\midrule
+Ausente & 30.56\% & 132415\\
+Presente & 69.38\% & 300640\\
+Eliminado & 0.06\% & 239\\
+\bottomrule
+\end{tabular}
+}
+\\
+A partir da Tabela 1, observa-se a distribuição dos participantes em relação à presença na prova de Ciências da Natureza, destacando-se a proporção de estudantes que compareceram, se ausentaram ou foram eliminados. Essa informação é importante para entender o engajamento dos inscritos na aplicação da prova.
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\textbf{Gráfico 1:} Presença na Prova de Ciências da Natureza
+\par\vspace{1ex}
+
+
+\includegraphics[width=\linewidth]{relatorio-figs/grafico-presenca-cn-1} 
+O Gráfico 1 apresenta visualmente a comparação entre estudantes presentes, ausentes e eliminados na prova de Ciências da Natureza, facilitando a interpretação da participação na avaliação.
+\end{minipage}
+
+\vfill
+
+\noindent
+
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\textbf{Tabela 2:} Frequência Intervalar da Nota de Ciências da Natureza
+\par\vspace{1ex}
+{\footnotesize
+
+\begin{tabular}{ll}
+\toprule
+Intervalo de nota & Percentual\\
+\midrule
+0 – 100 & 0.02\%\\
+100 – 200 & 0\%\\
+200 – 300 & 0\%\\
+300 – 400 & 12.32\%\\
+400 – 500 & 42.64\%\\
+\addlinespace
+500 – 600 & 35.04\%\\
+600 – 700 & 9.28\%\\
+700 – 800 & 0.69\%\\
+800 – 900 & 0.01\%\\
+900 – 1000 & 0\%\\
+\bottomrule
+\end{tabular}
+}
+\\
+A Tabela 2 apresenta a distribuição das notas de Ciências da Natureza em classes de 100 pontos, permitindo identificar em quais faixas se concentram os maiores e os menores desempenhos dos estudantes.
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\textbf{Gráfico 2:} Histograma das Notas de Ciências da Natureza com Curva Normal
+\par\vspace{1ex}
+
+\includegraphics[width=\linewidth]{relatorio-figs/hist-nota-cn-normal-1} 
+\\
+O Gráfico 2 compara a distribuição relativa das notas de Ciências da Natureza com uma curva normal ajustada pela média e pelo desvio padrão da amostra, permitindo avaliar se o desempenho se aproxima de um padrão aproximadamente normal ou se há assimetrias importantes.
+\end{minipage}
+
+\end{document}
