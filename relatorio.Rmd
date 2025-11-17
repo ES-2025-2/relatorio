@@ -2,9 +2,10 @@
 title: "Relatorio"
 author: "Fabio Firanzi, Heitor Dias, Julia Fideles, Matheus Soares, Tiago Braga"
 date: "2025-11-11"
+#always_allow_html: true
 output:
   pdf_document:
-    latex_engine: pdlatex
+    latex_engine: pdflatex
     keep_tex: true
 header-includes: 
  \usepackage[T1]{fontenc} 
@@ -97,6 +98,11 @@ Com base na analise do gráfico "Percentual de Presença na Prova CH" foi possí
 # Analise da variavel Notas da prova de Ciências Humanas
 
 ```{r analise-medidas-estatistica}
+# Carregar pacotes necessários
+library(dplyr)
+library(knitr)
+library(kableExtra)
+
 # Carregar o banco de dados
 amostra_10p <- read.csv("amostra_10p.csv")
 
@@ -116,7 +122,6 @@ dados_com_regiao <- amostra_10p %>%
   ))
 
 # PASSO 2: Agrupar (Group By) e Resumir (Summarise)
-# (Este objeto 'tabela_resumo_regiao' será usado no próximo gráfico)
 tabela_resumo_regiao <- dados_com_regiao %>%
   group_by(Regiao) %>%
   summarise(
@@ -125,25 +130,23 @@ tabela_resumo_regiao <- dados_com_regiao %>%
     variancia_nota_ch = var(NU_NOTA_CH),
     desvio_padrao_nota_ch = sd(NU_NOTA_CH),
     minimo_nota_ch = min(NU_NOTA_CH),
-    maximo_nota_ch = max(NU_NOTA_CH),
+    maximo_nota_ch = max(NU_NOTA_CH)
   ) %>%
-  
-  # Ordena pela Média (opcional)
   arrange(desc(media_nota_ch))
 
-# PASSO 4: Exibir a tabela formatada
+# PASSO 3: Exibir a tabela formatada para LaTeX/PDF
 tabela_resumo_regiao %>%
   kable(
-    caption = "Tabela Resumo: Estatísticas das Notas de CH por Região",
-
-    # Nomes das colunas (9 nomes para 9 colunas)
-    col.names = c("Regiao", "Media", "Mediana", "Variancia", "Desvio_Padrao", "Minimo", "Maximo"),
-    digits = 2,
-    format = "html"
+    caption   = "Tabela Resumo: Estatísticas das Notas de CH por Região",
+    col.names = c("Regiao", "Media", "Mediana", "Variancia", 
+                  "Desvio Padrao", "Minimo", "Maximo"),
+    digits    = 2,
+    format    = "latex",
+    booktabs  = TRUE
   ) %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), 
-                full_width = FALSE, 
-                position = "center")
+  kable_styling(
+    latex_options = c("striped", "hold_position", "scale_down")
+  )
 ```
 
 A "Tabela Resumo: Estatísticas das Notas de CH por Região" apresenta a distribuição das medidas: media,mediana, variância, desvio padrão, valor mínimo, valor máximo e a frequência relativa percentual. Essa divisão foi feita por região do Brasil. Com base nisso, podemos identificar claramente o desempenho superior da região Sudeste.
