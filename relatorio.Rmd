@@ -1158,8 +1158,11 @@ Isso sugere que:
 Pequenas diferenças entre a curva real e a curva normal ajustada indicam que:
 
 * Alguns níveis de nota são mais frequentes que o previsto pela normal (natural em testes educacionais).
+<!-- Língua Estrangeira -->
+# Análise da Escolha da Língua Estrangeira
 
-```{r tabela-linguaEstrangeira, results='asis'}
+**Gráfico 3:** Escolha das Línguas Estrangeiras
+```{r grafico-linguaEstrangeira, out.width = "\\linewidth", fig.asp = 1}
 amostra_10p <- read.csv("amostra_10p.csv", fileEncoding = "latin1")
 freq_abs_le <- table(amostra_10p$TP_LINGUA)
 freq_rel_le <- prop.table(freq_abs_le)
@@ -1172,19 +1175,6 @@ tabela_freq_le <- data.frame(
   check.names = FALSE
 )
 
-tab_le <- knitr::kable(
-  tabela_freq_le,
-  format    = "latex",
-  booktabs  = TRUE,
-  longtable = FALSE
-)
-
-cat(tab_le)
-```
-
-Observa-se, a partir da tabela, que aproximadamente 55\% dos participantes escolheu a opção "inglês" para a prova de língua estrangeira e 45\% dos participantes escolheu "espanhol", o que evidencia que a maior parte dos estudantes optou pela língua inglesa.
-
-```{r grafico-linguaEstrangeira, out.width = "\\linewidth", fig.asp = 1}
 percent_le <- paste0(round(100 * as.vector(freq_rel_le), 2))
 rotulo_le <- paste(names(freq_abs_le), " (", percent_le, "%)", sep="")
 
@@ -1193,7 +1183,7 @@ pie(freq_abs_le,
     labels = rotulo_le
 )
 ```
-O gráfico apresenta, de forma imagética, o contraste entre a quantidade do todo que optou pela língua inglesa e a quantidade que optou pela língua espanhola.
+Observa-se, a partir do gráfico, que aproximadamente 55\% dos participantes escolheu a opção "inglês" para a prova de língua estrangeira e 45\% dos participantes escolheu "espanhol", o que evidencia que a maior parte dos estudantes optou pela língua inglesa. Por meio disso, é possível afirmar que, apesar da semelhança entre as línguas portuguesa e espanhola, a maioria dos participantes escolheu o inglês, refletindo o maior investimento no ensino dessa língua no Brasil.
 
 <!-- AUXILIAR: Categoria de Tipo da Redação (Zerada ou Não Zerada) -->
 
@@ -1205,9 +1195,13 @@ amostra_10p$TP_REDACAO <- ifelse(
 )
 ```
 
+# Análise da Redação
+
+## 1 Redações Zeradas
 <!-- Redações zeradas -->
 
 **Tabela 6:** Frequência - Motivo do Zero na Redação
+
 ```{r tabela-motivoZero, results='asis'}
 # Tabela de motivos para o zero na redação
 redacoes_zeradas <- amostra_10p %>% filter(TP_STATUS_REDACAO >= 2 & TP_STATUS_REDACAO <= 9)
@@ -1234,8 +1228,6 @@ tab_mzero <- knitr::kable(
 cat(tab_mzero)
 ```
 
-Observando a tabela, percebe-se que mais da metade (54,2\%) das redações zeradas teve como motivo a redação em branco, sendo o principal motivo para isso. Os demais motivos, em ordem após esse, são fuga ao tema (19,97\%), cópia do texto motivador (11,01\%), texto insuficiente (8,54\%), parte desconectada (2,7\%), não atendimento ao tipo textual (1,99\%) e anulação (1,58\%). Com isso, é possível constatar que, a maior parte dos participantes que teve a redação zerada não escreveu ou escreveu insuficientemente (54,2\% em branco e 8,54\% texto insuficiente), não entendeu o tema ou não foi capaz de relacionar o tema a conhecimentos prévios e copiou os textos motivadores.
-
 **Gráfico 4:** Motivos para Redação Zerada
 
 ```{r grafico-motivoZero, out.width = "\\linewidth", fig.asp = 0.8, fig.width = 10, fig.height = 8}
@@ -1247,7 +1239,17 @@ pie(freq_abs_red_zero,
     labels = rotulo_zero
 )
 ```
-O gráfico, apresenta de forma imagética, a relação entre os motivos das redações zeradas e a frequência relativa deles. É possível observar que mais da metade das redações foi zerada por um motivo (Em Branco) e a outra metade foi por motivos diversos, o que evidencia que um motivo se sobressai aos demais.
+
+Observando a tabela, percebe-se que mais da metade (54,2\%) das redações zeradas teve como motivo a redação em branco, sendo o principal motivo para isso. Os demais motivos, em ordem após esse, são fuga ao tema (19,97\%), cópia do texto motivador (11,01\%), texto insuficiente (8,54\%), parte desconectada (2,7\%), não atendimento ao tipo textual (1,99\%) e anulação (1,58\%).
+
+## 1.1 Constatações
+
+* A maior parte dos participantes que teve a redação zerada não escreveu ou escreveu insuficientemente (54,2\% em branco e 8,54\% texto insuficiente)
+
+* 19,97\% dos participantes não entendeu completamente o tema e teve redação zerada por fuga ao tema
+
+* 11,01\% não foi capaz de relacionar o tema a conhecimentos prévios e copiou os textos motivadores.
+
 
 <!-- AUXILIAR: Tabela de específica pra redação, com filtro para redações não zeradas -->
 
@@ -1267,6 +1269,8 @@ amostra_redacao <- amostra_10p %>%
 amostra_redacao <- amostra_redacao %>%
   filter(TP_REDACAO == 0)
 ```
+
+## 2 Redações Não Zeradas
 
 **Tabela 7:** Frequência - Notas nas Competências
 
@@ -1309,7 +1313,6 @@ tab_comps <- knitr::kable(
 
 cat(tab_comps)
 ```
-A tabela apresenta a relação entre as notas e a frequência relativa da aparição da mesma em cada uma das 5 competências da redação, em redações que não foram zeradas. Ao comparar as frequências das notas em todas as competências, as principais constatações são: "A competência com maior taxa de 0 é a competência 5 (6,67\%)", "A competência 1 possui a maior parte das notas concentradas entre 100 e 160 (com porcentagens mais significativas, entre 13,92\% e 37,04\%)", "A competência 1 é a única cuja taxa de notas 200 é significativamente menor", "A competência 5 possui maior distribuição de notas que as demais (todas as porcentagens estão acima de 2\%)" e "A competência 2 é a competência com maior taxa de notas entre 120 e 200 (93,09\% das notas está nessa faixa)".
 
 **Gráfico 5:** Distribuição das Notas por Competência
 
@@ -1359,9 +1362,35 @@ ggplot(
     plot.title = element_text(hjust = 0.5, face = "bold")
   )
 ```
-O boxplot representa, graficamente, as informações presentes na tabela. Os pontos indicam valores que estão fora da concentração de resultados, mas que tiveram aparição (outliers). As principais constatações são: A competência 1 é a que possui menor dispersão, ou seja, a maioria dos resultados está concentrada em uma faixa pequena (100 a 160) e possui outliers em todas as notas fora dessa faixa. A competência 2 possui concentração de notas mais altas que as demais, o que é evidenciado por abranger notas mais altas e não possui outliers, ou seja, todos os resultados estão na faixa estipulada. A competência 5 possui maior dispersão, ou seja, abrange todas as notas possíveis e está mais distribuida.
 
-**Tabela 9:** Frequência - Notas da Redação
+A tabela apresenta a relação entre as notas e a frequência relativa da aparição da mesma em cada uma das 5 competências da redação, em redações que não foram zeradas.
+
+## 2.1 Constatações da Tabela
+
+Ao comparar as frequências das notas em todas as competências, as principais constatações são
+
+* A competência com maior taxa de 0 é a competência 5 (6,67\%)
+
+* A competência 1 possui a maior parte das notas concentradas entre 100 e 160 (com porcentagens mais significativas, entre 13,92\% e 37,04\%)
+
+* A competência 1 é a única cuja taxa de notas 200 é significativamente menor
+
+* A competência 5 possui maior distribuição de notas que as demais (todas as porcentagens estão acima de 2\%)
+
+* A competência 2 é a competência com maior taxa de notas entre 120 e 200 (93,09\% das notas está nessa faixa)".
+
+## 2.2 Constatações do Boxplot
+
+O boxplot representa, graficamente, as informações presentes na tabela. Os pontos indicam valores que estão fora da concentração de resultados, mas que tiveram aparição (outliers).
+
+* A competência 1 é a que possui menor dispersão, ou seja, a maioria dos resultados está concentrada em uma faixa pequena (100 a 160) e possui outliers em todas as notas fora dessa faixa
+
+* A competência 2 possui concentração de notas mais altas que as demais, o que é evidenciado por abranger notas mais altas e não possui outliers, ou seja, todos os resultados estão na faixa estipulada
+
+* A competência 5 possui maior dispersão, ou seja, abrange todas as notas possíveis e está mais distribuida.
+
+
+**Tabela 8:** Frequência - Notas da Redação
 
 ```{r tabela-notaRedacao, results='asis'}
 grupos_red <- seq(0, 1000, by = 100)
@@ -1379,7 +1408,7 @@ dados_red <- amostra_redacao$NU_NOTA_REDACAO
 media_red <- mean(dados_red, na.rm = TRUE)
 sd_red <- sd(dados_red, na.rm = TRUE)
 
-names(freq_abs_red) <- c("x <= 100", "100 < x <= 200", "200 < x <= 300", "300 < x <= 400", "400 < x <= 500", "500 < x <= 600", "600 < x <= 700", "700 < x <= 800", "800 < x <= 900", "900 < x")
+names(freq_abs_red) <- c("0 - 100", "100 - 200", "200 - 300", "300 - 400", "400 - 500", "500 - 600", "600 - 700", "700 - 800", "800 - 900", "900 - 1000")
 
 tabela_freq_red <- data.frame(
   'Intervalo de Notas' = names(freq_abs_red),
@@ -1396,12 +1425,9 @@ tab_nred <- knitr::kable(
 
 cat(tab_nred)
 ```
-
 Média das notas: `r sprintf("%.2f", media_red)`
 
 Desvio Padrão: `r sprintf("%.2f", sd_red)`
-
-A tabela indica a frequência relativa, em porcentagem, das faixas de notas da redação. Aproximadamente metade dos resultados está centrado entre 500 e 700 (22,43\% + 20, 39\%), enquanto os demais intervalos têm frequência cada vez menor conforme se afasta do centro, tendendo para os intervalos extremos.
 
 **Gráfico 6:** Distribuição das Notas da Redação
 
@@ -1435,7 +1461,8 @@ ggplot(amostra_redacao, aes(x = NU_NOTA_REDACAO)) +
   )
 ```
 
-O gráfico relaciona o comportamento da frequência dos intervalos das notas da redação (presentes na tabela 4), indicado pelas barras, com o comportamento da normal, linha, para a verificação da semelhança entre ambos. É possível observar que a maior frequência de aparição dos valores converge para o centro, enquanto diminui ao se aproximar das extremidades, o que se assemelha ao comportamento teórico da normal.
+A tabela indica a frequência relativa, em porcentagem, das faixas de notas da redação. Aproximadamente metade dos resultados está centrado entre 500 e 700 (22,43\% + 20, 39\%), enquanto os demais intervalos têm frequência cada vez menor conforme se afasta do centro, tendendo para os intervalos extremos.
 
-Com base na análise estatística, é possível constatar que a presença no primeiro dia de prova (provas de humanas e linguagens) é maior que no segundo dia (natureza e matemática), o que mostra que, embora não seja uma taxa muito grande, ainda há desistência após o primeiro dia de prova.
-A média das quatro áreas do conhecimento varia entre 400 e 600, o que mostra que a distribuição das notas tende ao centro e tem menor distribuição nas extremidades, convergindo para o padrão da normal, fator que torna a prova justa por nivelar os níveis das questões. Além disso, as notas da redação é centrada entre 500 e 700, o que também mantém a tendência central de notas observada.
+O gráfico relaciona o comportamento da frequência dos intervalos das notas da redação (presentes na tabela 3), indicado pelas barras, com o comportamento da normal, linha, para a verificação da semelhança entre ambos.
+
+* É possível observar que a maior frequência de aparição dos valores converge para o centro, enquanto diminui ao se aproximar das extremidades, o que se assemelha ao comportamento teórico da normal.
