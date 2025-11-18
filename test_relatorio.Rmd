@@ -390,4 +390,5 @@ ggplot(dados_regressao, aes(x = NU_NOTA_LC, y = NU_NOTA_CH)) +
 
 
 ```
+
 O "Gráfico de Regressão: Nota de Humanas vs. Nota de Linguagens" confirma a correlação positiva. Nesse cenário, os pontos estão razoavelmente agrupados ao redor da linha vermelha, que sobe da esquerda para a direita, confirmando a tendência de que notas altas em LC acompanham notas altas em CH. Para o modelo elaborado, temos a seguinte equação: Nota_CH = 93.30 + 0.82 * Nota_LC. Atraves dessa equação, é possível dizer que para cada 1 ponto que um aluno ganha em na prova de linguagens (NU_NOTA_LC), espera-se que sua nota em humanas (NU_NOTA_CH) aumente, em média, 0.82 pontos. Logo, é possível afirmar que a nota de Linguagens em geral consegue prever a nota de Humanas.
