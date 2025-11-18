@@ -579,9 +579,9 @@ tabela_resumo_regiao %>%
 
 A "Tabela Resumo: Estatísticas das Notas de CH por Região" apresenta a distribuição das medidas: media,mediana, variância, desvio padrão, valor mínimo, valor máximo e a frequência relativa percentual. Essa divisão foi feita por região do Brasil. Com base nisso, podemos identificar claramente o desempenho superior da região Sudeste.
 
-Liderança Clara: O Sudeste lidera em ambos os indicadores de performance, possuindo a maior Média (593,12) e, mais importante, a maior Mediana (601,8).
+Liderança Clara: O Sudeste lidera em ambos os indicadores de performance, possuindo a maior Média (533.58) e, mais importante, a maior Mediana (540.4).
 
-O "Grupo de Ponta": Embora o Sudeste seja o primeiro, ele faz parte de um "grupo de alta performance" juntamente com as regiões Sul (Mediana 597,5) e Centro-Oeste (Mediana 591,3). Estas três regiões estão claramente destacadas das regiões Nordeste (Mediana 562,9) e Norte (Mediana 555,0).
+O "Grupo de Ponta": Embora o Sudeste seja o primeiro, ele faz parte de um "grupo de alta performance" juntamente com as regiões Sul (Mediana 534.0) e Centro-Oeste (Mediana 518.7). Estas três regiões estão claramente destacadas das regiões Nordeste (Mediana 494.9) e Norte (Mediana 481.2).
 
 A Armadilha da Média: Em todas as regiões, a Média é "puxada" para baixo por notas mais fracas (assimetria à esquerda). Por isso, a Mediana é a métrica mais justa para a comparação, e nela o Sudeste também vence.
 
@@ -625,7 +625,7 @@ ggplot(dados_para_boxplot, aes(x = reorder(Regiao, NU_NOTA_CH, FUN = median),
   coord_flip() + 
   
   labs(
-    title = "Gráfico: Boxplot das Notas de CH por Região",
+    title = "Boxplot das Notas de CH por Região",
     subtitle = "Ordenado pela Mediana",
     x = "Região",
     y = "Nota de Ciências Humanas"
@@ -634,8 +634,6 @@ ggplot(dados_para_boxplot, aes(x = reorder(Regiao, NU_NOTA_CH, FUN = median),
 ```
 
 O gráfico "Boxplot das Notas de CH por Região", compara o desempenho central (a mediana) das notas de Ciências Humanas (CH) entre as cinco grandes regiões do Brasil. Além disso, o gráfico representa os valores "extremos", os outliers, da variavel 'NU_NOTA_CH', contribuindo para uma analise de desempenho na prova do Enem.
-
-As caixas das regiões Sul e Sudeste são visivelmente mais longas (largas) do que as das outras regiões. Isto significa que a diferença de nota entre o aluno do percentil 25 e o do percentil 75 é maior. Ou seja, embora tenham o melhor desempenho, são regiões internamente mais "desiguais" ou "inconstantes".
 
 O Boxplot confirma que a região Sudeste tem o melhor desempenho geral em Ciências Humanas, não apenas na mediana, mas no "corpo" principal dos seus alunos (o miolo de 50%). No entanto, esta alta performance vem acompanhada de uma maior desigualdade interna (maior dispersão) representada pelo comprimento maior e um alto número de Outliers, tanto Outliers superiores (notas > 750) quanto os Outliers inferiores (notas < 300), um padrão também visto na região Sul.
 
@@ -785,10 +783,8 @@ dados_regressao <- amostra_10p %>%
 # Calcula a correlação
 cor_coef <- cor(dados_regressao$NU_NOTA_LC, dados_regressao$NU_NOTA_CH)
 
-# Exibe o resultado
-cat(paste0("O Coeficiente de Correlação (r) entre LC e CH é: ", round(cor_coef, 4)))
-
 ```
+O Coeficiente de Correlação (r) entre LC e CH é: 0.7615
 
 Isso significa que, em geral, alunos que tiram notas mais altas em Linguagens também tiram notas mais altas em Humanas. Isso demonstra que as duas variaveis possuem uma forte correlação. 
 
