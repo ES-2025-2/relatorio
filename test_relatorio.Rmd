@@ -37,7 +37,7 @@ library(kableExtra)
 library(knitr)
 ```
 
-# Analise da area de conhecimento de Humanas: Heitor
+# Analise da area de conhecimento de Humanas:
 
 ```{r setup-e-carga, message=FALSE, warning=FALSE}
 #Carregar o banco de dados
