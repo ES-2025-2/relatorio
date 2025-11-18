@@ -324,7 +324,7 @@ A faixa de nota com maior frequência (a Classe Modal) é [500, 550), contendo 2
 
 As notas de Ciências Humanas apresentam uma distribuição aproximadamente normal, bem representada pela curva teórica sobreposta ao histograma. A média foi de 510,92 pontos, indicando o desempenho central dos estudantes, enquanto o desvio-padrão de 92,95 pontos mostra dispersão moderada ao redor da média. A forma da distribuição confirma que os dados seguem um padrão típico e estável, adequado para análises baseadas em normalidade.
 
-# 1.3 Correlação e Regressão Linear Simples
+# Correlação e Regressão Linear Simples
 
 Para essa analise, buscou-se indentificar o poder de correlação de duas variaveis, notas de Ciências Humanas e notas de Linguagens e Códigos.
 
