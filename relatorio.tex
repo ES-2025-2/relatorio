@@ -89,6 +89,28 @@ Braga}
 \begin{document}
 \maketitle
 
+O trabalho elaborado pelos alunos Fabio Firanzi, Heitor Dias, Julia
+Fideles, Matheus Soares e Tiago Braga tem como objetivo a análise
+estatística dos resultados do ENEM 2024, por meio de uma amostra
+aleatória que abrange 10\% dos resultados. As variáveis utilizadas para
+a análise são: TP\_PRESENCA\_CN, TP\_PRESENCA\_CH, TP\_PRESENCA\_LC,
+TP\_PRESENCA\_MT (presença nas provas de Ciências da Natureza, Ciências
+Humanas, Linguagens e Códigos e Matemática, respectivamente),
+NU\_NOTA\_CN, NU\_NOTA\_CH, NU\_NOTA\_LC, NU\_NOTA\_MT (Notas nas quatro
+áreas do conhecimento presentes na prova), TP\_LINGUA (língua
+estrangeira escolhida pelo participante), TP\_STATUS\_REDACAO (Indicação
+do motivo para a redação ser zerada, além de auxiliar para filtragem de
+redações não zeradas para os cálculos referentes as notas),
+NU\_NOTA\_COMP1, NU\_NOTA\_COMP2, NU\_NOTA\_COMP3, NU\_NOTA\_COMP4,
+NU\_NOTA\_COMP5 (notas das cinco competências) e NU\_NOTA\_REDACAO
+(notas das redações).
+
+Os resultados obtidos indicam a relação de participantes frequentes,
+ausentes e eliminados; a análise das notas de cada área do conhecimento
+e da redação; relação entre as escolhas da língua estrangeira;
+apresentação dos motivos que levaram uma redação a ser zerada;
+distribuição das notas das competências.
+
 \begin{tabular}{llr}
 \toprule
 Presença na prova & Percentual & Frequência\\
@@ -138,7 +160,7 @@ aproximadamente 55\% dos alunos, o desvio padrão das notas é de 69,87.
 \centering
 \begin{tabular}[t]{lrrrrr}
 \toprule
-Prova & Média & Mediana & Desv. Padrão & Min & Máx\\
+Prova & Média & Mediana & D. Padrão & Min & Máx\\
 \midrule
 LC & 526.70 & 533.3 & 68.03 & 298.8 & 795.8\\
 MT & 527.24 & 499.1 & 113.91 & 342.8 & 961.9\\
@@ -419,13 +441,13 @@ Natureza}\label{anuxe1lise-das-variuxe1veis-de-ciuxeancias-da-natureza}
 \toprule
 Presença na prova & Percentual & Frequência\\
 \midrule
-0 & 30.56\% & 132415\\
-1 & 69.38\% & 300640\\
-2 & 0.06\% & 239\\
+Ausente & 30.56\% & 132415\\
+Presente & 69.38\% & 300640\\
+Eliminado & 0.06\% & 239\\
 \bottomrule
 \end{tabular}
 
-A partir da Tabela 1, observa-se a distribuição dos participantes em
+A partir da Tabela 2, observa-se a distribuição dos participantes em
 relação à presença na prova de Ciências da Natureza, destacando-se a
 proporção de estudantes que compareceram, se ausentaram ou foram
 eliminados. Essa informação é importante para entender o engajamento dos
@@ -433,21 +455,12 @@ inscritos na aplicação da prova.
 
 \textbf{Gráfico 1:} Presença na Prova de Ciências da Natureza
 
-\begin{verbatim}
-## Warning: No shared levels found between `names(values)` of the manual scale and the
-## data's fill values.
-## No shared levels found between `names(values)` of the manual scale and the
-## data's fill values.
-## No shared levels found between `names(values)` of the manual scale and the
-## data's fill values.
-\end{verbatim}
-
 \includegraphics[width=\linewidth]{relatorio_files/figure-latex/grafico-presenca-cn-1}
 O Gráfico 1 apresenta visualmente a comparação entre estudantes
 presentes, ausentes e eliminados na prova de Ciências da Natureza,
 facilitando a interpretação da participação na avaliação.
 
-\textbf{Tabela 2:} Frequência Intervalar da Nota de Ciências da Natureza
+\textbf{Tabela 3:} Frequência Intervalar da Nota de Ciências da Natureza
 
 \begin{tabular}{ll}
 \toprule
@@ -467,17 +480,12 @@ Intervalo de nota & Percentual\\
 \bottomrule
 \end{tabular}
 
-A Tabela 2 apresenta a distribuição das notas de Ciências da Natureza em
+A Tabela 3 apresenta a distribuição das notas de Ciências da Natureza em
 classes de 100 pontos, permitindo identificar em quais faixas se
 concentram os maiores e os menores desempenhos dos estudantes.
 
 \textbf{Gráfico 2:} Histograma das Notas de Ciências da Natureza com
 Curva Normal
-
-\begin{verbatim}
-## Warning: Removed 132654 rows containing non-finite outside the scale range
-## (`stat_bin()`).
-\end{verbatim}
 
 \includegraphics[width=\linewidth]{relatorio_files/figure-latex/hist-nota-cn-normal-1}
 
@@ -486,35 +494,26 @@ Natureza com uma curva normal ajustada pela média e pelo desvio padrão
 da amostra, permitindo avaliar se o desempenho se aproxima de um padrão
 aproximadamente normal ou se há assimetrias importantes.
 
-\textbf{Tabela 1:} Frequência - Presença na Prova de Matemática
+\textbf{Tabela 4:} Frequência - Presença na Prova de Matemática
 
 \begin{tabular}{llr}
 \toprule
 Presença na prova & Percentual & Frequência\\
 \midrule
-0 & 30.56\% & 132415\\
-1 & 69.38\% & 300640\\
-2 & 0.06\% & 239\\
+Ausente & 30.56\% & 132415\\
+Presente & 69.38\% & 300640\\
+Eliminado & 0.06\% & 239\\
 \bottomrule
 \end{tabular}
 
-\textbf{Gráfico 1:} Presença na Prova
-
-\begin{verbatim}
-## Warning: No shared levels found between `names(values)` of the manual scale and the
-## data's fill values.
-## No shared levels found between `names(values)` of the manual scale and the
-## data's fill values.
-## No shared levels found between `names(values)` of the manual scale and the
-## data's fill values.
-\end{verbatim}
+\textbf{Gráfico 3:} Presença na Prova
 
 \includegraphics[width=\linewidth]{relatorio_files/figure-latex/grafico-presenca1-1}
 
 \subsection{1. Análise da Presença na Prova de
 Matemática}\label{anuxe1lise-da-presenuxe7a-na-prova-de-matemuxe1tica}
 
-A Tabela 1 mostra que 30,56\% dos inscritos não compareceram, enquanto
+A Tabela 4 mostra que 30,56\% dos inscritos não compareceram, enquanto
 69,38\% estiveram presentes e apenas 0,06\% foram eliminados. Essa
 discrepância revela dois pontos centrais:
 
@@ -540,70 +539,12 @@ associada a:
   Desmotivação ou insegurança com o exame
 \end{itemize}
 
-O gráfico 1 reforça visualmente essa diferença, tornando evidente o
+O gráfico 3 reforça visualmente essa diferença, tornando evidente o
 contraste entre o volume de presentes e ausentes.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\textbf{Tabela 2:} Provas Padrão vs.~Acessibilidade
-
-\begin{tabular}{llr}
-\toprule
-Categoria & Percentual & Frequência\\
-\midrule
-Prova padrão & 100\% & 300640\\
-\bottomrule
-\end{tabular}
-
-\textbf{Gráfico 2:} Proporção de Provas com Acessibilidade
-
-\includegraphics[width=\linewidth]{relatorio_files/figure-latex/grafico-acessibilidade-1}
-
-\subsection{2. Provas Padrão vs.~Provas com
-Acessibilidade}\label{provas-padruxe3o-vs.-provas-com-acessibilidade}
-
-A Tabela 2 mostra que 99,78\% dos candidatos fizeram prova padrão,
-enquanto apenas 0,22\% demandaram acessibilidade (cerca de 676
-estudantes.)
-
-\subsubsection{2.1 Proporção extremamente baixa de necessidades
-especiais}\label{proporuxe7uxe3o-extremamente-baixa-de-necessidades-especiais}
-
-Esse valor sugere duas possíveis interpretações:
-
-\begin{itemize}
-\item
-  O número real de estudantes com necessidades específicas pode ser
-  baixo.
-\item
-  Ou há subregistro de solicitação de acessibilidade, o que é comum em
-  exames de grande porte, seja por desconhecimento ou receio de
-  burocracias.
-\end{itemize}
-
-\subsubsection{2.2 Distribuição interna entre tipos de
-acessibilidade}\label{distribuiuxe7uxe3o-interna-entre-tipos-de-acessibilidade}
-
-O gráfico da página 1 revela que, dentro das provas acessíveis:
-
-\begin{itemize}
-\item
-  Ampliada é a modalidade mais comum (quase metade dos casos).
-\item
-  Adaptada Ledor, Superampliada e Videoprova Libras aparecem em segundo
-  plano.
-\item
-  Libras -- Ampliada não ocorreu, indicando pouca demanda ou ausência de
-  candidatos elegíveis.
-\end{itemize}
-
-Essa distribuição mostra que deficiência visual é o principal motivo
-para solicitação de acessibilidade, seguido de necessidades pedagógicas
-específicas.
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-\textbf{Tabela 3:} Frequência Intervalar da Nota de Matemática
+\textbf{Tabela 5:} Frequência Intervalar da Nota de Matemática
 
 \begin{tabular}{ll}
 \toprule
@@ -626,7 +567,7 @@ Intervalo de nota & Percentual\\
 \subsection{3. Distribuição das Notas de
 Matemática}\label{distribuiuxe7uxe3o-das-notas-de-matemuxe1tica}
 
-A Tabela 3 divide as notas em intervalos de 100 pontos, permitindo
+A Tabela 5 divide as notas em intervalos de 100 pontos, permitindo
 observar o comportamento geral do desempenho dos estudantes.
 
 \subsubsection{3.1 Concentração forte em torno do meio da
@@ -673,12 +614,7 @@ intermediário, mas raramente produz desempenhos extremos.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\textbf{Gráfico 3:} Histograma das Notas de Matemática com Curva Normal
-
-\begin{verbatim}
-## Warning: Removed 132654 rows containing non-finite outside the scale range
-## (`stat_bin()`).
-\end{verbatim}
+\textbf{Gráfico 4:} Histograma das Notas de Matemática com Curva Normal
 
 \includegraphics[width=\linewidth]{relatorio_files/figure-latex/hist-nota-mt-normal-1}
 
@@ -722,5 +658,162 @@ que:
   Alguns níveis de nota são mais frequentes que o previsto pela normal
   (natural em testes educacionais).
 \end{itemize}
+
+\begin{tabular}{llr}
+\toprule
+Língua Estrangeira & Percentual & Frequência\\
+\midrule
+Inglês & 54.93\% & 237997\\
+Espanhol & 45.07\% & 195297\\
+\bottomrule
+\end{tabular}
+
+Observa-se, a partir da tabela, que aproximadamente 55\% dos
+participantes escolheu a opção ``inglês'' para a prova de língua
+estrangeira e 45\% dos participantes escolheu ``espanhol'', o que
+evidencia que a maior parte dos estudantes optou pela língua inglesa.
+
+\includegraphics[width=\linewidth]{relatorio_files/figure-latex/grafico-linguaEstrangeira-1}
+O gráfico apresenta, de forma imagética, o contraste entre a quantidade
+do todo que optou pela língua inglesa e a quantidade que optou pela
+língua espanhola.
+
+\textbf{Tabela 6:} Frequência - Motivo do Zero na Redação
+
+\begin{tabular}{ll}
+\toprule
+Motivo & Percentual\\
+\midrule
+Anulada & 1.58\%\\
+Cópia Texto Motivador & 11.01\%\\
+Em Branco & 54.2\%\\
+Fuga ao Tema & 19.97\%\\
+Não atendimento ao tipo textual & 1.99\%\\
+\addlinespace
+Texto insuficiente & 8.54\%\\
+Parte desconectada & 2.7\%\\
+\bottomrule
+\end{tabular}
+
+Observando a tabela, percebe-se que mais da metade (54,2\%) das redações
+zeradas teve como motivo a redação em branco, sendo o principal motivo
+para isso. Os demais motivos, em ordem após esse, são fuga ao tema
+(19,97\%), cópia do texto motivador (11,01\%), texto insuficiente
+(8,54\%), parte desconectada (2,7\%), não atendimento ao tipo textual
+(1,99\%) e anulação (1,58\%). Com isso, é possível constatar que, a
+maior parte dos participantes que teve a redação zerada não escreveu ou
+escreveu insuficientemente (54,2\% em branco e 8,54\% texto
+insuficiente), não entendeu o tema ou não foi capaz de relacionar o tema
+a conhecimentos prévios e copiou os textos motivadores.
+
+\textbf{Gráfico 4:} Motivos para Redação Zerada
+
+\includegraphics[width=\linewidth]{relatorio_files/figure-latex/grafico-motivoZero-1}
+O gráfico, apresenta de forma imagética, a relação entre os motivos das
+redações zeradas e a frequência relativa deles. É possível observar que
+mais da metade das redações foi zerada por um motivo (Em Branco) e a
+outra metade foi por motivos diversos, o que evidencia que um motivo se
+sobressai aos demais.
+
+\textbf{Tabela 7:} Frequência - Notas nas Competências
+
+\begin{tabular}{llllll}
+\toprule
+Nota & C1 & C2 & C3 & C4 & C5\\
+\midrule
+0 & 0.01\% & 0\% & 0.02\% & 0.02\% & 6.67\%\\
+20 & 0.01\% & 0\% & 0.03\% & 0.04\% & 2.83\%\\
+40 & 0.21\% & 0.8\% & 1.81\% & 0.35\% & 4.49\%\\
+60 & 0.96\% & 0.54\% & 2.74\% & 1.49\% & 4.57\%\\
+80 & 7.78\% & 2.03\% & 10.38\% & 7.34\% & 10.98\%\\
+\addlinespace
+100 & 13.92\% & 3.55\% & 13.08\% & 10.85\% & 10.31\%\\
+120 & 37.04\% & 27.06\% & 34.67\% & 32.03\% & 15.22\%\\
+140 & 17.12\% & 11.24\% & 13.59\% & 12.97\% & 9.66\%\\
+160 & 21.53\% & 18.89\% & 14.87\% & 14.99\% & 11.82\%\\
+180 & 1.35\% & 17.39\% & 6.52\% & 10.55\% & 9.27\%\\
+\addlinespace
+200 & 0.07\% & 18.51\% & 2.28\% & 9.37\% & 14.19\%\\
+\bottomrule
+\end{tabular}
+
+A tabela apresenta a relação entre as notas e a frequência relativa da
+aparição da mesma em cada uma das 5 competências da redação, em redações
+que não foram zeradas. Ao comparar as frequências das notas em todas as
+competências, as principais constatações são: ``A competência com maior
+taxa de 0 é a competência 5 (6,67\%)'', ``A competência 1 possui a maior
+parte das notas concentradas entre 100 e 160 (com porcentagens mais
+significativas, entre 13,92\% e 37,04\%)'', ``A competência 1 é a única
+cuja taxa de notas 200 é significativamente menor'', ``A competência 5
+possui maior distribuição de notas que as demais (todas as porcentagens
+estão acima de 2\%)'' e ``A competência 2 é a competência com maior taxa
+de notas entre 120 e 200 (93,09\% das notas está nessa faixa)''.
+
+\textbf{Gráfico 5:} Distribuição das Notas por Competência
+
+\includegraphics[width=\linewidth]{relatorio_files/figure-latex/boxplot-notaCompetencias-1}
+O boxplot representa, graficamente, as informações presentes na tabela.
+Os pontos indicam valores que estão fora da concentração de resultados,
+mas que tiveram aparição (outliers). As principais constatações são: A
+competência 1 é a que possui menor dispersão, ou seja, a maioria dos
+resultados está concentrada em uma faixa pequena (100 a 160) e possui
+outliers em todas as notas fora dessa faixa. A competência 2 possui
+concentração de notas mais altas que as demais, o que é evidenciado por
+abranger notas mais altas e não possui outliers, ou seja, todos os
+resultados estão na faixa estipulada. A competência 5 possui maior
+dispersão, ou seja, abrange todas as notas possíveis e está mais
+distribuida.
+
+\textbf{Tabela 9:} Frequência - Notas da Redação
+
+\begin{tabular}{ll}
+\toprule
+Intervalo de Notas & Percentual\\
+\midrule
+x <= 100 & 0.02\%\\
+100 < x <= 200 & 0.1\%\\
+200 < x <= 300 & 1.05\%\\
+300 < x <= 400 & 5.37\%\\
+400 < x <= 500 & 12.17\%\\
+\addlinespace
+500 < x <= 600 & 22.43\%\\
+600 < x <= 700 & 20.39\%\\
+700 < x <= 800 & 16.34\%\\
+800 < x <= 900 & 15.52\%\\
+900 < x & 6.61\%\\
+\bottomrule
+\end{tabular}
+
+Média das notas: 659.33
+
+Desvio Padrão: 163.34
+
+A tabela indica a frequência relativa, em porcentagem, das faixas de
+notas da redação. Aproximadamente metade dos resultados está centrado
+entre 500 e 700 (22,43\% + 20, 39\%), enquanto os demais intervalos têm
+frequência cada vez menor conforme se afasta do centro, tendendo para os
+intervalos extremos.
+
+\textbf{Gráfico 6:} Distribuição das Notas da Redação
+
+\includegraphics[width=\linewidth]{relatorio_files/figure-latex/histograma-notaRedacao-1}
+
+O gráfico relaciona o comportamento da frequência dos intervalos das
+notas da redação (presentes na tabela 4), indicado pelas barras, com o
+comportamento da normal, linha, para a verificação da semelhança entre
+ambos. É possível observar que a maior frequência de aparição dos
+valores converge para o centro, enquanto diminui ao se aproximar das
+extremidades, o que se assemelha ao comportamento teórico da normal.
+
+Com base na análise estatística, é possível constatar que a presença no
+primeiro dia de prova (provas de humanas e linguagens) é maior que no
+segundo dia (natureza e matemática), o que mostra que, embora não seja
+uma taxa muito grande, ainda há desistência após o primeiro dia de
+prova. A média das quatro áreas do conhecimento varia entre 400 e 600, o
+que mostra que a distribuição das notas tende ao centro e tem menor
+distribuição nas extremidades, convergindo para o padrão da normal,
+fator que torna a prova justa por nivelar os níveis das questões. Além
+disso, as notas da redação é centrada entre 500 e 700, o que também
+mantém a tendência central de notas observada.
 
 \end{document}
