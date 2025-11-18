@@ -1,0 +1,848 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  twocolumn]{article}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{longtable}
+\usepackage{etoolbox}
+\usepackage[T1]{fontenc} \usepackage[utf8]{inputenc} \usepackage[portuguese]{babel} \usepackage{booktabs} \usepackage{float} \usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Relatorio},
+  pdfauthor={Fabio Firanzi, Heitor Dias, Julia Fideles, Matheus Soares, Tiago Braga},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Relatorio}
+\author{Fabio Firanzi, Heitor Dias, Julia Fideles, Matheus Soares, Tiago
+Braga}
+\date{2025-11-11}
+
+\begin{document}
+\maketitle
+
+O trabalho elaborado pelos alunos Fabio Firanzi, Heitor Dias, Julia
+Fideles, Matheus Soares e Tiago Braga tem como objetivo a análise
+estatística dos resultados do ENEM 2024, por meio de uma amostra
+aleatória que abrange 10\% dos resultados. As variáveis utilizadas para
+a análise são: TP\_PRESENCA\_CN, TP\_PRESENCA\_CH, TP\_PRESENCA\_LC,
+TP\_PRESENCA\_MT (presença nas provas de Ciências da Natureza, Ciências
+Humanas, Linguagens e Códigos e Matemática, respectivamente),
+NU\_NOTA\_CN, NU\_NOTA\_CH, NU\_NOTA\_LC, NU\_NOTA\_MT (Notas nas quatro
+áreas do conhecimento presentes na prova), TP\_LINGUA (língua
+estrangeira escolhida pelo participante), TP\_STATUS\_REDACAO (Indicação
+do motivo para a redação ser zerada, além de auxiliar para filtragem de
+redações não zeradas para os cálculos referentes as notas),
+NU\_NOTA\_COMP1, NU\_NOTA\_COMP2, NU\_NOTA\_COMP3, NU\_NOTA\_COMP4,
+NU\_NOTA\_COMP5 (notas das cinco competências) e NU\_NOTA\_REDACAO
+(notas das redações).
+
+Os resultados obtidos indicam a relação de participantes frequentes,
+ausentes e eliminados; a análise das notas de cada área do conhecimento
+e da redação; relação entre as escolhas da língua estrangeira;
+apresentação dos motivos que levaram uma redação a ser zerada;
+distribuição das notas das competências.
+
+\begin{tabular}{llr}
+\toprule
+Presença na prova & Percentual & Frequência\\
+\midrule
+Ausente & 26.74\% & 115880\\
+Presente & 73.12\% & 316843\\
+Eliminado & 0.13\% & 571\\
+\bottomrule
+\end{tabular}
+
+\includegraphics[width=\linewidth]{relatorio_files/figure-latex/grafico-presenca-1}
+
+\section{Tabela e gráfico de
+presença}\label{tabela-e-gruxe1fico-de-presenuxe7a}
+
+A tabela ``Frequência de presença na prova de LC'' e o Gráfico
+``Presença na prova de LC'' exibem a porcentagem de alunos presentes,
+ausentes e eliminados na prova de linguágens e códigos. Com base nessa
+tabela, pode-se identificar que a grande maioria, 73,1\%, dos alunos
+estava presente na avaliação, 26,7\% ausente e uma minoria de 0,1\% foi
+eliminada antes, durante ou após a prova. Embora a maioria tenha
+completado a avaliação, o alto índice de ausência sugere a necessidade
+de estudos futuros para investigar os fatores que contribuem para essa
+abstenção.
+
+\includegraphics[width=\linewidth]{relatorio_files/figure-latex/hist-linguagens-1}
+
+\section{Histograma da nota de LC}\label{histograma-da-nota-de-lc}
+
+Para a criação desse histograma foi utilizado a nota dos alunos
+presentes e não eliminados na avaliação de Linguagens e códigos, com
+esse dado sendo analizado em sua frequência, média, desvio padrão e
+distribuição.
+
+O ``Histograma da Nota de LC'' ilustra a distribuição de frequência das
+notas de Linguagens e Códigos para todos os alunos presentes. Ele foi
+construído sobrepondo uma curva normal teórica (linha vermelha),
+calculada a partir da média e do desvio padrão da amostra, sobre o
+histograma das notas reais (barras azuis).
+
+A maior concentração de notas é de 500-600 pontos, contendo
+aproximadamente 55\% dos alunos, o desvio padrão das notas é de 69,87.
+
+\begin{table}
+\centering
+\caption{\label{tab:unnamed-chunk-2}Tabela Comparativa: LC vs MT (para 298.976 alunos presentes em ambas e com nota > 0)}
+\centering
+\begin{tabular}[t]{lrrrrr}
+\toprule
+Prova & Média & Mediana & D. Padrão & Min & Máx\\
+\midrule
+LC & 526.70 & 533.3 & 68.03 & 298.8 & 795.8\\
+MT & 527.24 & 499.1 & 113.91 & 342.8 & 961.9\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Tabela e gráfico LC vs MT}\label{tabela-e-gruxe1fico-lc-vs-mt}
+
+A tabela ``Tabela comparativa: LC vs MT'' ilustra as, médias, medianas,
+desvios-padrão, notas mínimas e notas máximas das provas de linguagens e
+matemática, considerando apenas os alunos que estiveram presentes em
+ambas delas.
+
+O gráfico ``comparação das distribuições de notas:LC vs MT'' exibe os
+gráficos de distribuição de notas de linguagens e matemática
+sobrepostos, oferecendo uma comparação visual direta e clara da
+distribuição de notas das duas matérias.
+
+Embora as médias de linguagens e matemática tenham sido muito próximas,
+526,7 e 527,2 respectivamente, a distribuição de notas da prova de
+matemática é totalmente diferente da de linguagens (que se aproxima de
+uma normal perfeita) tendo suas notas muito mais distribuidas no
+gráfico, evidenciando um desvio padrão muito maior.
+
+\pandocbounded{\includegraphics[keepaspectratio]{relatorio_files/figure-latex/Gráfico de Densidade LC vs MT-1.pdf}}
+
+O Gráfico de Densidade oferece uma comparação visual direta entre as
+distribuições das notas de Linguagens (vermelho) e Matemática (azul).
+Este gráfico foi gerado utilizando apenas os alunos que compareceram e
+obtiveram nota maior que zero em ambas as provas. Percebe-se que a curva
+de Matemática é mais achatada e espalhada (refletindo o maior desvio
+padrão), indicando que há uma variabilidade muito maior nas notas. Em
+contraste, as notas de Linguagens são mais ``pontudas'' e concentradas
+em torno de sua média.
+
+\pandocbounded{\includegraphics[keepaspectratio]{relatorio_files/figure-latex/boxplot-nota-regiao-1.pdf}}
+
+O Boxplot complementa a tabela estatística anterior, visualizando a
+distribuição das notas de Linguagens e Códigos por região. Ele foi
+criado agrupando os alunos por região e ordenando o eixo Y pela mediana
+das notas, da maior para a menor. Este gráfico permite uma visualização
+clara não apenas da mediana (a linha central na caixa), mas também da
+dispersão do ``meio'' dos alunos (o tamanho da caixa, ou Intervalo
+Interquartil) e dos outliers (pontos). Observa-se que as regiões Sudeste
+e Sul apresentam as medianas mais elevadas, enquanto as regiões Nordeste
+e Norte mostram um desempenho mediano inferior e uma dispersão de notas
+(tamanho da caixa) ligeiramente maior, indicando maior variação no
+desempenho dos alunos dessas regiões.
+
+\begin{table}
+\centering
+\begin{tabular}{lrrrrrrr}
+\toprule
+Região & Média & Mediana & Var & D. Padrão & Min & Máx & Nº de Alunos\\
+\midrule
+S & 542.13 & 548.0 & 3935.23 & 62.73 & 298.8 & 795.8 & 141162\\
+CO & 527.52 & 533.5 & 4542.66 & 67.40 & 298.8 & 777.4 & 24755\\
+NE & 510.60 & 516.3 & 4889.35 & 69.92 & 298.8 & 795.8 & 116314\\
+N & 499.47 & 505.4 & 4805.12 & 69.32 & 298.8 & 732.3 & 34406\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Tabela e boxplot de notas LC por
+região}\label{tabela-e-boxplot-de-notas-lc-por-regiuxe3o}
+
+A tabela ``Estatísticas das notas de LC por Região'' exibe as médias,
+medianas, variências, desvios-padrão, notas mínimas, notas máximas e
+número aproximado de alunos de cada região do Brasil.
+
+O ``Boxplot das notas de linguagens por Região'', ilustra a performance
+dos alunos de cada uma das regiões do Brasil exibindo a distribuição das
+notas. As ``caixas'' representam os 50\% centrais dos alunos, com os
+pontos sendo os ``outliers'', ou seja, os fora da média, tanto para
+baixo quanto para cima e a linha dentro da caixa representa a mediana.
+Com base no boxplot, a região Sudoeste obteve o melhor resultado, com
+sua média de 542,74 sendo a mais alta seguida de perto pela região Sul e
+sua média de 540.36, o boxplot também deixa evidente a desigualdade do
+país, com as regiões Norte e nordeste ficando significativamente atras
+das demais.
+
+\section{Analise da variavel de presença na prova de
+humanas}\label{analise-da-variavel-de-presenuxe7a-na-prova-de-humanas}
+
+Foi feita uma analise da area de conhecimento de Ciências Humanas do
+Enem, utilizando a varivel: TP\_PRESENCA\_CH. Tal variavel, é
+classificada como qualitativa possuindo 3 possíveis valores:
+
+\begin{itemize}
+\tightlist
+\item
+  0: Ausente
+\item
+  1: Presente
+\item
+  2: Eliminado da Prova
+\end{itemize}
+
+\subsection{Gráfico de Frequências das presenças no dia da
+prova}\label{gruxe1fico-de-frequuxeancias-das-presenuxe7as-no-dia-da-prova}
+
+Busca indentificar se o aluno estava presente, ausente ou se foi
+eliminado da prova de ciências humanas, e, com isso, expressar a
+porcentagem e os valores absolutos da variável TP\_PRESENCA\_CH.
+
+\pandocbounded{\includegraphics[keepaspectratio]{relatorio_files/figure-latex/analise_variavel_presenca-1.pdf}}
+O gráfico ``Percentual de Presença na Prova de CH'', trata dos dados da
+variável `TP\_PRESENCA\_CH'. Uma vez que a variável é do tipo
+qualitativa, a abordagem mais convencional é um gráfico de barras dos
+percentuais.
+
+Com base na analise do gráfico ``Percentual de Presença na Prova CH''
+foi possível determinar que no Exame Nacional do Ensino Médio (ENEM),
+edição de 2024, o número de alunos presentes foi de aproximadamente 2,73
+vezes maior que o número de alunos ausentes. Além disso, percebe-se que
+a quantidade de alunos elimanados na prova de Ciências Humanas foi
+extremamente pequena - 0,1\% - comparado com os percentuais da coluna
+``Presença'' e da coluna ``Ausente''.
+
+\section{Analise da variavel Notas da prova de Ciências
+Humanas}\label{analise-da-variavel-notas-da-prova-de-ciuxeancias-humanas}
+
+\begin{table}[!h]
+\centering
+\caption{\label{tab:analise-medidas-estatistica}Tabela Resumo: Estatísticas das Notas de CH por Região}
+\centering
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
+\begin{tabular}[t]{lrrrrrr}
+\toprule
+Regiao & Media & Mediana & Variancia & Desvio Padrao & Minimo & Maximo\\
+\midrule
+\cellcolor{gray!10}{Sudeste} & \cellcolor{gray!10}{533.58} & \cellcolor{gray!10}{540.4} & \cellcolor{gray!10}{7482.78} & \cellcolor{gray!10}{86.50} & \cellcolor{gray!10}{283.8} & \cellcolor{gray!10}{819.7}\\
+Sul & 527.92 & 534.0 & 7095.26 & 84.23 & 283.8 & 819.7\\
+\cellcolor{gray!10}{Centro-Oeste} & \cellcolor{gray!10}{514.69} & \cellcolor{gray!10}{518.7} & \cellcolor{gray!10}{8192.05} & \cellcolor{gray!10}{90.51} & \cellcolor{gray!10}{283.8} & \cellcolor{gray!10}{817.4}\\
+Nordeste & 495.07 & 494.9 & 8216.95 & 90.65 & 283.8 & 819.7\\
+\cellcolor{gray!10}{Norte} & \cellcolor{gray!10}{484.05} & \cellcolor{gray!10}{481.2} & \cellcolor{gray!10}{7511.50} & \cellcolor{gray!10}{86.67} & \cellcolor{gray!10}{283.8} & \cellcolor{gray!10}{808.2}\\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+A ``Tabela Resumo: Estatísticas das Notas de CH por Região'' apresenta a
+distribuição das medidas: media,mediana, variância, desvio padrão, valor
+mínimo, valor máximo e a frequência relativa percentual. Essa divisão
+foi feita por região do Brasil. Com base nisso, podemos identificar
+claramente o desempenho superior da região Sudeste.
+
+Liderança Clara: O Sudeste lidera em ambos os indicadores de
+performance, possuindo a maior Média (533.58) e, mais importante, a
+maior Mediana (540.4).
+
+O ``Grupo de Ponta'': Embora o Sudeste seja o primeiro, ele faz parte de
+um ``grupo de alta performance'' juntamente com as regiões Sul (Mediana
+534.0) e Centro-Oeste (Mediana 518.7). Estas três regiões estão
+claramente destacadas das regiões Nordeste (Mediana 494.9) e Norte
+(Mediana 481.2).
+
+A Armadilha da Média: Em todas as regiões, a Média é ``puxada'' para
+baixo por notas mais fracas (assimetria à esquerda). Por isso, a Mediana
+é a métrica mais justa para a comparação, e nela o Sudeste também vence.
+
+\subsection{Gráfico Boxplot da variável
+notas}\label{gruxe1fico-boxplot-da-variuxe1vel-notas}
+
+\pandocbounded{\includegraphics[keepaspectratio]{relatorio_files/figure-latex/grafico_boxplot_regiao_COMPLETO-1.pdf}}
+
+O gráfico ``Boxplot das Notas de CH por Região'', compara o desempenho
+central (a mediana) das notas de Ciências Humanas (CH) entre as cinco
+grandes regiões do Brasil. Além disso, o gráfico representa os valores
+``extremos'', os outliers, da variavel `NU\_NOTA\_CH', contribuindo para
+uma analise de desempenho na prova do Enem.
+
+O Boxplot confirma que a região Sudeste tem o melhor desempenho geral em
+Ciências Humanas, não apenas na mediana, mas no ``corpo'' principal dos
+seus alunos (o miolo de 50\%). No entanto, esta alta performance vem
+acompanhada de uma maior desigualdade interna (maior dispersão)
+representada pelo comprimento maior e um alto número de Outliers, tanto
+Outliers superiores (notas \textgreater{} 750) quanto os Outliers
+inferiores (notas \textless{} 300), um padrão também visto na região
+Sul.
+
+\subsection{Histograma de Densidade com Média e Desvio
+Padrão}\label{histograma-de-densidade-com-muxe9dia-e-desvio-padruxe3o}
+
+Para os dados quantitativos contínuos da variável NU\_NOTA\_CH, que
+representa as notas dos alunos na prova de ciências humanas, criamos
+classes (faixas de valores) para a desenvolver um histograma com uma
+Normal sobreposta.
+
+\pandocbounded{\includegraphics[keepaspectratio]{relatorio_files/figure-latex/chunk-grafico-densidade-percentual-1.pdf}}
+O ``Histograma de Densidade com Média e Desvio Padrão'' apresenta a
+densidade das notas de Ciências Humanas (CH), indicando a distribuição
+dos valores observados. As barras em azul representam a frequência
+relativa das notas, enquanto a linha vermelha mostra a curva normal
+teórica ajustada a partir dos dados. Além disso, a linha pontilhada
+vertical identifica a média das notas (510,92 pontos). Nesse cenário,
+essa variavel possui O desvio-padrão igual a 92,95 pontos, informado no
+canto superior direito do gráfico. Todos esses fatores auxiliam para a
+execução de uma analise a cerca da distribuição das notas da prova de
+Ciências Humanas.
+
+A faixa de nota com maior frequência (a Classe Modal) é {[}500, 550),
+contendo 21.05\% dos alunos.
+
+As notas de Ciências Humanas apresentam uma distribuição aproximadamente
+normal, bem representada pela curva teórica sobreposta ao histograma. A
+média foi de 510,92 pontos, indicando o desempenho central dos
+estudantes, enquanto o desvio-padrão de 92,95 pontos mostra dispersão
+moderada ao redor da média. A forma da distribuição confirma que os
+dados seguem um padrão típico e estável, adequado para análises baseadas
+em normalidade.
+
+\section{1.3 Correlação e Regressão Linear
+Simples}\label{correlauxe7uxe3o-e-regressuxe3o-linear-simples}
+
+Para essa analise, buscou-se indentificar o poder de correlação de duas
+variaveis, notas de Ciências Humanas e notas de Linguagens e Códigos.
+
+Nesta análise, vamos investigar a relação entre duas variáveis
+quantitativas: NU\_NOTA\_LC (Linguagens e Códigos) e NU\_NOTA\_CH
+(Ciências Humanas).
+
+\begin{itemize}
+\item
+  Variável Independente (X): NU\_NOTA\_LC
+\item
+  Variável Dependente (Y): NU\_NOTA\_CH
+\end{itemize}
+
+O objetivo é responder: ``A nota de Linguagens pode prever a nota de
+Humanas?''
+
+Para isso, foi feita um processo de filtragem, matendo somente os alunos
+com notas válidas (sem N) e os alunos com notas maiores que zero em
+ambas as variaveis. Com isso, o número total de observações válidas para
+a regressão: foi de 316201.
+
+\subsection{Coeficiente de Correlação de
+Pearson}\label{coeficiente-de-correlauxe7uxe3o-de-pearson}
+
+O Coeficiente de Correlação (r) entre LC e CH é: 0.7615
+
+Isso significa que, em geral, alunos que tiram notas mais altas em
+Linguagens também tiram notas mais altas em Humanas. Isso demonstra que
+as duas variaveis possuem uma forte correlação.
+
+\subsection{Regressão Linear}\label{regressuxe3o-linear}
+
+\begin{verbatim}
+## `geom_smooth()` using formula = 'y ~ x'
+\end{verbatim}
+
+\pandocbounded{\includegraphics[keepaspectratio]{relatorio_files/figure-latex/unnamed-chunk-5-1.pdf}}
+
+O ``Gráfico de Regressão: Nota de Humanas vs.~Nota de Linguagens''
+confirma a correlação positiva. Nesse cenário, os pontos estão
+razoavelmente agrupados ao redor da linha vermelha, que sobe da esquerda
+para a direita, confirmando a tendência de que notas altas em LC
+acompanham notas altas em CH. Para o modelo elaborado, temos a seguinte
+equação: Nota\_CH = 93.30 + 0.82 * Nota\_LC. Atraves dessa equação, é
+possível dizer que para cada 1 ponto que um aluno ganha em na prova de
+linguagens (NU\_NOTA\_LC), espera-se que sua nota em humanas
+(NU\_NOTA\_CH) aumente, em média, 0.82 pontos. Logo, é possível afirmar
+que a nota de Linguagens em geral consegue prever a nota de Humanas.
+
+\section{Análise das variáveis de Ciências da
+Natureza}\label{anuxe1lise-das-variuxe1veis-de-ciuxeancias-da-natureza}
+
+\begin{tabular}{llr}
+\toprule
+Presença na prova & Percentual & Frequência\\
+\midrule
+Ausente & 30.56\% & 132415\\
+Presente & 69.38\% & 300640\\
+Eliminado & 0.06\% & 239\\
+\bottomrule
+\end{tabular}
+
+A partir da Tabela 2, observa-se a distribuição dos participantes em
+relação à presença na prova de Ciências da Natureza, destacando-se a
+proporção de estudantes que compareceram, se ausentaram ou foram
+eliminados. Essa informação é importante para entender o engajamento dos
+inscritos na aplicação da prova.
+
+\textbf{Gráfico 1:} Presença na Prova de Ciências da Natureza
+
+\includegraphics[width=\linewidth]{relatorio_files/figure-latex/grafico-presenca-cn-1}
+O Gráfico 1 apresenta visualmente a comparação entre estudantes
+presentes, ausentes e eliminados na prova de Ciências da Natureza,
+facilitando a interpretação da participação na avaliação.
+
+\textbf{Tabela 3:} Frequência Intervalar da Nota de Ciências da Natureza
+
+\begin{tabular}{ll}
+\toprule
+Intervalo de nota & Percentual\\
+\midrule
+0 – 100 & 0.02\%\\
+100 – 200 & 0\%\\
+200 – 300 & 0\%\\
+300 – 400 & 12.32\%\\
+400 – 500 & 42.64\%\\
+\addlinespace
+500 – 600 & 35.04\%\\
+600 – 700 & 9.28\%\\
+700 – 800 & 0.69\%\\
+800 – 900 & 0.01\%\\
+900 – 1000 & 0\%\\
+\bottomrule
+\end{tabular}
+
+A Tabela 3 apresenta a distribuição das notas de Ciências da Natureza em
+classes de 100 pontos, permitindo identificar em quais faixas se
+concentram os maiores e os menores desempenhos dos estudantes.
+
+\textbf{Gráfico 2:} Histograma das Notas de Ciências da Natureza com
+Curva Normal
+
+\includegraphics[width=\linewidth]{relatorio_files/figure-latex/hist-nota-cn-normal-1}
+
+O Gráfico 2 compara a distribuição relativa das notas de Ciências da
+Natureza com uma curva normal ajustada pela média e pelo desvio padrão
+da amostra, permitindo avaliar se o desempenho se aproxima de um padrão
+aproximadamente normal ou se há assimetrias importantes.
+
+\textbf{Tabela 4:} Frequência - Presença na Prova de Matemática
+
+\begin{tabular}{llr}
+\toprule
+Presença na prova & Percentual & Frequência\\
+\midrule
+Ausente & 30.56\% & 132415\\
+Presente & 69.38\% & 300640\\
+Eliminado & 0.06\% & 239\\
+\bottomrule
+\end{tabular}
+
+\textbf{Gráfico 3:} Presença na Prova
+
+\includegraphics[width=\linewidth]{relatorio_files/figure-latex/grafico-presenca1-1}
+
+\subsection{1. Análise da Presença na Prova de
+Matemática}\label{anuxe1lise-da-presenuxe7a-na-prova-de-matemuxe1tica}
+
+A Tabela 4 mostra que 30,56\% dos inscritos não compareceram, enquanto
+69,38\% estiveram presentes e apenas 0,06\% foram eliminados. Essa
+discrepância revela dois pontos centrais:
+
+\subsubsection{1.1 Comparação entre presença e
+ausência}\label{comparauxe7uxe3o-entre-presenuxe7a-e-ausuxeancia}
+
+A quantidade de presentes é mais do que o dobro da de ausentes,
+indicando que, embora a taxa de ausência seja significativa, a maior
+parte dos estudantes permanece engajada e comparece à prova.
+
+\subsubsection{1.2 Ausências ainda são um desafio
+estrutural}\label{ausuxeancias-ainda-suxe3o-um-desafio-estrutural}
+
+Com mais de 132 mil ausentes, observa-se uma dificuldade que pode estar
+associada a:
+
+\begin{itemize}
+\item
+  Logística de deslocamento
+\item
+  Realização da prova em dia único
+\item
+  Desmotivação ou insegurança com o exame
+\end{itemize}
+
+O gráfico 3 reforça visualmente essa diferença, tornando evidente o
+contraste entre o volume de presentes e ausentes.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Tabela 5:} Frequência Intervalar da Nota de Matemática
+
+\begin{tabular}{ll}
+\toprule
+Intervalo de nota & Percentual\\
+\midrule
+0 – 100 & 0.03\%\\
+100 – 200 & 0\%\\
+200 – 300 & 0\%\\
+300 – 400 & 10.1\%\\
+400 – 500 & 40.17\%\\
+\addlinespace
+500 – 600 & 22.48\%\\
+600 – 700 & 18.46\%\\
+700 – 800 & 7.06\%\\
+800 – 900 & 1.52\%\\
+900 – 1000 & 0.18\%\\
+\bottomrule
+\end{tabular}
+
+\subsection{3. Distribuição das Notas de
+Matemática}\label{distribuiuxe7uxe3o-das-notas-de-matemuxe1tica}
+
+A Tabela 5 divide as notas em intervalos de 100 pontos, permitindo
+observar o comportamento geral do desempenho dos estudantes.
+
+\subsubsection{3.1 Concentração forte em torno do meio da
+distribuição}\label{concentrauxe7uxe3o-forte-em-torno-do-meio-da-distribuiuxe7uxe3o}
+
+Os intervalos com maiores proporções são:
+
+\begin{itemize}
+\item
+  400--500: 40,17\%
+\item
+  500--600: 22,48\%
+\end{itemize}
+
+Somando esses dois grupos, mais de 62\% dos participantes estão entre
+400 e 600 pontos, indicando que:
+
+\begin{itemize}
+\item
+  A maior parte dos estudantes teve desempenho mediano, nem muito baixo,
+  nem muito alto.
+\item
+  A dificuldade da prova parece adequadamente calibrada para centralizar
+  alunos em torno da média.
+\end{itemize}
+
+\subsection{3.2 Baixa incidência de notas
+extremas}\label{baixa-inciduxeancia-de-notas-extremas}
+
+Notas muito baixas (\textless300) e muito altas (\textgreater800)
+representam percentual muito pequeno:
+
+\begin{itemize}
+\item
+  \textless100 pontos: 0,03\%
+\item
+  800--900: 1,52\%
+\item
+  900--1000: 0,18\%
+\end{itemize}
+
+Esses valores sugerem que a prova discrimina bem alunos com domínio
+intermediário, mas raramente produz desempenhos extremos.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Gráfico 4:} Histograma das Notas de Matemática com Curva Normal
+
+\includegraphics[width=\linewidth]{relatorio_files/figure-latex/hist-nota-mt-normal-1}
+
+\subsection{4. Ajuste à Curva Normal da
+Distribuição}\label{ajuste-uxe0-curva-normal-da-distribuiuxe7uxe3o}
+
+O histograma com a curva normal ajustada mostra que:
+
+\subsubsection{4.1 A distribuição é aproximadamente
+normal}\label{a-distribuiuxe7uxe3o-uxe9-aproximadamente-normal}
+
+A forma do gráfico indica:
+
+\begin{itemize}
+\item
+  Picos de densidade próximos ao centro
+\item
+  Decaimento simétrico nos extremos
+\item
+  Ausência de longas caudas que caracterizariam assimetria acentuada
+\end{itemize}
+
+Isso sugere que:
+
+\begin{itemize}
+\item
+  O exame conseguiu distribuir os alunos segundo um padrão próximo ao
+  esperado estatisticamente.
+\item
+  Há equilíbrio entre questões fáceis, intermediárias e difíceis.
+\end{itemize}
+
+4.2 Diferença entre curva teórica e real
+
+Pequenas diferenças entre a curva real e a curva normal ajustada indicam
+que:
+
+\begin{itemize}
+\tightlist
+\item
+  Alguns níveis de nota são mais frequentes que o previsto pela normal
+  (natural em testes educacionais). \# Análise da Escolha da Língua
+  Estrangeira
+\end{itemize}
+
+\textbf{Gráfico 3:} Escolha das Línguas Estrangeiras
+
+\includegraphics[width=\linewidth]{relatorio_files/figure-latex/grafico-linguaEstrangeira-1}
+Observa-se, a partir do gráfico, que aproximadamente 55\% dos
+participantes escolheu a opção ``inglês'' para a prova de língua
+estrangeira e 45\% dos participantes escolheu ``espanhol'', o que
+evidencia que a maior parte dos estudantes optou pela língua inglesa.
+Por meio disso, é possível afirmar que, apesar da semelhança entre as
+línguas portuguesa e espanhola, a maioria dos participantes escolheu o
+inglês, refletindo o maior investimento no ensino dessa língua no
+Brasil.
+
+\section{Análise da Redação}\label{anuxe1lise-da-redauxe7uxe3o}
+
+\subsection{1 Redações Zeradas}\label{redauxe7uxf5es-zeradas}
+
+\textbf{Tabela 6:} Frequência - Motivo do Zero na Redação
+
+\begin{tabular}{ll}
+\toprule
+Motivo & Percentual\\
+\midrule
+Anulada & 1.58\%\\
+Cópia Texto Motivador & 11.01\%\\
+Em Branco & 54.2\%\\
+Fuga ao Tema & 19.97\%\\
+Não atendimento ao tipo textual & 1.99\%\\
+\addlinespace
+Texto insuficiente & 8.54\%\\
+Parte desconectada & 2.7\%\\
+\bottomrule
+\end{tabular}
+
+\textbf{Gráfico 4:} Motivos para Redação Zerada
+
+\includegraphics[width=\linewidth]{relatorio_files/figure-latex/grafico-motivoZero-1}
+
+Observando a tabela, percebe-se que mais da metade (54,2\%) das redações
+zeradas teve como motivo a redação em branco, sendo o principal motivo
+para isso. Os demais motivos, em ordem após esse, são fuga ao tema
+(19,97\%), cópia do texto motivador (11,01\%), texto insuficiente
+(8,54\%), parte desconectada (2,7\%), não atendimento ao tipo textual
+(1,99\%) e anulação (1,58\%).
+
+\subsection{1.1 Constatações}\label{constatauxe7uxf5es}
+
+\begin{itemize}
+\item
+  A maior parte dos participantes que teve a redação zerada não escreveu
+  ou escreveu insuficientemente (54,2\% em branco e 8,54\% texto
+  insuficiente)
+\item
+  19,97\% dos participantes não entendeu completamente o tema e teve
+  redação zerada por fuga ao tema
+\item
+  11,01\% não foi capaz de relacionar o tema a conhecimentos prévios e
+  copiou os textos motivadores.
+\end{itemize}
+
+\subsection{2 Redações Não Zeradas}\label{redauxe7uxf5es-nuxe3o-zeradas}
+
+\textbf{Tabela 7:} Frequência - Notas nas Competências
+
+\begin{tabular}{llllll}
+\toprule
+Nota & C1 & C2 & C3 & C4 & C5\\
+\midrule
+0 & 0.01\% & 0\% & 0.02\% & 0.02\% & 6.67\%\\
+20 & 0.01\% & 0\% & 0.03\% & 0.04\% & 2.83\%\\
+40 & 0.21\% & 0.8\% & 1.81\% & 0.35\% & 4.49\%\\
+60 & 0.96\% & 0.54\% & 2.74\% & 1.49\% & 4.57\%\\
+80 & 7.78\% & 2.03\% & 10.38\% & 7.34\% & 10.98\%\\
+\addlinespace
+100 & 13.92\% & 3.55\% & 13.08\% & 10.85\% & 10.31\%\\
+120 & 37.04\% & 27.06\% & 34.67\% & 32.03\% & 15.22\%\\
+140 & 17.12\% & 11.24\% & 13.59\% & 12.97\% & 9.66\%\\
+160 & 21.53\% & 18.89\% & 14.87\% & 14.99\% & 11.82\%\\
+180 & 1.35\% & 17.39\% & 6.52\% & 10.55\% & 9.27\%\\
+\addlinespace
+200 & 0.07\% & 18.51\% & 2.28\% & 9.37\% & 14.19\%\\
+\bottomrule
+\end{tabular}
+
+\textbf{Gráfico 5:} Distribuição das Notas por Competência
+
+\includegraphics[width=\linewidth]{relatorio_files/figure-latex/boxplot-notaCompetencias-1}
+
+A tabela apresenta a relação entre as notas e a frequência relativa da
+aparição da mesma em cada uma das 5 competências da redação, em redações
+que não foram zeradas.
+
+\subsection{2.1 Constatações da
+Tabela}\label{constatauxe7uxf5es-da-tabela}
+
+Ao comparar as frequências das notas em todas as competências, as
+principais constatações são
+
+\begin{itemize}
+\item
+  A competência com maior taxa de 0 é a competência 5 (6,67\%)
+\item
+  A competência 1 possui a maior parte das notas concentradas entre 100
+  e 160 (com porcentagens mais significativas, entre 13,92\% e 37,04\%)
+\item
+  A competência 1 é a única cuja taxa de notas 200 é significativamente
+  menor
+\item
+  A competência 5 possui maior distribuição de notas que as demais
+  (todas as porcentagens estão acima de 2\%)
+\item
+  A competência 2 é a competência com maior taxa de notas entre 120 e
+  200 (93,09\% das notas está nessa faixa)``.
+\end{itemize}
+
+\subsection{2.2 Constatações do
+Boxplot}\label{constatauxe7uxf5es-do-boxplot}
+
+O boxplot representa, graficamente, as informações presentes na tabela.
+Os pontos indicam valores que estão fora da concentração de resultados,
+mas que tiveram aparição (outliers).
+
+\begin{itemize}
+\item
+  A competência 1 é a que possui menor dispersão, ou seja, a maioria dos
+  resultados está concentrada em uma faixa pequena (100 a 160) e possui
+  outliers em todas as notas fora dessa faixa
+\item
+  A competência 2 possui concentração de notas mais altas que as demais,
+  o que é evidenciado por abranger notas mais altas e não possui
+  outliers, ou seja, todos os resultados estão na faixa estipulada
+\item
+  A competência 5 possui maior dispersão, ou seja, abrange todas as
+  notas possíveis e está mais distribuida.
+\end{itemize}
+
+\textbf{Tabela 8:} Frequência - Notas da Redação
+
+\begin{tabular}{ll}
+\toprule
+Intervalo de Notas & Percentual\\
+\midrule
+0 - 100 & 0.02\%\\
+100 - 200 & 0.1\%\\
+200 - 300 & 1.05\%\\
+300 - 400 & 5.37\%\\
+400 - 500 & 12.17\%\\
+\addlinespace
+500 - 600 & 22.43\%\\
+600 - 700 & 20.39\%\\
+700 - 800 & 16.34\%\\
+800 - 900 & 15.52\%\\
+900 - 1000 & 6.61\%\\
+\bottomrule
+\end{tabular}
+
+Média das notas: 659.33
+
+Desvio Padrão: 163.34
+
+\textbf{Gráfico 6:} Distribuição das Notas da Redação
+
+\includegraphics[width=\linewidth]{relatorio_files/figure-latex/histograma-notaRedacao-1}
+
+A tabela indica a frequência relativa, em porcentagem, das faixas de
+notas da redação. Aproximadamente metade dos resultados está centrado
+entre 500 e 700 (22,43\% + 20, 39\%), enquanto os demais intervalos têm
+frequência cada vez menor conforme se afasta do centro, tendendo para os
+intervalos extremos.
+
+O gráfico relaciona o comportamento da frequência dos intervalos das
+notas da redação (presentes na tabela 3), indicado pelas barras, com o
+comportamento da normal, linha, para a verificação da semelhança entre
+ambos.
+
+\begin{itemize}
+\tightlist
+\item
+  É possível observar que a maior frequência de aparição dos valores
+  converge para o centro, enquanto diminui ao se aproximar das
+  extremidades, o que se assemelha ao comportamento teórico da normal.
+\end{itemize}
+
+Com base na análise estatística, é possível constatar que a presença no
+primeiro dia de prova (provas de humanas e linguagens) é maior que no
+segundo dia (natureza e matemática), o que mostra que, embora não seja
+uma taxa muito grande, ainda há desistência após o primeiro dia de
+prova. A média das quatro áreas do conhecimento varia entre 400 e 600, o
+que mostra que a distribuição das notas tende ao centro e tem menor
+distribuição nas extremidades, convergindo para o padrão da normal,
+fator que torna a prova justa por nivelar os níveis das questões. Além
+disso, as notas da redação é centrada entre 500 e 700, o que também
+mantém a tendência central de notas~observada.
+
+\end{document}
