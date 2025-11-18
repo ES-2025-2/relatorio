@@ -458,3 +458,354 @@ kable_styling(full_width = FALSE)
   
   O "Boxplot das notas de linguagens por Região", ilustra a performance dos alunos de cada uma das regiões do Brasil exibindo a distribuição das notas. As "caixas" representam os 50% centrais dos alunos, com os pontos sendo os "outliers", ou seja, os fora da média, tanto para baixo quanto para cima e a linha dentro da caixa representa a mediana. 
   Com base no boxplot, a região Sudoeste obteve o melhor resultado, com sua média de 542,74 sendo a mais alta seguida de perto pela região Sul e sua média de 540.36, o boxplot também deixa evidente a desigualdade do país, com as regiões Norte e nordeste ficando significativamente atras das demais.
+  
+# Analise da variavel de presença na prova de humanas
+Foi feita uma analise da area de conhecimento de Ciências Humanas do Enem, utilizando a varivel: TP_PRESENCA_CH. Tal variavel, é classificada como qualitativa possuindo 3 possíveis valores: 
+
+- 0: Ausente
+- 1: Presente
+- 2: Eliminado da Prova
+
+## Gráfico de Frequências das presenças no dia da prova
+Busca indentificar se o aluno estava presente, ausente ou se foi eliminado da prova de ciências humanas, e, com isso, expressar a porcentagem e os valores absolutos da variável TP_PRESENCA_CH.
+
+```{r analise_variavel_presenca, message=FALSE, warning=FALSE}
+
+library(scales) # Certifique-se de que este pacote está carregado no início do seu Rmd
+
+# Vamos renomear os valores 0 e 1 para ficarem mais claros
+tabela_presenca <- amostra_10p %>%
+  mutate(Presenca = case_when(
+    TP_PRESENCA_CH == 0 ~ "Ausente",
+    TP_PRESENCA_CH == 1 ~ "Presente",
+    TRUE ~ "Eliminado da prova"
+  )) %>%
+  count(Presenca, sort = TRUE) %>% # Conta as ocorrências
+  mutate(Percentual = prop.table(n) * 100) # Calcula o percentual
+
+
+# Item 2: Gráfico (Gráfico de Barras com PERCENTUAL e CORES)
+
+ggplot(tabela_presenca, aes(x = reorder(Presenca, -Percentual), 
+                           y = Percentual, 
+                           fill = Presenca)) +
+  
+  geom_bar(stat = "identity", show.legend = FALSE) +
+  
+  # Adiciona o rótulo de percentual no topo da barra
+  geom_text(
+    aes(label = sprintf("%.2f%%", Percentual)), 
+    vjust = -0.5,
+    size = 3.5
+  ) + 
+
+  scale_y_continuous(
+    labels = scales::label_number(suffix = " %"),
+    
+    # Aumenta o teto do gráfico para o rótulo não cortar
+    # (max(tabela_presenca$Percentual) * 1.1) é uma forma segura de
+    # garantir que o limite é 10% maior que a maior barra.
+    limits = c(0, max(tabela_presenca$Percentual) * 1.1)
+  ) +
+  
+  labs(title = "Percentual de Presença na Prova de CH",
+       x = "Status de Presença",
+       y = "Percentual de Alunos (%)") +
+  theme_minimal()
+
+```
+O gráfico "Percentual de Presença na Prova de CH", trata dos dados da variável 'TP_PRESENCA_CH'. Uma vez que a variável é do tipo qualitativa, a abordagem mais convencional é um gráfico de barras dos percentuais. 
+
+Com base na analise do gráfico "Percentual de Presença na Prova CH" foi possível determinar que no Exame Nacional do Ensino Médio (ENEM), edição de 2024, o número de alunos presentes foi de aproximadamente 2,73 vezes maior que o número de alunos ausentes. Além disso, percebe-se que a quantidade de alunos elimanados na prova de Ciências Humanas foi extremamente pequena - 0,1% - comparado com os percentuais da coluna "Presença" e da coluna "Ausente".
+
+# Analise da variavel Notas da prova de Ciências Humanas
+
+```{r analise-medidas-estatistica}
+# Carregar pacotes necessários
+library(dplyr)
+library(knitr)
+library(kableExtra)
+
+# Carregar o banco de dados
+amostra_10p <- read.csv("amostra_10p.csv")
+
+# PASSO 1: Etiquetar (Mutate) os dados com a Região
+dados_com_regiao <- amostra_10p %>%
+
+  # Filtra (presentes, com nota válida e maior que zero)
+  filter(TP_PRESENCA_CH == 1, !is.na(NU_NOTA_CH), NU_NOTA_CH > 0) %>%
+  
+  # Cria a nova coluna "Regiao"
+  mutate(Regiao = case_when(
+    SG_UF_PROVA %in% c('AM', 'AC', 'RO', 'RR', 'AP', 'PA', 'TO') ~ "Norte",
+    SG_UF_PROVA %in% c('MA', 'PI', 'CE', 'RN', 'PB', 'PE', 'AL', 'SE', 'BA') ~ "Nordeste",
+    SG_UF_PROVA %in% c('SP', 'MG', 'RJ', 'ES') ~ "Sudeste",
+    SG_UF_PROVA %in% c('GO', 'DF', 'MT', 'MS') ~ "Centro-Oeste",
+    SG_UF_PROVA %in% c('PR', 'SC', 'RS') ~ "Sul"
+  ))
+
+# PASSO 2: Agrupar (Group By) e Resumir (Summarise)
+tabela_resumo_regiao <- dados_com_regiao %>%
+  group_by(Regiao) %>%
+  summarise(
+    media_nota_ch = mean(NU_NOTA_CH),
+    mediana_nota_ch = median(NU_NOTA_CH),
+    variancia_nota_ch = var(NU_NOTA_CH),
+    desvio_padrao_nota_ch = sd(NU_NOTA_CH),
+    minimo_nota_ch = min(NU_NOTA_CH),
+    maximo_nota_ch = max(NU_NOTA_CH)
+  ) %>%
+  arrange(desc(media_nota_ch))
+
+# PASSO 3: Exibir a tabela formatada para LaTeX/PDF
+tabela_resumo_regiao %>%
+  kable(
+    caption   = "Tabela Resumo: Estatísticas das Notas de CH por Região",
+    col.names = c("Regiao", "Media", "Mediana", "Variancia", 
+                  "Desvio Padrao", "Minimo", "Maximo"),
+    digits    = 2,
+    format    = "latex",
+    booktabs  = TRUE
+  ) %>%
+  kable_styling(
+    latex_options = c("striped", "hold_position", "scale_down")
+  )
+```
+
+A "Tabela Resumo: Estatísticas das Notas de CH por Região" apresenta a distribuição das medidas: media,mediana, variância, desvio padrão, valor mínimo, valor máximo e a frequência relativa percentual. Essa divisão foi feita por região do Brasil. Com base nisso, podemos identificar claramente o desempenho superior da região Sudeste.
+
+Liderança Clara: O Sudeste lidera em ambos os indicadores de performance, possuindo a maior Média (593,12) e, mais importante, a maior Mediana (601,8).
+
+O "Grupo de Ponta": Embora o Sudeste seja o primeiro, ele faz parte de um "grupo de alta performance" juntamente com as regiões Sul (Mediana 597,5) e Centro-Oeste (Mediana 591,3). Estas três regiões estão claramente destacadas das regiões Nordeste (Mediana 562,9) e Norte (Mediana 555,0).
+
+A Armadilha da Média: Em todas as regiões, a Média é "puxada" para baixo por notas mais fracas (assimetria à esquerda). Por isso, a Mediana é a métrica mais justa para a comparação, e nela o Sudeste também vence.
+
+## Gráfico Boxplot da variável notas
+
+```{r grafico_boxplot_regiao_COMPLETO}
+# Carrega os dados originais
+amostra_10p <- read.csv("amostra_10p.csv")
+
+# Filtra e etiqueta os dados, criando o 'dados_para_boxplot'
+dados_para_boxplot <- amostra_10p %>%
+  
+  # Filtra (presentes, com nota válida e maior que zero)
+  filter(TP_PRESENCA_CH == 1, !is.na(NU_NOTA_CH), NU_NOTA_CH > 0) %>%
+  
+  # Cria a nova coluna "Regiao"
+  mutate(Regiao = case_when(
+    SG_UF_PROVA %in% c('AM', 'AC', 'RO', 'RR', 'AP', 'PA', 'TO') ~ "Norte",
+    SG_UF_PROVA %in% c('MA', 'PI', 'CE', 'RN', 'PB', 'PE', 'AL', 'SE', 'BA') ~ "Nordeste",
+    SG_UF_PROVA %in% c('SP', 'MG', 'RJ', 'ES') ~ "Sudeste",
+    SG_UF_PROVA %in% c('GO', 'DF', 'MT', 'MS') ~ "Centro-Oeste",
+    SG_UF_PROVA %in% c('PR', 'SC', 'RS') ~ "Sul"
+  )) %>%
+  
+  # Garante que só temos as 5 regiões
+  filter(!is.na(Regiao))
+
+# PASSO 2: Criar o Gráfico Boxplot
+ggplot(dados_para_boxplot, aes(x = reorder(Regiao, NU_NOTA_CH, FUN = median), 
+                             y = NU_NOTA_CH,
+                             fill = Regiao)) + 
+  
+  # Desenha os boxplots
+  geom_boxplot(
+    show.legend = FALSE, # Remove legenda redundante
+    outlier.shape = 21, 
+    outlier.size = 1.5
+  ) +
+  
+  # "Deita" o gráfico para facilitar a leitura das regiões
+  coord_flip() + 
+  
+  labs(
+    title = "Gráfico: Boxplot das Notas de CH por Região",
+    subtitle = "Ordenado pela Mediana",
+    x = "Região",
+    y = "Nota de Ciências Humanas"
+  ) +
+  theme_minimal()
+```
+
+O gráfico "Boxplot das Notas de CH por Região", compara o desempenho central (a mediana) das notas de Ciências Humanas (CH) entre as cinco grandes regiões do Brasil. Além disso, o gráfico representa os valores "extremos", os outliers, da variavel 'NU_NOTA_CH', contribuindo para uma analise de desempenho na prova do Enem.
+
+As caixas das regiões Sul e Sudeste são visivelmente mais longas (largas) do que as das outras regiões. Isto significa que a diferença de nota entre o aluno do percentil 25 e o do percentil 75 é maior. Ou seja, embora tenham o melhor desempenho, são regiões internamente mais "desiguais" ou "inconstantes".
+
+O Boxplot confirma que a região Sudeste tem o melhor desempenho geral em Ciências Humanas, não apenas na mediana, mas no "corpo" principal dos seus alunos (o miolo de 50%). No entanto, esta alta performance vem acompanhada de uma maior desigualdade interna (maior dispersão) representada pelo comprimento maior e um alto número de Outliers, tanto Outliers superiores (notas > 750) quanto os Outliers inferiores (notas < 300), um padrão também visto na região Sul.
+
+
+## Histograma de Densidade com Média e Desvio Padrão
+
+Para os dados quantitativos contínuos da variável NU_NOTA_CH, que representa as notas dos alunos na prova de ciências humanas, criamos classes (faixas de valores) para a desenvolver um histograma com uma Normal sobreposta.
+
+```{r chunk-grafico-densidade-percentual}
+VARIAVEL_EM_ANALISE <- "NU_NOTA_CH"
+
+dados_analise <- amostra_10p %>%
+  # Filtra alunos PRESENTES na prova de CH
+  filter(TP_PRESENCA_CH == 1) %>%
+  # Seleciona apenas a nota de CH e renomeia para "Valor"
+  select(Valor = all_of(VARIAVEL_EM_ANALISE)) %>%
+  # Remove NAs (notas nulas)
+  filter(!is.na(Valor))
+
+# (Este código assume que 'dados_analise' e 'media_nota'/'sd_nota'
+# já foram criados nos blocos anteriores)
+
+# 1. Carregar o pacote 'scales' (necessário para formatar o eixo)
+library(scales)
+
+# Média e desvio padrão
+media_nota_ch <- mean(amostra_10p$NU_NOTA_CH, na.rm = TRUE)
+sd_nota_ch    <- sd(amostra_10p$NU_NOTA_CH, na.rm = TRUE)
+
+# (Este código assume que 'dados_analise', 'media_nota', 'sd_nota'
+# já foram criados nos blocos anteriores)
+# (E que os pacotes 'ggplot2' e 'scales' estão carregados)
+
+# 1. Criar o texto para a anotação
+texto_estatisticas <- paste(
+  "Média:", round(media_nota_ch, 2),
+  "\nDesvio Padrão:", round(sd_nota_ch, 2)
+)
+
+# 2. Criar o Gráfico
+ggplot(dados_analise, aes(x = Valor)) +
+  
+  # Camada 1: O Histograma
+  geom_histogram(
+    aes(y = after_stat(density), fill = "Frequência (Real)"),
+    binwidth = 50, 
+    color = "white",
+    alpha = 0.8
+  ) +
+  
+  # Camada 2: A Curva Normal Teórica
+  stat_function(
+    aes(color = "Curva Normal (Teórica)"),
+    fun = dnorm, 
+    args = list(mean = media_nota_ch, sd = sd_nota_ch),
+    linewidth = 1.2 
+  ) +
+  
+  # Camada 3: A Linha da Média (Tracejada)
+  geom_vline(
+    aes(xintercept = media_nota_ch, linetype = "Média"), 
+    color = "black",
+    linewidth = 1
+  ) +
+  
+  # Camada 4: Texto (Média e Desvio Padrão)
+  annotate(
+    "text",
+    x = Inf, y = Inf,        # Posição: Canto superior direito
+    label = texto_estatisticas, # O texto que criamos acima
+    hjust = 1.1,            # Alinhamento horizontal
+    vjust = 2,              # Alinhamento vertical
+    size = 4,               
+    fontface = "bold",      
+    color = "black"      
+  ) +
+
+  # Legenda e Estilização
+  scale_fill_manual(values = c("Frequência (Real)" = "steelblue")) +
+  scale_color_manual(values = c("Curva Normal (Teórica)" = "red")) +
+  scale_linetype_manual(values = c("Média" = "dashed")) +
+  
+  # Formata o eixo Y (Densidade) para Percentual
+  scale_y_continuous(labels = scales::percent_format(accuracy = 0.1)) +
+  
+  # Títulos
+  labs(
+    title = "Histograma de Densidade com Média e Desvio Padrão",
+    x = "Nota de CH",
+    y = "Densidade (em %)",
+    
+    # Ao dar o MESMO nome para os 3, o R junta a legenda
+    fill = "", 
+    color = "",
+    linetype = ""
+  ) +
+  theme_minimal() + # Tema base
+  
+  # --- MODIFICAÇÃO AQUI ---
+  # Move a legenda para a parte de baixo
+  theme(legend.position = "bottom")
+```
+O "Histograma de Densidade com Média e Desvio Padrão" apresenta a densidade das notas de Ciências Humanas (CH), indicando a distribuição dos valores observados. As barras em azul representam a frequência relativa das notas, enquanto a linha vermelha mostra a curva normal teórica ajustada a partir dos dados. Além disso, a linha pontilhada vertical identifica a média das notas (510,92 pontos). Nesse cenário, essa variavel possui O desvio-padrão igual a 92,95 pontos, informado no canto superior direito do gráfico. Todos esses fatores auxiliam para a execução de uma analise a cerca da distribuição das notas da prova de Ciências Humanas.
+ 
+A faixa de nota com maior frequência (a Classe Modal) é [500, 550), contendo 21.05% dos alunos.
+
+As notas de Ciências Humanas apresentam uma distribuição aproximadamente normal, bem representada pela curva teórica sobreposta ao histograma. A média foi de 510,92 pontos, indicando o desempenho central dos estudantes, enquanto o desvio-padrão de 92,95 pontos mostra dispersão moderada ao redor da média. A forma da distribuição confirma que os dados seguem um padrão típico e estável, adequado para análises baseadas em normalidade.
+
+# 1.3 Correlação e Regressão Linear Simples
+
+Para essa analise, buscou-se indentificar o poder de correlação de duas variaveis, notas de Ciências Humanas e notas de Linguagens e Códigos.
+
+Nesta análise, vamos investigar a relação entre duas variáveis quantitativas: NU_NOTA_LC (Linguagens e Códigos) e NU_NOTA_CH (Ciências Humanas).
+
+- Variável Independente (X): NU_NOTA_LC
+
+- Variável Dependente (Y): NU_NOTA_CH
+
+O objetivo é responder: "A nota de Linguagens pode prever a nota de Humanas?"
+
+Para isso, foi feita um processo de filtragem, matendo somente os alunos com notas válidas (sem N) e os alunos com notas maiores que zero em ambas as variaveis. Com isso, o número total de observações válidas para a regressão: foi de 316201.
+
+```{r}
+# 2. Filtrar os dados para a regressão
+# É MUITO IMPORTANTE filtrar os dados corretamente:
+# - Aluno deve estar PRESENTE em AMBAS as provas (CH e LC)
+# - Aluno deve ter nota válida (não-NA) em AMBAS
+# - Aluno deve ter nota > 0 em AMBAS (para remover notas zeradas)
+
+dados_regressao <- amostra_10p %>%
+  filter(
+    TP_PRESENCA_CH == 1,
+    TP_PRESENCA_LC == 1,
+    !is.na(NU_NOTA_CH),
+    !is.na(NU_NOTA_LC),
+    NU_NOTA_CH > 0,
+    NU_NOTA_LC > 0
+  ) %>%
+  # Seleciona apenas as colunas que vamos usar
+  select(NU_NOTA_CH, NU_NOTA_LC)
+
+```
+
+## Coeficiente de Correlação de Pearson
+
+```{r}
+# Calcula a correlação
+cor_coef <- cor(dados_regressao$NU_NOTA_LC, dados_regressao$NU_NOTA_CH)
+
+# Exibe o resultado
+cat(paste0("O Coeficiente de Correlação (r) entre LC e CH é: ", round(cor_coef, 4)))
+
+```
+
+Isso significa que, em geral, alunos que tiram notas mais altas em Linguagens também tiram notas mais altas em Humanas. Isso demonstra que as duas variaveis possuem uma forte correlação. 
+
+## Regressão Linear
+```{r}
+
+ggplot(dados_regressao, aes(x = NU_NOTA_LC, y = NU_NOTA_CH)) +
+  # 1. Nuvem de pontos
+  geom_point(alpha = 0.5, color = "blue") + # 'alpha' ajuda a ver a densidade
+  
+  # 2. Reta de Regressão (calculada automaticamente pelo ggplot)
+  geom_smooth(method = "lm", color = "red", linewidth = 1.5, se = TRUE) +
+  
+  # Títulos e formatação
+  labs(
+    title = "Gráfico de Regressão: Nota de Humanas vs. Nota de Linguagens",
+    x = "Nota de Linguagens e Códigos (LC)",
+    y = "Nota de Ciências Humanas (CH)"
+  ) +
+  theme_minimal()
+
+
+```
+
+O "Gráfico de Regressão: Nota de Humanas vs. Nota de Linguagens" confirma a correlação positiva. Nesse cenário, os pontos estão razoavelmente agrupados ao redor da linha vermelha, que sobe da esquerda para a direita, confirmando a tendência de que notas altas em LC acompanham notas altas em CH. Para o modelo elaborado, temos a seguinte equação: Nota_CH = 93.30 + 0.82 * Nota_LC. Atraves dessa equação, é possível dizer que para cada 1 ponto que um aluno ganha em na prova de linguagens (NU_NOTA_LC), espera-se que sua nota em humanas (NU_NOTA_CH) aumente, em média, 0.82 pontos. Logo, é possível afirmar que a nota de Linguagens em geral consegue prever a nota de Humanas.
