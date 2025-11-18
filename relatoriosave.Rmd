@@ -2,14 +2,10 @@
 title: "Relatorio"
 author: "Fabio Firanzi, Heitor Dias, Julia Fideles, Matheus Soares, Tiago Braga"
 date: "2025-11-11"
-#always_allow_html: true
 output:
-  pdf_document:
+pdf_document:
     latex_engine: pdflatex
     keep_tex: true
-    includes:
-      in_header: header.tex
-classoption: twocolumn
 header-includes: 
  \usepackage[T1]{fontenc} 
  \usepackage[utf8]{inputenc} 
@@ -38,88 +34,71 @@ amostra_10p <- read.csv("amostra_10p.csv")
 
 ```
 
-```{r tabela-presenca, results='asis'}
-freq_abs_presenca <- table(amostra_10p$TP_PRESENCA_LC)
-freq_rel_presenca <- prop.table(freq_abs_presenca)
+```{r analise_variavel_presenca, message=FALSE, warning=FALSE}
+# Item 1: Tabela de Frequências (Absoluta e Relativa)
 
-# Mapeamento dos códigos
-rotulos <- c(
-  "0" = "Ausente",
-  "1" = "Presente",
-  "2" = "Eliminado"
-)
+# Vamos renomear os valores 0 e 1 para ficarem mais claros
+tabela_presenca <- amostra_10p %>%
+  mutate(Presenca = case_when(
+    TP_PRESENCA_LC == 0 ~ "Ausente",
+    TP_PRESENCA_LC == 1 ~ "Presente",
+    TRUE ~ "Eliminado"
+  )) %>%
+  count(Presenca, sort = TRUE) %>% # Conta as ocorrências
+  mutate(Percentual = prop.table(n) * 100) # Calcula o percentual
 
-tabela <- data.frame(
-  `Presença na prova` = rotulos[names(freq_abs_presenca)],
-  Percentual = paste0(round(100 * as.vector(freq_rel_presenca), 2), "%"),
-  Frequência = as.vector(freq_abs_presenca),
-  check.names = FALSE
-)
-
-# ---- REMOVER OS NÚMEROS À ESQUERDA ----
-tab <- knitr::kable(
-  tabela,
-  format    = "latex",
-  booktabs  = TRUE,
-  longtable = FALSE,
-  row.names = FALSE   # <--- ESSENCIAL: remove a coluna com 0,1,2
-)
-
-cat(tab)
-
-```
-
-```{r grafico-presenca, message=FALSE, warning=FALSE, out.width="\\linewidth", fig.asp=0.5}
-library(dplyr)
-library(ggplot2)
-
-# 1. Monta tabela de frequências com rótulos
-dados_presenca <- amostra_10p %>%
-  mutate(
-    Status = case_when(
-      TP_PRESENCA_LC == 0 ~ "Ausente",
-      TP_PRESENCA_LC == 1 ~ "Presente",
-      TP_PRESENCA_LC == 2 ~ "Eliminado"
-    )
-  )
-
-tabela_graf <- dados_presenca %>%
-  count(Status, name = "Frequencia") %>%
-  mutate(
-    Percentual = Frequencia / sum(Frequencia) * 100,
-    label_pct  = paste0(round(Percentual, 1), "%"),
-    # Ordem das barras: Presente, Ausente, Eliminado
-    Status = factor(Status, levels = c("Presente", "Ausente", "Eliminado"))
-  )
-
-# 2. Gráfico de barras
-ggplot(tabela_graf, aes(x = Status, y = Frequencia, fill = Status)) +
-  geom_col() +
-  geom_text(aes(label = label_pct),
-            vjust = -0.5, size = 4) +
-  scale_y_continuous(
-    labels = scales::label_number(big.mark = ".", decimal.mark = ",")
-  ) +
-  scale_fill_manual(values = c(
-    "Presente"  = "#2E7D32",  # verde
-    "Ausente"   = "#A52A2A",  # vermelho tijolo
-    "Eliminado" = "#D4AF37"   # dourado
-  )) +
-  labs(
-    x = "Status de Presença",
-    y = "Número de Alunos",
-    fill = NULL
-  ) +
-  theme_minimal() +
-  theme(
-    legend.position = "none",
-    plot.title = element_text(hjust = 0.5)
-  )
-```
-
-# Tabela e gráfico de presença
+# Mostra a tabela formatada (ótimo para o relatório)
+kable(
+  # --- ALTERAÇÃO AQUI: Seleciona e reordena as colunas ---
+  select(tabela_presenca, Presenca, Percentual, n), 
   
-  A tabela "Frequência de presença na prova de LC" e o Gráfico "Presença na prova de LC" exibem a porcentagem de alunos presentes, ausentes e eliminados na prova de linguágens e códigos. Com base nessa tabela, pode-se identificar que a grande maioria, 73,1%, dos alunos estava presente na avaliação, 26,7% ausente e uma minoria de 0,1% foi eliminada antes, durante ou após a prova. Embora a maioria tenha completado a avaliação, o alto índice de ausência sugere a necessidade de estudos futuros para investigar os fatores que contribuem para essa abstenção.
+  caption = "Tabela 1: Frequência de Presença na Prova de LC",
+  
+  # --- ALTERAÇÃO AQUI: Inverte os nomes para corresponder ---
+  col.names = c("Status", "Percentual (%)", "Frequência (N)"),
+  digits = 2
+) %>%
+      kable_styling(bootstrap_options = c("striped", "hover", "condensed"), 
+      full_width = FALSE, 
+      position = "center") %>%
+      row_spec(0, bold = TRUE, background = "#D3D3D3")
+
+# Item 2: Gráfico (Gráfico de Barras com cores manuais)
+
+# 1. ALTERAÇÃO AQUI: 'fill = Presenca' foi para dentro do aes()
+ggplot(tabela_presenca, aes(x = reorder(Presenca, -n), y = n, fill = Presenca)) +
+  
+  # 2. ALTERAÇÃO AQUI: O 'fill' foi removido daqui
+  geom_bar(stat = "identity") +
+  
+  # --- ALTERAÇÃO SOLICITADA: Troca 'n' por 'Percentual' no rótulo ---
+  geom_text(aes(label = paste0(round(Percentual, 1), "%")), 
+            vjust = -0.5) + # Adiciona a % no topo
+  
+  # 3. ALTERAÇÃO AQUI: Adiciona a escala manual de cores
+  scale_fill_manual(values = c("Presente" = "forestgreen", 
+                               "Ausente" = "firebrick", 
+                               "Eliminado" = "goldenrod")) +
+  
+  scale_y_continuous(
+    labels = scales::label_number(big.mark = ".", decimal.mark = ","),
+    expand = expansion(mult = c(0, 0.1)) 
+  ) +
+  
+  labs(title = "Gráfico 1: Presença na Prova de LC",
+       x = "Status de Presença",
+       y = "Número de Alunos") +
+  theme_minimal() +
+  
+  # 4. ALTERAÇÃO AQUI: Remove a legenda, pois é redundante
+  theme(legend.position = "none")
+
+```
+
+\par\vspace{1ex}
+A análise da Tabela 1, que detalha a frequência de presença, revela que a grande maioria, 73,12% dos inscritos realizaram a prova de Linguagens e Códigos, contudo, a taxa de abstenção foi considerável, atingindo 26,74% dos participantes, enquanto uma minoria de 0,13% foi eliminada. Embora a maioria tenha completado a avaliação, o alto índice de ausência sugere a necessidade de estudos futuros para investigar os fatores que contribuem para essa abstenção.
+\par\vspace{1ex}
+
 ```{r hist-linguagens, out.width="\\linewidth", fig.asp=0.8, message=FALSE, warning=FALSE}
 # Média e desvio padrão
 media_LC <- mean(amostra_10p$NU_NOTA_LC, na.rm = TRUE)
@@ -204,75 +183,61 @@ ggplot(amostra_10p, aes(x = NU_NOTA_LC)) +
 
 ```
 
-# Histograma da nota de LC
+\par\vspace{1ex}
+O "Histograma da Nota de LC" ilustra a distribuição de frequência das notas de Linguagens e Códigos para todos os alunos presentes. Ele foi construído sobrepondo uma curva normal teórica (linha vermelha), calculada a partir da média e do desvio padrão da amostra, sobre o histograma das notas reais (barras azuis). A análise visual indica que a distribuição das notas não se ajusta perfeitamente a uma curva normal; há uma concentração maior de alunos com notas na faixa de 500-600 pontos, ligeiramente acima da média (linha tracejada), e a "cauda" de notas altas (acima de 700) é menos pronunciada do que a curva teórica sugeriria.
+\par\vspace{1ex}
 
-  Para a criação desse histograma foi utilizado a nota dos alunos presentes e não eliminados na avaliação de Linguagens e códigos, com esse dado sendo analizado em sua frequência, média, desvio padrão e distribuição.
+```{r Tabela_Comparativa_LC-MT, message=FALSE, warning=FALSE}
 
-  O “Histograma da Nota de LC” ilustra a distribuição de frequência das notas de Linguagens e Códigos para todos os alunos presentes. Ele foi construído sobrepondo uma curva normal teórica (linha vermelha), calculada a partir da média e do desvio padrão da amostra, sobre o histograma das notas reais (barras azuis). 
-  
-  A maior concentração de notas é de 500-600 pontos, contendo aproximadamente 55% dos alunos, o desvio padrão das notas é de 69,87.
-
-```{r}
+# 1. Filtra para alunos PRESENTES EM AMBAS e com notas válidas
 dados_presentes_ambas <- amostra_10p %>%
-filter(
-TP_PRESENCA_LC == 1,
-TP_PRESENCA_MT == 1,
-!is.na(NU_NOTA_LC), !is.na(NU_NOTA_MT),
-NU_NOTA_LC > 0, NU_NOTA_MT > 0
-)
+  filter(
+    TP_PRESENCA_LC == 1 & TP_PRESENCA_MT == 1,
+    !is.na(NU_NOTA_LC) & !is.na(NU_NOTA_MT),
+    NU_NOTA_LC > 0 & NU_NOTA_MT > 0  # <--- ALTERAÇÃO AQUI
+  )
 
-resumo_LC <- dados_presentes_ambas %>%
-summarise(
-Prova = "LC",
-Media = mean(NU_NOTA_LC),
-Mediana = median(NU_NOTA_LC),
-Desv.Padrao = sd(NU_NOTA_LC),
-Minimo = min(NU_NOTA_LC),
-Maximo = max(NU_NOTA_LC)
-)
+# 2. Cria tabelas de resumo separadas
+resumo_lc <- dados_presentes_ambas %>%
+  summarise(
+    Média = mean(NU_NOTA_LC),
+    Mediana = median(NU_NOTA_LC),
+    "Desv. Padrão" = sd(NU_NOTA_LC),
+    Mínimo = min(NU_NOTA_LC),
+    Máximo = max(NU_NOTA_LC)
+  ) %>%
+  # --- CORREÇÃO AQUI: Removido acento ---
+  mutate(Prova = "Linguagens e Codigos")
 
-resumo_MT <- dados_presentes_ambas %>%
-summarise(
-Prova = "MT",
-Media = mean(NU_NOTA_MT),
-Mediana = median(NU_NOTA_MT),
-Desv.Padrao = sd(NU_NOTA_MT),
-Minimo = min(NU_NOTA_MT),
-Maximo = max(NU_NOTA_MT)
-)
+resumo_mt <- dados_presentes_ambas %>%
+  summarise(
+    Média = mean(NU_NOTA_MT),
+    Mediana = median(NU_NOTA_MT),
+    "Desv. Padrão" = sd(NU_NOTA_MT),
+    Mínimo = min(NU_NOTA_MT),
+    Máximo = max(NU_NOTA_MT)
+  ) %>%
+  # --- CORREÇÃO AQUI: Removido acento ---
+  mutate(Prova = "Matematica")
 
-tabela_comp <- bind_rows(resumo_LC, resumo_MT) %>%
-mutate(
-Media = round(Media, 2),
-Mediana = round(Mediana, 1),
-Desv.Padrao = round(Desv.Padrao, 2),
-Minimo = round(Minimo, 1),
-Maximo = round(Maximo, 1)
-)
+# 3. Junta as duas
+tabela_comparativa_final <- bind_rows(resumo_lc, resumo_mt) %>%
+  select(Prova, Média, Mediana, "Desv. Padrão", Mínimo, Máximo)
 
-n_alunos <- nrow(dados_presentes_ambas)
+# 4. Pega o N total de alunos comparados
+n_total_alunos <- nrow(dados_presentes_ambas)
 
+# 5. Imprime a tabela
 kable(
-tabela_comp,
-format = "latex",
-booktabs = TRUE,
-col.names = c("Prova", "Média", "Mediana", "Desv. Padrão", "Min", "Máx"),
-caption = paste0(
-"Tabela Comparativa: LC vs MT (para ",
-format(n_alunos, big.mark = ".", decimal.mark = ","),
-" alunos presentes em ambas e com nota > 0)"
-)
+  tabela_comparativa_final,
+  caption = paste("Tabela Comparativa: LC vs MT (para", format(n_total_alunos, big.mark="."), "alunos presentes em ambas e com nota > 0)"),
+  digits = 2
 ) %>%
-kable_styling(full_width = FALSE)
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = FALSE, position = "center")
+
 ```
 
-# Tabela e gráfico LC vs MT
 
-  A tabela "Tabela comparativa: LC vs MT" ilustra as, médias, medianas, desvios-padrão, notas mínimas e notas máximas das provas de linguagens e matemática, considerando apenas os alunos que estiveram presentes em ambas delas.
-  
-  O gráfico "comparação das distribuições de notas:LC vs MT" exibe os gráficos de distribuição de notas de linguagens e matemática sobrepostos, oferecendo uma comparação visual direta e clara da distribuição de notas das duas matérias.
-  
-  Embora as médias de linguagens e matemática tenham sido muito próximas, 526,7 e 527,2 respectivamente, a distribuição de notas da prova de matemática é totalmente diferente da de linguagens (que se aproxima de uma normal perfeita) tendo suas notas muito mais distribuidas no gráfico, evidenciando um desvio padrão muito maior.
 
 ```{r Gráfico de Densidade LC vs MT, message=FALSE, warning=FALSE}
 # --- CHUNK CORRIGIDO: Gráfico de Densidade LC vs MT ---
@@ -340,7 +305,62 @@ ggplot(dados_tidy, aes(x = Nota, fill = Prova)) +
   )
 ```
 
+\par\vspace{1ex}
 O Gráfico de Densidade oferece uma comparação visual direta entre as distribuições das notas de Linguagens (vermelho) e Matemática (azul). Este gráfico foi gerado utilizando apenas os alunos que compareceram e obtiveram nota maior que zero em ambas as provas. Percebe-se que a curva de Matemática é mais achatada e espalhada (refletindo o maior desvio padrão), indicando que há uma variabilidade muito maior nas notas. Em contraste, as notas de Linguagens são mais "pontudas" e concentradas em torno de sua média.
+\par\vspace{1ex}
+
+```{r tabela-boxplot, message=FALSE, warning=FALSE}
+# --- NOVO CHUNK: Tabela de Resumo Estatístico para LC por Região ---
+
+# 1. Criar a Tabela Resumo por Região para LC
+tabela_resumo_regiao_lc <- amostra_10p %>%
+  
+  # PASSO 1: FILTRAR
+  # Filtra apenas quem estava PRESENTE e tinha nota de LC
+  filter(TP_PRESENCA_LC == 1, !is.na(NU_NOTA_LC), NU_NOTA_LC > 0) %>%
+  
+  # PASSO 2: "ETIQUETAR" (MUTATE)
+  # Cria a nova coluna "Regiao" com base no seu critério
+  mutate(Regiao = case_when(
+    SG_UF_PROVA %in% c('AM', 'AC', 'RO', 'RR', 'AP', 'PA', 'TO') ~ "Norte",
+    SG_UF_PROVA %in% c('MA', 'PI', 'CE', 'RN', 'PB', 'PE', 'AL', 'SE', 'BA') ~ "Nordeste",
+    SG_UF_PROVA %in% c('SP', 'MG', 'RJ', 'ES') ~ "Sudeste",
+    SG_UF_PROVA %in% c('GO', 'DF', 'MT', 'MS') ~ "Centro-Oeste",
+    SG_UF_PROVA %in% c('PR', 'SC', 'RS') ~ "Sul"
+  )) %>%
+  
+  # PASSO 3: AGRUPAR
+  # Agora agrupamos pela nova coluna
+  group_by(Regiao) %>%
+  
+  # PASSO 4: CALCULAR AS ESTATÍSTICAS
+  # Resumimos os dados para cada Regiao
+  summarise(
+    media_notas_lc_rg = mean(NU_NOTA_LC),
+    mediana_notas_lc_rg = median(NU_NOTA_LC),
+    variancia_notas_lc_rg = var(NU_NOTA_LC),
+    desvio_padrao_notas_lc_rg = sd(NU_NOTA_LC),
+    minimo_notas_lc_rg = min(NU_NOTA_LC),
+    maximo_notas_lc_rg = max(NU_NOTA_LC),
+    n_alunos_lc_rg = n()
+  ) %>%
+  
+  # PASSO 5: ORDENAR (Opcional, pela mediana para bater com o boxplot)
+  arrange(desc(mediana_notas_lc_rg))
+
+# 2. Exibir a tabela formatada
+tabela_resumo_regiao_lc %>%
+  kable(
+    caption = "Tabela Resumo: Estatísticas das Notas de LC por Região",
+    col.names = c("Região", "Média", "Mediana", "Variância", "Desv. Padrão", "Mínimo", "Máximo", "Nº de Alunos"),
+    digits = 2 # Arredonda os números
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = FALSE,
+    position = "center"
+  )
+```
 
 ```{r boxplot-nota-regiao, message=FALSE, warning=FALSE}
 # --- Chunk Corrigido: Boxplot Notas LC por Região (com N de alunos) ---
@@ -397,64 +417,10 @@ ggplot(dados_para_boxplot, aes(
     plot.title = element_text(hjust = 0.5, face = "bold"),
     plot.subtitle = element_text(hjust = 0.5)
   )
+
+
 ```
 
+\par\vspace{1ex}
 O Boxplot complementa a tabela estatística anterior, visualizando a distribuição das notas de Linguagens e Códigos por região. Ele foi criado agrupando os alunos por região e ordenando o eixo Y pela mediana das notas, da maior para a menor. Este gráfico permite uma visualização clara não apenas da mediana (a linha central na caixa), mas também da dispersão do "meio" dos alunos (o tamanho da caixa, ou Intervalo Interquartil) e dos outliers (pontos). Observa-se que as regiões Sudeste e Sul apresentam as medianas mais elevadas, enquanto as regiões Nordeste e Norte mostram um desempenho mediano inferior e uma dispersão de notas (tamanho da caixa) ligeiramente maior, indicando maior variação no desempenho dos alunos dessas regiões.
-
-```{r tabela-boxplot, message=FALSE, warning=FALSE}
-  dados_regiao <- amostra_10p %>%
-filter(
-TP_PRESENCA_LC == 1,
-!is.na(NU_NOTA_LC),
-NU_NOTA_LC > 0
-) %>%
-mutate(
-Regiao = case_when(
-SG_UF_PROVA %in% c('AM', 'AC', 'RO', 'RR', 'AP', 'PA', 'TO') ~ "N",
-SG_UF_PROVA %in% c('MA', 'PI', 'CE', 'RN', 'PB', 'PE', 'AL', 'SE', 'BA') ~ "NE",
-SG_UF_PROVA %in% c('SP', 'MG', 'RJ', 'ES') ~ "S",
-SG_UF_PROVA %in% c('GO', 'DF', 'MT', 'MS') ~ "CO",
-SG_UF_PROVA %in% c('PR', 'SC', 'RS') ~ "S"
-)
-) %>%
-filter(!is.na(Regiao))
-
-tabela_regiao <- dados_regiao %>%
-group_by(Regiao) %>%
-summarise(
-Media = mean(NU_NOTA_LC),
-Mediana = median(NU_NOTA_LC),
-Variancia = var(NU_NOTA_LC),
-Desv.Padrao = sd(NU_NOTA_LC),
-Minimo = min(NU_NOTA_LC),
-Maximo = max(NU_NOTA_LC),
-`N de alunos` = n(),
-.groups = "drop"
-) %>%
-mutate(
-Media = round(Media, 2),
-Mediana = round(Mediana, 1),
-Variancia = round(Variancia, 2),
-Desv.Padrao = round(Desv.Padrao, 2),
-Minimo = round(Minimo, 1),
-Maximo = round(Maximo, 1)
-) %>%
-arrange(factor(Regiao,
-levels = c("SE", "S", "CO", "NE", "N")))
-
-kable(
-tabela_regiao,
-format = "latex",
-booktabs = TRUE,
-col.names = c("Região", "Média", "Mediana", "Var",
-"D. Padrão", "Min", "Máx", "Nº de Alunos")
-) %>%
-kable_styling(full_width = FALSE)
-```
-
-# Tabela e boxplot de notas LC por região
-
-  A tabela "Estatísticas das notas de LC por Região" exibe as médias, medianas, variências, desvios-padrão, notas mínimas, notas máximas e número aproximado de alunos de cada região do Brasil.
-  
-  O "Boxplot das notas de linguagens por Região", ilustra a performance dos alunos de cada uma das regiões do Brasil exibindo a distribuição das notas. As "caixas" representam os 50% centrais dos alunos, com os pontos sendo os "outliers", ou seja, os fora da média, tanto para baixo quanto para cima e a linha dentro da caixa representa a mediana. 
-  Com base no boxplot, a região Sudoeste obteve o melhor resultado, com sua média de 542,74 sendo a mais alta seguida de perto pela região Sul e sua média de 540.36, o boxplot também deixa evidente a desigualdade do país, com as regiões Norte e nordeste ficando significativamente atras das demais.
+\par\vspace{1ex}
