@@ -1462,3 +1462,6 @@ A tabela indica a frequência relativa, em porcentagem, das faixas de notas da r
 O gráfico relaciona o comportamento da frequência dos intervalos das notas da redação (presentes na tabela 3), indicado pelas barras, com o comportamento da normal, linha, para a verificação da semelhança entre ambos.
 
 * É possível observar que a maior frequência de aparição dos valores converge para o centro, enquanto diminui ao se aproximar das extremidades, o que se assemelha ao comportamento teórico da normal.
+
+Com base na análise estatística, é possível constatar que a presença no primeiro dia de prova (provas de humanas e linguagens) é maior que no segundo dia (natureza e matemática), o que mostra que, embora não seja uma taxa muito grande, ainda há desistência após o primeiro dia de prova.
+A média das quatro áreas do conhecimento varia entre 400 e 600, o que mostra que a distribuição das notas tende ao centro e tem menor distribuição nas extremidades, convergindo para o padrão da normal, fator que torna a prova justa por nivelar os níveis das questões. Além disso, as notas da redação é centrada entre 500 e 700, o que também mantém a tendência central de notas observada.

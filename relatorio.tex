@@ -309,14 +309,14 @@ foi feita por região do Brasil. Com base nisso, podemos identificar
 claramente o desempenho superior da região Sudeste.
 
 Liderança Clara: O Sudeste lidera em ambos os indicadores de
-performance, possuindo a maior Média (593,12) e, mais importante, a
-maior Mediana (601,8).
+performance, possuindo a maior Média (533.58) e, mais importante, a
+maior Mediana (540.4).
 
 O ``Grupo de Ponta'': Embora o Sudeste seja o primeiro, ele faz parte de
 um ``grupo de alta performance'' juntamente com as regiões Sul (Mediana
-597,5) e Centro-Oeste (Mediana 591,3). Estas três regiões estão
-claramente destacadas das regiões Nordeste (Mediana 562,9) e Norte
-(Mediana 555,0).
+534.0) e Centro-Oeste (Mediana 518.7). Estas três regiões estão
+claramente destacadas das regiões Nordeste (Mediana 494.9) e Norte
+(Mediana 481.2).
 
 A Armadilha da Média: Em todas as regiões, a Média é ``puxada'' para
 baixo por notas mais fracas (assimetria à esquerda). Por isso, a Mediana
@@ -332,12 +332,6 @@ central (a mediana) das notas de Ciências Humanas (CH) entre as cinco
 grandes regiões do Brasil. Além disso, o gráfico representa os valores
 ``extremos'', os outliers, da variavel `NU\_NOTA\_CH', contribuindo para
 uma analise de desempenho na prova do Enem.
-
-As caixas das regiões Sul e Sudeste são visivelmente mais longas
-(largas) do que as das outras regiões. Isto significa que a diferença de
-nota entre o aluno do percentil 25 e o do percentil 75 é maior. Ou seja,
-embora tenham o melhor desempenho, são regiões internamente mais
-``desiguais'' ou ``inconstantes''.
 
 O Boxplot confirma que a região Sudeste tem o melhor desempenho geral em
 Ciências Humanas, não apenas na mediana, mas no ``corpo'' principal dos
@@ -407,9 +401,7 @@ a regressão: foi de 316201.
 \subsection{Coeficiente de Correlação de
 Pearson}\label{coeficiente-de-correlauxe7uxe3o-de-pearson}
 
-\begin{verbatim}
-## O Coeficiente de Correlação (r) entre LC e CH é: 0.7615
-\end{verbatim}
+O Coeficiente de Correlação (r) entre LC e CH é: 0.7615
 
 Isso significa que, em geral, alunos que tiram notas mais altas em
 Linguagens também tiram notas mais altas em Humanas. Isso demonstra que
@@ -656,27 +648,25 @@ que:
 \tightlist
 \item
   Alguns níveis de nota são mais frequentes que o previsto pela normal
-  (natural em testes educacionais).
+  (natural em testes educacionais). \# Análise da Escolha da Língua
+  Estrangeira
 \end{itemize}
 
-\begin{tabular}{llr}
-\toprule
-Língua Estrangeira & Percentual & Frequência\\
-\midrule
-Inglês & 54.93\% & 237997\\
-Espanhol & 45.07\% & 195297\\
-\bottomrule
-\end{tabular}
+\textbf{Gráfico 3:} Escolha das Línguas Estrangeiras
 
-Observa-se, a partir da tabela, que aproximadamente 55\% dos
+\includegraphics[width=\linewidth]{relatorio_files/figure-latex/grafico-linguaEstrangeira-1}
+Observa-se, a partir do gráfico, que aproximadamente 55\% dos
 participantes escolheu a opção ``inglês'' para a prova de língua
 estrangeira e 45\% dos participantes escolheu ``espanhol'', o que
 evidencia que a maior parte dos estudantes optou pela língua inglesa.
+Por meio disso, é possível afirmar que, apesar da semelhança entre as
+línguas portuguesa e espanhola, a maioria dos participantes escolheu o
+inglês, refletindo o maior investimento no ensino dessa língua no
+Brasil.
 
-\includegraphics[width=\linewidth]{relatorio_files/figure-latex/grafico-linguaEstrangeira-1}
-O gráfico apresenta, de forma imagética, o contraste entre a quantidade
-do todo que optou pela língua inglesa e a quantidade que optou pela
-língua espanhola.
+\section{Análise da Redação}\label{anuxe1lise-da-redauxe7uxe3o}
+
+\subsection{1 Redações Zeradas}\label{redauxe7uxf5es-zeradas}
 
 \textbf{Tabela 6:} Frequência - Motivo do Zero na Redação
 
@@ -695,25 +685,33 @@ Parte desconectada & 2.7\%\\
 \bottomrule
 \end{tabular}
 
+\textbf{Gráfico 4:} Motivos para Redação Zerada
+
+\includegraphics[width=\linewidth]{relatorio_files/figure-latex/grafico-motivoZero-1}
+
 Observando a tabela, percebe-se que mais da metade (54,2\%) das redações
 zeradas teve como motivo a redação em branco, sendo o principal motivo
 para isso. Os demais motivos, em ordem após esse, são fuga ao tema
 (19,97\%), cópia do texto motivador (11,01\%), texto insuficiente
 (8,54\%), parte desconectada (2,7\%), não atendimento ao tipo textual
-(1,99\%) e anulação (1,58\%). Com isso, é possível constatar que, a
-maior parte dos participantes que teve a redação zerada não escreveu ou
-escreveu insuficientemente (54,2\% em branco e 8,54\% texto
-insuficiente), não entendeu o tema ou não foi capaz de relacionar o tema
-a conhecimentos prévios e copiou os textos motivadores.
+(1,99\%) e anulação (1,58\%).
 
-\textbf{Gráfico 4:} Motivos para Redação Zerada
+\subsection{1.1 Constatações}\label{constatauxe7uxf5es}
 
-\includegraphics[width=\linewidth]{relatorio_files/figure-latex/grafico-motivoZero-1}
-O gráfico, apresenta de forma imagética, a relação entre os motivos das
-redações zeradas e a frequência relativa deles. É possível observar que
-mais da metade das redações foi zerada por um motivo (Em Branco) e a
-outra metade foi por motivos diversos, o que evidencia que um motivo se
-sobressai aos demais.
+\begin{itemize}
+\item
+  A maior parte dos participantes que teve a redação zerada não escreveu
+  ou escreveu insuficientemente (54,2\% em branco e 8,54\% texto
+  insuficiente)
+\item
+  19,97\% dos participantes não entendeu completamente o tema e teve
+  redação zerada por fuga ao tema
+\item
+  11,01\% não foi capaz de relacionar o tema a conhecimentos prévios e
+  copiou os textos motivadores.
+\end{itemize}
+
+\subsection{2 Redações Não Zeradas}\label{redauxe7uxf5es-nuxe3o-zeradas}
 
 \textbf{Tabela 7:} Frequência - Notas nas Competências
 
@@ -737,50 +735,75 @@ Nota & C1 & C2 & C3 & C4 & C5\\
 \bottomrule
 \end{tabular}
 
-A tabela apresenta a relação entre as notas e a frequência relativa da
-aparição da mesma em cada uma das 5 competências da redação, em redações
-que não foram zeradas. Ao comparar as frequências das notas em todas as
-competências, as principais constatações são: ``A competência com maior
-taxa de 0 é a competência 5 (6,67\%)'', ``A competência 1 possui a maior
-parte das notas concentradas entre 100 e 160 (com porcentagens mais
-significativas, entre 13,92\% e 37,04\%)'', ``A competência 1 é a única
-cuja taxa de notas 200 é significativamente menor'', ``A competência 5
-possui maior distribuição de notas que as demais (todas as porcentagens
-estão acima de 2\%)'' e ``A competência 2 é a competência com maior taxa
-de notas entre 120 e 200 (93,09\% das notas está nessa faixa)''.
-
 \textbf{Gráfico 5:} Distribuição das Notas por Competência
 
 \includegraphics[width=\linewidth]{relatorio_files/figure-latex/boxplot-notaCompetencias-1}
+
+A tabela apresenta a relação entre as notas e a frequência relativa da
+aparição da mesma em cada uma das 5 competências da redação, em redações
+que não foram zeradas.
+
+\subsection{2.1 Constatações da
+Tabela}\label{constatauxe7uxf5es-da-tabela}
+
+Ao comparar as frequências das notas em todas as competências, as
+principais constatações são
+
+\begin{itemize}
+\item
+  A competência com maior taxa de 0 é a competência 5 (6,67\%)
+\item
+  A competência 1 possui a maior parte das notas concentradas entre 100
+  e 160 (com porcentagens mais significativas, entre 13,92\% e 37,04\%)
+\item
+  A competência 1 é a única cuja taxa de notas 200 é significativamente
+  menor
+\item
+  A competência 5 possui maior distribuição de notas que as demais
+  (todas as porcentagens estão acima de 2\%)
+\item
+  A competência 2 é a competência com maior taxa de notas entre 120 e
+  200 (93,09\% das notas está nessa faixa)``.
+\end{itemize}
+
+\subsection{2.2 Constatações do
+Boxplot}\label{constatauxe7uxf5es-do-boxplot}
+
 O boxplot representa, graficamente, as informações presentes na tabela.
 Os pontos indicam valores que estão fora da concentração de resultados,
-mas que tiveram aparição (outliers). As principais constatações são: A
-competência 1 é a que possui menor dispersão, ou seja, a maioria dos
-resultados está concentrada em uma faixa pequena (100 a 160) e possui
-outliers em todas as notas fora dessa faixa. A competência 2 possui
-concentração de notas mais altas que as demais, o que é evidenciado por
-abranger notas mais altas e não possui outliers, ou seja, todos os
-resultados estão na faixa estipulada. A competência 5 possui maior
-dispersão, ou seja, abrange todas as notas possíveis e está mais
-distribuida.
+mas que tiveram aparição (outliers).
 
-\textbf{Tabela 9:} Frequência - Notas da Redação
+\begin{itemize}
+\item
+  A competência 1 é a que possui menor dispersão, ou seja, a maioria dos
+  resultados está concentrada em uma faixa pequena (100 a 160) e possui
+  outliers em todas as notas fora dessa faixa
+\item
+  A competência 2 possui concentração de notas mais altas que as demais,
+  o que é evidenciado por abranger notas mais altas e não possui
+  outliers, ou seja, todos os resultados estão na faixa estipulada
+\item
+  A competência 5 possui maior dispersão, ou seja, abrange todas as
+  notas possíveis e está mais distribuida.
+\end{itemize}
+
+\textbf{Tabela 8:} Frequência - Notas da Redação
 
 \begin{tabular}{ll}
 \toprule
 Intervalo de Notas & Percentual\\
 \midrule
-x <= 100 & 0.02\%\\
-100 < x <= 200 & 0.1\%\\
-200 < x <= 300 & 1.05\%\\
-300 < x <= 400 & 5.37\%\\
-400 < x <= 500 & 12.17\%\\
+0 - 100 & 0.02\%\\
+100 - 200 & 0.1\%\\
+200 - 300 & 1.05\%\\
+300 - 400 & 5.37\%\\
+400 - 500 & 12.17\%\\
 \addlinespace
-500 < x <= 600 & 22.43\%\\
-600 < x <= 700 & 20.39\%\\
-700 < x <= 800 & 16.34\%\\
-800 < x <= 900 & 15.52\%\\
-900 < x & 6.61\%\\
+500 - 600 & 22.43\%\\
+600 - 700 & 20.39\%\\
+700 - 800 & 16.34\%\\
+800 - 900 & 15.52\%\\
+900 - 1000 & 6.61\%\\
 \bottomrule
 \end{tabular}
 
@@ -788,22 +811,28 @@ Média das notas: 659.33
 
 Desvio Padrão: 163.34
 
+\textbf{Gráfico 6:} Distribuição das Notas da Redação
+
+\includegraphics[width=\linewidth]{relatorio_files/figure-latex/histograma-notaRedacao-1}
+
 A tabela indica a frequência relativa, em porcentagem, das faixas de
 notas da redação. Aproximadamente metade dos resultados está centrado
 entre 500 e 700 (22,43\% + 20, 39\%), enquanto os demais intervalos têm
 frequência cada vez menor conforme se afasta do centro, tendendo para os
 intervalos extremos.
 
-\textbf{Gráfico 6:} Distribuição das Notas da Redação
-
-\includegraphics[width=\linewidth]{relatorio_files/figure-latex/histograma-notaRedacao-1}
-
 O gráfico relaciona o comportamento da frequência dos intervalos das
-notas da redação (presentes na tabela 4), indicado pelas barras, com o
+notas da redação (presentes na tabela 3), indicado pelas barras, com o
 comportamento da normal, linha, para a verificação da semelhança entre
-ambos. É possível observar que a maior frequência de aparição dos
-valores converge para o centro, enquanto diminui ao se aproximar das
-extremidades, o que se assemelha ao comportamento teórico da normal.
+ambos.
+
+\begin{itemize}
+\tightlist
+\item
+  É possível observar que a maior frequência de aparição dos valores
+  converge para o centro, enquanto diminui ao se aproximar das
+  extremidades, o que se assemelha ao comportamento teórico da normal.
+\end{itemize}
 
 Com base na análise estatística, é possível constatar que a presença no
 primeiro dia de prova (provas de humanas e linguagens) é maior que no
@@ -814,6 +843,6 @@ que mostra que a distribuição das notas tende ao centro e tem menor
 distribuição nas extremidades, convergindo para o padrão da normal,
 fator que torna a prova justa por nivelar os níveis das questões. Além
 disso, as notas da redação é centrada entre 500 e 700, o que também
-mantém a tendência central de notas observada.
+mantém a tendência central de notas~observada.
 
 \end{document}
